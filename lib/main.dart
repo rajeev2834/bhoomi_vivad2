@@ -1,3 +1,4 @@
+import 'package:bhoomi_vivad/providers/addBaseData.dart';
 import 'package:bhoomi_vivad/providers/auth.dart';
 import 'package:bhoomi_vivad/screens/home_screen.dart';
 import 'package:bhoomi_vivad/screens/login.dart';
@@ -18,6 +19,9 @@ class BhoomiVivad extends StatelessWidget {
       providers: [
         ChangeNotifierProvider.value(
           value: Auth(),
+        ),
+        ChangeNotifierProvider.value(
+          value: AddBaseData(),
         ),
       ],
       child: Consumer<Auth>(

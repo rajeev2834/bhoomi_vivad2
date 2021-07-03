@@ -3,13 +3,15 @@ import 'dart:io';
 
 import 'package:bhoomi_vivad/constants.dart';
 import 'package:bhoomi_vivad/models/http_exception.dart';
+import '../models/user.dart';
+import '../utils/database_helper.dart';
 import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
-
 class Auth with ChangeNotifier {
   String? _token;
+  final dbHelper = DatabaseHelper.instance;
 
   bool get isAuth {
     return token != null;
@@ -62,7 +64,7 @@ class Auth with ChangeNotifier {
       return false;
     }
     final extractedUserData =
-    json.decode(prefs.getString('userData')!) as Map<String, dynamic>;
+        json.decode(prefs.getString('userData')!) as Map<String, dynamic>;
     _token = extractedUserData['token'];
     notifyListeners();
     return true;
@@ -78,21 +80,35 @@ class Auth with ChangeNotifier {
   Future<void> fetchAndSetUser() async {
     final url = base_url + 'manage/';
     try {
-      final response = await http.get(Uri.parse(url),
-          headers: {HttpHeaders.authorizationHeader: "Token " + _token.toString()});
-      if(response.statusCode == 200)
-      {
-        final extractedUserData =
-        jsonDecode(response.body) as Map<String, dynamic>;
+      final response = await http.get(Uri.parse(url), headers: {
+        HttpHeaders.authorizationHeader: "Token " + _token.toString()
+      });
+      if (response.statusCode == 200) {
+        final responseData = jsonDecode(response.body) as Map<String, dynamic>;
         notifyListeners();
-      }
-      else{
+
+        deleteUserData('user');
+        updateUserTable('user', responseData);
+
+      } else {
         throw HttpException("Unable to load User data!!!");
       }
-
     } catch (error) {
       throw (error);
     }
+  }
+
+  void updateUserTable(String user, Map<String, dynamic> userData) async
+  {
+    int result;
+    result = await dbHelper.insertTableData(user, userData);
+    if(result != null)
+      print(result);
+  }
+
+  void deleteUserData(String user) async{
+    var result = await dbHelper.deleteTableData(user);
+    print(result);
   }
 
 }

@@ -219,7 +219,7 @@ class _LoginState extends State<Login> {
             Navigator.of(context).pop();
           },
           child: Text('Ok', style: TextStyle(fontWeight: FontWeight.bold),),
-        )
+        ),
       ],
     );
     showDialog(context: context, builder: (_) => alertDialog);
