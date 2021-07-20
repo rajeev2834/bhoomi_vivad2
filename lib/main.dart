@@ -1,8 +1,10 @@
 import 'package:bhoomi_vivad/providers/addBaseData.dart';
 import 'package:bhoomi_vivad/providers/auth.dart';
+import 'package:bhoomi_vivad/providers/get_base_data.dart';
 import 'package:bhoomi_vivad/screens/home_screen.dart';
 import 'package:bhoomi_vivad/screens/login.dart';
 import 'package:bhoomi_vivad/screens/splash_screen.dart';
+import 'package:bhoomi_vivad/screens/vivad_entry/vivad_entry_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -22,6 +24,9 @@ class BhoomiVivad extends StatelessWidget {
         ),
         ChangeNotifierProvider.value(
           value: AddBaseData(),
+        ),
+        ChangeNotifierProvider.value(
+          value: GetBaseData(),
         ),
       ],
       child: Consumer<Auth>(
@@ -43,6 +48,7 @@ class BhoomiVivad extends StatelessWidget {
                 : Login(),
           ),
           routes: {
+            VivadEntryScreen.routeName: (context) => VivadEntryScreen(),
           },
         ),
       ),

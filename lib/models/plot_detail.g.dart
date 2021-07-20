@@ -17,12 +17,13 @@ PlotDetail _$PlotDetailFromJson(Map<String, dynamic> json) {
     longitude: (json['longitude'] as num).toDouble(),
     mauza_id: json['mauza_id'] as int,
     panchayat_id: json['panchayat_id'] as String,
-    plot_id: json['plot_id'] as String,
+    plot_uuid: json['plot_uuid'] as String,
     plot_nature_id: json['plot_nature_id'] as int,
     plot_type_id: json['plot_type_id'] as int,
     rakwa: (json['rakwa'] as num).toDouble(),
     remarks: json['remarks'] as String,
     thana_no: json['thana_no'] as int,
+    is_govtPlot: json['is_govtPlot'] as bool,
   );
 }
 
@@ -37,10 +38,11 @@ Map<String, dynamic> _$PlotDetailToJson(PlotDetail instance) =>
       'longitude': instance.longitude,
       'mauza_id': instance.mauza_id,
       'panchayat_id': instance.panchayat_id,
-      'plot_id': instance.plot_id,
+      'plot_uuid': instance.plot_uuid,
       'plot_nature_id': instance.plot_nature_id,
       'plot_type_id': instance.plot_type_id,
       'rakwa': instance.rakwa,
       'remarks': instance.remarks,
       'thana_no': instance.thana_no,
+      'is_govtPlot': instance.is_govtPlot,
     };

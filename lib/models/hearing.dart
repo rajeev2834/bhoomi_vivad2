@@ -3,17 +3,32 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'hearing.g.dart';
 
+class HearingList{
+  final List<Hearing> hearings;
+
+  HearingList({
+    required this.hearings,
+  });
+
+  factory HearingList.fromJson(List<dynamic> parsedJson) {
+    List<Hearing> hearings = [];
+    hearings = parsedJson.map((i)=>Hearing.fromJson(i)).toList();
+
+    return new HearingList(hearings: hearings);
+  }
+}
+
+
 @JsonSerializable()
 class Hearing {
-  int id;
-  String? vivad_id;
-  DateTime? hearing_date;
-  String? remarks;
+  String vivad_uuid;
+  DateTime hearing_date;
+  String remarks;
   bool first_party;
   bool second_party;
 
 
-  Hearing({required this.id, required this.vivad_id, required this.hearing_date, required this.remarks,
+  Hearing({required this.vivad_uuid,  required this.hearing_date, required this.remarks,
   required this.first_party, required this.second_party});
 
   factory Hearing.fromJson(Map<String, dynamic> json) => _$HearingFromJson(json);

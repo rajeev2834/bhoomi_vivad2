@@ -2,8 +2,10 @@ import 'package:bhoomi_vivad/providers/addBaseData.dart';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:path/path.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:provider/provider.dart';
+import '../models/http_exception.dart';
 
 class Body extends StatelessWidget {
   @override
@@ -86,6 +88,38 @@ class Body extends StatelessWidget {
                               ),
                   ),
                 ),
+                Positioned(
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  child: Container(
+                    alignment: Alignment.center,
+                    margin: EdgeInsets.symmetric(horizontal: 20.0),
+                    height: 44,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(20.0),
+                      boxShadow: [
+                        BoxShadow(
+                          offset: Offset(0, 10),
+                          blurRadius: 50.0,
+                          color:
+                              Theme.of(context).primaryColor.withOpacity(0.23),
+                        ),
+                      ],
+                    ),
+                    child: TextButton.icon(
+                      icon: Icon(Icons.cloud_download_rounded),
+                      label: Text(
+                        "Download Base Data",
+                        style: TextStyle(fontSize: 14.0),
+                      ),
+                      onPressed: () {
+                        _addBaseData(context, pr);
+                      },
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
@@ -94,18 +128,73 @@ class Body extends StatelessWidget {
           ),
           Container(
             margin: EdgeInsets.only(left: 10.0, top: 10.0),
-            child: VivadRelatedGrid(),
+            child: VivadRelatedGrid(context),
           ),
           SizedBox(
             height: 20.0,
+          ),
+          CustomTitle(
+            title: 'Bhoomi Bank Related',
+          ),
+          Container(
+            margin: EdgeInsets.only(left: 10.0, top: 10.0),
+            child: BankRelatedGrid(context),
           ),
         ],
       ),
     );
   }
 
+  Future<void> _addBaseData(BuildContext context, ProgressDialog pr) async {
+    try {
+      await pr.show();
+      await Provider.of<AddBaseData>(context, listen: false)
+          .getToken()
+          .then((value) {
+        pr.update(message: 'Loading Circle data');
+        Provider.of<AddBaseData>(context, listen: false)
+            .fetchAndSetCircle()
+            .then((value) {
+          pr.update(message: 'Loading Panchayat data');
+          Provider.of<AddBaseData>(context, listen: false)
+              .fetchAndSetPanchayat()
+              .then((value) {
+            pr.update(message: "Loading Mauza data");
+            Provider.of<AddBaseData>(context, listen: false)
+                .fetchAndSetMauza()
+                .then((value) {
+              pr.update(message: 'Loading Thana');
+              Provider.of<AddBaseData>(context, listen: false)
+                  .fetchAndSetThana()
+                  .then((value) {
+                pr.update(message: 'Loading Plot Type');
+                Provider.of<AddBaseData>(context, listen: false)
+                    .fetchAndSetPlotType()
+                    .then((value) {
+                  pr.update(message: 'Loading Plot Nature');
+                  Provider.of<AddBaseData>(context, listen: false)
+                      .fetchAndSetPlotNature()
+                      .then((value) {
+                    pr.update(message: "All data loaded.");
+                    pr.hide().whenComplete(() => null);
+                  });
+                });
+              });
+            });
+          });
+          // ignore: invalid_return_type_for_catch_error
+        }).catchError((handleError) => _showAlertDialog(
+                context, 'Error', 'Failed to load base data.'));
+      });
+    } on HttpException catch (error) {
+      var errorMessage = error.toString();
+      _showAlertDialog(context, 'Error', errorMessage);
+    }
+  }
+
   Widget CustomTitle({required String title}) {
     return Container(
+      margin: EdgeInsets.only(top: 10.0),
       height: 18,
       child: Stack(
         children: <Widget>[
@@ -113,7 +202,7 @@ class Body extends StatelessWidget {
             padding: const EdgeInsets.only(left: 20.0),
             child: Text(
               title,
-              style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
             ),
           ),
         ],
@@ -121,11 +210,13 @@ class Body extends StatelessWidget {
     );
   }
 
-  Widget VivadRelatedGrid() {
+  Widget VivadRelatedGrid(BuildContext context) {
     List<GridViewItem> loadedItem = [
       GridViewItem(title: 'New Vivad Entry', icon: Icons.assignment),
       GridViewItem(title: 'Edit Vivad', icon: Icons.edit),
       GridViewItem(title: 'Pending Vivad', icon: Icons.pending_actions),
+      GridViewItem(title: 'Vivad Disposed', icon: Icons.restore_from_trash_outlined),
+      GridViewItem(title: 'All Vivad', icon: Icons.work_outline_rounded),
     ];
     return Container(
       child: Padding(
@@ -143,30 +234,30 @@ class Body extends StatelessWidget {
                 ),
                 child: GestureDetector(
                   onTap: () {
-                   _moveNextScreen(index);
+                    _moveNextScreen(context, index);
                   },
-                      child: Card(
-                        elevation: 5.0,
-                        child: Center(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: <Widget>[
-                              Icon(
-                                loadedItem[index].icon,
-                                color: Colors.indigo,
-                                size: 33.0,
-                              ),
-                              Text(
-                                loadedItem[index].title,
-                                style: TextStyle(
-                                  fontSize: 12.0,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ],
+                  child: Card(
+                    elevation: 5.0,
+                    child: Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: <Widget>[
+                          Icon(
+                            loadedItem[index].icon,
+                            color: Colors.indigo,
+                            size: 33.0,
                           ),
-                        ),
+                          Text(
+                            loadedItem[index].title,
+                            style: TextStyle(
+                              fontSize: 12.0,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
                       ),
+                    ),
+                  ),
                 ),
               ),
             )),
@@ -174,8 +265,10 @@ class Body extends StatelessWidget {
     );
   }
 
-  void _moveNextScreen(int index){
-    print(index);
+  void _moveNextScreen(BuildContext context, int index) async {
+    if (index == 0) {
+      await Navigator.of(context).pushNamed('/vivad_entry_screen');
+    }
   }
 
   void _showAlertDialog(BuildContext context, String title, String message) {
@@ -195,6 +288,59 @@ class Body extends StatelessWidget {
       ],
     );
     showDialog(context: context, builder: (_) => alertDialog);
+  }
+
+  Widget BankRelatedGrid(BuildContext context) {
+    List<GridViewItem> loadedItem = [
+      GridViewItem(title: 'Survey Plots', icon: Icons.image_search_outlined),
+      GridViewItem(title: 'Search Plots', icon: Icons.search_outlined),
+      GridViewItem(title: 'All Plots', icon: Icons.landscape_outlined),
+    ];
+    return Container(
+      child: Padding(
+        padding: EdgeInsets.all(8.0),
+        child: GridView.count(
+            crossAxisCount: 3,
+            mainAxisSpacing: 5,
+            shrinkWrap: true,
+            children: List.generate(
+              loadedItem.length,
+                  (index) => Padding(
+                padding: EdgeInsets.symmetric(
+                  vertical: 10.0,
+                  horizontal: 10.0,
+                ),
+                child: GestureDetector(
+                  onTap: () {
+                    _moveNextScreen(context, index);
+                  },
+                  child: Card(
+                    elevation: 5.0,
+                    child: Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: <Widget>[
+                          Icon(
+                            loadedItem[index].icon,
+                            color: Colors.indigoAccent,
+                            size: 33.0,
+                          ),
+                          Text(
+                            loadedItem[index].title,
+                            style: TextStyle(
+                              fontSize: 12.0,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            )),
+      ),
+    );
   }
 }
 

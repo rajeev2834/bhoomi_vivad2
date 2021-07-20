@@ -9,7 +9,7 @@ part of 'vivad.dart';
 Vivad _$VivadFromJson(Map<String, dynamic> json) {
   return Vivad(
     abhidari_name: json['abhidari_name'] as String,
-    case_status: json['case_status'] as int,
+    case_status: json['case_status'] == 0 ? 'Pending' : 'Closed',
     cause_vivad: json['cause_vivad'] as String,
     circle_id: json['circle_id'] as String,
     court_status: json['court_status'] as String,
@@ -23,7 +23,7 @@ Vivad _$VivadFromJson(Map<String, dynamic> json) {
     next_hearing_date: json['next_hearing_date'] as String,
     notice_order: json['notice_order'] as String,
     panchayat_id: json['panchayat_id'] as String,
-    plot_id: json['plot_id'] as int,
+    plot_uuid: json['plot_uuid'] as String,
     register_date: json['register_date'] as String,
     remarks: json['remarks'] as String,
     second_party_address: json['second_party_address'] as String,
@@ -31,7 +31,7 @@ Vivad _$VivadFromJson(Map<String, dynamic> json) {
     second_party_name: json['second_party_name'] as String,
     thana_no: json['thana_no'] as int,
     violence_detail: json['violence_detail'] as String,
-    vivad_id: json['vivad_id'] as int,
+    vivad_uuid: json['vivad_uuid'] as String,
   );
 }
 
@@ -51,7 +51,7 @@ Map<String, dynamic> _$VivadToJson(Vivad instance) => <String, dynamic>{
       'next_hearing_date': instance.next_hearing_date,
       'notice_order': instance.notice_order,
       'panchayat_id': instance.panchayat_id,
-      'plot_id': instance.plot_id,
+      'plot_uuid': instance.plot_uuid,
       'register_date': instance.register_date,
       'remarks': instance.remarks,
       'second_party_address': instance.second_party_address,
@@ -59,5 +59,5 @@ Map<String, dynamic> _$VivadToJson(Vivad instance) => <String, dynamic>{
       'second_party_name': instance.second_party_name,
       'thana_no': instance.thana_no,
       'violence_detail': instance.violence_detail,
-      'vivad_id': instance.vivad_id,
+      'vivad_uuid': instance.vivad_uuid,
     };

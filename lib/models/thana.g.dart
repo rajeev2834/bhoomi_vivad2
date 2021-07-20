@@ -8,7 +8,7 @@ part of 'thana.dart';
 
 Thana _$ThanaFromJson(Map<String, dynamic> json) {
   return Thana(
-    circle_id: json['circle_id'] as String,
+    circle_id: json['circle'] as String,
     thana_id: json['thana_id'] as int,
     thana_name_hn: json['thana_name_hn'] as String,
   );

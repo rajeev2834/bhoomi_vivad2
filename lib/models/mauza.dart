@@ -3,6 +3,21 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'mauza.g.dart';
 
+class MauzaList{
+    final List<Mauza> mauzas;
+
+    MauzaList({
+        required this.mauzas,
+    });
+
+    factory MauzaList.fromJson(List<dynamic> parsedJson) {
+        List<Mauza> mauzas = [];
+        mauzas = parsedJson.map((i)=>Mauza.fromJson(i)).toList();
+
+        return new MauzaList(mauzas: mauzas);
+    }
+}
+
 @JsonSerializable()
 class Mauza {
     String circle_id;
