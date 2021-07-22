@@ -1,10 +1,12 @@
 import 'package:bhoomi_vivad/models/plot_detail.dart';
 import 'package:bhoomi_vivad/models/thana.dart';
 import 'package:bhoomi_vivad/models/vivad.dart';
+import 'package:bhoomi_vivad/providers/addBaseData.dart';
 import 'package:bhoomi_vivad/providers/get_base_data.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:progress_dialog/progress_dialog.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import 'package:uuid/uuid.dart';
@@ -26,7 +28,7 @@ class _EntryFormState extends State<EntryForm> {
   String? _thanaValue;
   String? _plotType;
   String? _plotNature;
-  String? isDisposed = '';
+  String? isDisposed;
   String? _khata;
   String? _khesra;
   String? _rakwa;
@@ -54,7 +56,7 @@ class _EntryFormState extends State<EntryForm> {
   TextEditingController _dateTimeController = TextEditingController();
 
   PlotDetail? _plotDetail;
-  Vivad? _vivad;
+  Vivad? _vivadData;
 
   var uuid = Uuid();
 
@@ -67,9 +69,10 @@ class _EntryFormState extends State<EntryForm> {
     _getPlotType();
     _getPlotNature();
 
+    _caseStatus = 'Pending';
+
     super.initState();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -235,43 +238,38 @@ class _EntryFormState extends State<EntryForm> {
         top: 0.0,
       ),
       child: Consumer<GetBaseData>(
-        builder: (ctx, getBaseData, _) =>
-            Column(
-              children: <Widget>[
-                SizedBox(
-                  width: MediaQuery
-                      .of(context)
-                      .size
-                      .width * 0.90,
-                  child: DropdownButtonFormField<String>(
-                    value: _circleValue,
-                    decoration: InputDecoration(
-                      labelText: 'Circle *',
-                      contentPadding: EdgeInsets.all(10.0),
-                      filled: true,
-                      fillColor: Colors.white,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8.0),
-                      ),
-                    ),
-                    items: getBaseData.circles
-                        .map(
-                          (e) =>
-                          DropdownMenuItem<String>(
-                            child: Text(e.circleNameHn),
-                            value: e.circleId,
-                          ),
-                    )
-                        .toList(),
-                    onChanged: ((value) {
-                      _circleValue = value;
-                    }),
-                    validator: (value) =>
-                    value == null ? 'Circle value required' : null,
+        builder: (ctx, getBaseData, _) => Column(
+          children: <Widget>[
+            SizedBox(
+              width: MediaQuery.of(context).size.width * 0.90,
+              child: DropdownButtonFormField<String>(
+                value: _circleValue,
+                decoration: InputDecoration(
+                  labelText: 'Circle *',
+                  contentPadding: EdgeInsets.all(10.0),
+                  filled: true,
+                  fillColor: Colors.white,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8.0),
                   ),
                 ),
-              ],
+                items: getBaseData.circles
+                    .map(
+                      (e) => DropdownMenuItem<String>(
+                        child: Text(e.circleNameHn),
+                        value: e.circleId,
+                      ),
+                    )
+                    .toList(),
+                onChanged: ((value) {
+                  _circleValue = value;
+                }),
+                validator: (value) =>
+                    value == null ? 'Circle value required' : null,
+              ),
             ),
+          ],
+        ),
       ),
     );
   }
@@ -288,43 +286,38 @@ class _EntryFormState extends State<EntryForm> {
         top: 0.0,
       ),
       child: Consumer<GetBaseData>(
-        builder: (ctx, getBaseData, _) =>
-            Column(
-              children: <Widget>[
-                SizedBox(
-                  width: MediaQuery
-                      .of(context)
-                      .size
-                      .width * 0.90,
-                  child: DropdownButtonFormField<String>(
-                    value: _panchayatValue,
-                    decoration: InputDecoration(
-                      labelText: 'Panchayat *',
-                      contentPadding: EdgeInsets.all(10.0),
-                      filled: true,
-                      fillColor: Colors.white,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8.0),
-                      ),
-                    ),
-                    items: getBaseData.panchayats
-                        .map(
-                          (e) =>
-                          DropdownMenuItem<String>(
-                            child: Text(e.panchayat_name_hn),
-                            value: e.panchayat_id.toString(),
-                          ),
-                    )
-                        .toList(),
-                    onChanged: ((value) {
-                      _dropDownPanchayatSelected(value);
-                    }),
-                    validator: (value) =>
-                    value == null ? 'Panchayat value required' : null,
+        builder: (ctx, getBaseData, _) => Column(
+          children: <Widget>[
+            SizedBox(
+              width: MediaQuery.of(context).size.width * 0.90,
+              child: DropdownButtonFormField<String>(
+                value: _panchayatValue,
+                decoration: InputDecoration(
+                  labelText: 'Panchayat *',
+                  contentPadding: EdgeInsets.all(10.0),
+                  filled: true,
+                  fillColor: Colors.white,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8.0),
                   ),
                 ),
-              ],
+                items: getBaseData.panchayats
+                    .map(
+                      (e) => DropdownMenuItem<String>(
+                        child: Text(e.panchayat_name_hn),
+                        value: e.panchayat_id.toString(),
+                      ),
+                    )
+                    .toList(),
+                onChanged: ((value) {
+                  _dropDownPanchayatSelected(value);
+                }),
+                validator: (value) =>
+                    value == null ? 'Panchayat value required' : null,
+              ),
             ),
+          ],
+        ),
       ),
     );
   }
@@ -354,45 +347,40 @@ class _EntryFormState extends State<EntryForm> {
         top: 2.0,
       ),
       child: Consumer<GetBaseData>(
-        builder: (ctx, getBaseData, _) =>
-            Column(
-              children: <Widget>[
-                SizedBox(
-                  width: MediaQuery
-                      .of(context)
-                      .size
-                      .width * 0.90,
-                  child: DropdownButtonFormField<String>(
-                    decoration: InputDecoration(
-                      labelText: 'Mauza*',
-                      contentPadding: EdgeInsets.all(10.0),
-                      filled: true,
-                      fillColor: Colors.white,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8.0),
-                      ),
-                    ),
-                    items: getBaseData.mauzas
-                        .map(
-                          (e) =>
-                          DropdownMenuItem<String>(
-                            child: Text(e.mauza_name_hn),
-                            value: e.mauza_id.toString(),
-                          ),
-                    )
-                        .toList(),
-                    onChanged: ((value) {
-                      setState(() {
-                        _mauzaValue = value;
-                      });
-                    }),
-                    validator: (value) =>
-                    value == null ? 'Mauza value required' : null,
-                    value: _mauzaValue,
+        builder: (ctx, getBaseData, _) => Column(
+          children: <Widget>[
+            SizedBox(
+              width: MediaQuery.of(context).size.width * 0.90,
+              child: DropdownButtonFormField<String>(
+                decoration: InputDecoration(
+                  labelText: 'Mauza*',
+                  contentPadding: EdgeInsets.all(10.0),
+                  filled: true,
+                  fillColor: Colors.white,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8.0),
                   ),
                 ),
-              ],
+                items: getBaseData.mauzas
+                    .map(
+                      (e) => DropdownMenuItem<String>(
+                        child: Text(e.mauza_name_hn),
+                        value: e.mauza_id.toString(),
+                      ),
+                    )
+                    .toList(),
+                onChanged: ((value) {
+                  setState(() {
+                    _mauzaValue = value;
+                  });
+                }),
+                validator: (value) =>
+                    value == null ? 'Mauza value required' : null,
+                value: _mauzaValue,
+              ),
             ),
+          ],
+        ),
       ),
     );
   }
@@ -409,43 +397,38 @@ class _EntryFormState extends State<EntryForm> {
         top: 2.0,
       ),
       child: Consumer<GetBaseData>(
-        builder: (ctx, getBaseData, _) =>
-            Column(
-              children: <Widget>[
-                SizedBox(
-                  width: MediaQuery
-                      .of(context)
-                      .size
-                      .width * 0.90,
-                  child: DropdownButtonFormField<String>(
-                    decoration: InputDecoration(
-                      labelText: 'Thana ',
-                      contentPadding: EdgeInsets.all(10.0),
-                      filled: true,
-                      fillColor: Colors.white,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8.0),
-                      ),
-                    ),
-                    items: getBaseData.thanas
-                        .map(
-                          (e) =>
-                          DropdownMenuItem<String>(
-                            child: Text(e.thana_name_hn),
-                            value: e.thana_id.toString(),
-                          ),
-                    )
-                        .toList(),
-                    onChanged: ((value) {
-                      setState(() {
-                        _thanaValue = value;
-                      });
-                    }),
-                    value: _thanaValue,
+        builder: (ctx, getBaseData, _) => Column(
+          children: <Widget>[
+            SizedBox(
+              width: MediaQuery.of(context).size.width * 0.90,
+              child: DropdownButtonFormField<String>(
+                decoration: InputDecoration(
+                  labelText: 'Thana ',
+                  contentPadding: EdgeInsets.all(10.0),
+                  filled: true,
+                  fillColor: Colors.white,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8.0),
                   ),
                 ),
-              ],
+                items: getBaseData.thanas
+                    .map(
+                      (e) => DropdownMenuItem<String>(
+                        child: Text(e.thana_name_hn),
+                        value: e.thana_id.toString(),
+                      ),
+                    )
+                    .toList(),
+                onChanged: ((value) {
+                  setState(() {
+                    _thanaValue = value;
+                  });
+                }),
+                value: _thanaValue,
+              ),
             ),
+          ],
+        ),
       ),
     );
   }
@@ -466,16 +449,15 @@ class _EntryFormState extends State<EntryForm> {
               bottom: 5.0,
             ),
             child: TextFormField(
+              keyboardType: TextInputType.number,
               decoration: InputDecoration(
                 labelText: 'Khata No',
                 labelStyle: TextStyle(
-                    color: Theme
-                        .of(context)
-                        .primaryColor, fontSize: 15.0),
+                    color: Theme.of(context).primaryColor, fontSize: 15.0),
                 suffixIcon:
-                Icon(Icons.menu_book_outlined, color: Colors.indigo),
+                    Icon(Icons.menu_book_outlined, color: Colors.indigo),
                 contentPadding:
-                new EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
+                    new EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10.0),
                 ),
@@ -496,13 +478,11 @@ class _EntryFormState extends State<EntryForm> {
               decoration: InputDecoration(
                 labelText: 'Khesra No',
                 labelStyle: TextStyle(
-                    color: Theme
-                        .of(context)
-                        .primaryColor, fontSize: 15.0),
+                    color: Theme.of(context).primaryColor, fontSize: 15.0),
                 suffixIcon:
-                Icon(Icons.scatter_plot_outlined, color: Colors.indigo),
+                    Icon(Icons.scatter_plot_outlined, color: Colors.indigo),
                 contentPadding:
-                new EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
+                    new EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10.0),
                 ),
@@ -524,12 +504,10 @@ class _EntryFormState extends State<EntryForm> {
               decoration: InputDecoration(
                 labelText: 'Rakwa (in acre)',
                 labelStyle: TextStyle(
-                    color: Theme
-                        .of(context)
-                        .primaryColor, fontSize: 15.0),
+                    color: Theme.of(context).primaryColor, fontSize: 15.0),
                 suffixIcon: Icon(Icons.rule_outlined, color: Colors.indigo),
                 contentPadding:
-                new EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
+                    new EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10.0),
                 ),
@@ -551,12 +529,10 @@ class _EntryFormState extends State<EntryForm> {
               decoration: InputDecoration(
                 labelText: 'Chauhaddi',
                 labelStyle: TextStyle(
-                    color: Theme
-                        .of(context)
-                        .primaryColor, fontSize: 15.0),
+                    color: Theme.of(context).primaryColor, fontSize: 15.0),
                 suffixIcon: Icon(Icons.fence_outlined, color: Colors.indigo),
                 contentPadding:
-                new EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
+                    new EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10.0),
                 ),
@@ -597,43 +573,40 @@ class _EntryFormState extends State<EntryForm> {
   Widget PlotType() {
     return Container(
       child: Consumer<GetBaseData>(
-        builder: (ctx, getBaseData, _) =>
-            Column(
-              children: <Widget>[
-                SizedBox(
-                  width: MediaQuery
-                      .of(context)
-                      .size
-                      .width * 0.90,
-                  child: DropdownButtonFormField<String>(
-                    decoration: InputDecoration(
-                      labelText: 'Plot Type ',
-                      contentPadding: EdgeInsets.all(10.0),
-                      filled: true,
-                      fillColor: Colors.white,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8.0),
-                      ),
-                    ),
-                    items: getBaseData.plot_types
-                        .map(
-                          (e) =>
-                          DropdownMenuItem<String>(
-                            child: Text(e.plot_type),
-                            value: e.id.toString(),
-                          ),
-                    )
-                        .toList(),
-                    onChanged: ((value) {
-                      setState(() {
-                        _plotType = value;
-                      });
-                    }),
-                    value: _plotType,
+        builder: (ctx, getBaseData, _) => Column(
+          children: <Widget>[
+            SizedBox(
+              width: MediaQuery.of(context).size.width * 0.90,
+              child: DropdownButtonFormField<String>(
+                decoration: InputDecoration(
+                  labelText: 'Plot Type ',
+                  contentPadding: EdgeInsets.all(10.0),
+                  filled: true,
+                  fillColor: Colors.white,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8.0),
                   ),
                 ),
-              ],
+                items: getBaseData.plot_types
+                    .map(
+                      (e) => DropdownMenuItem<String>(
+                        child: Text(e.plot_type),
+                        value: e.id.toString(),
+                      ),
+                    )
+                    .toList(),
+                onChanged: ((value) {
+                  FocusScope.of(context).requestFocus(new FocusNode());
+                  setState(() {
+                    _plotType = value;
+                  });
+                }),
+                value: _plotType,
+                validator: (value) => value == null ? 'Select plot type' : null,
+              ),
             ),
+          ],
+        ),
       ),
     );
   }
@@ -646,43 +619,40 @@ class _EntryFormState extends State<EntryForm> {
   Widget PlotNature() {
     return Container(
       child: Consumer<GetBaseData>(
-        builder: (ctx, getBaseData, _) =>
-            Column(
-              children: <Widget>[
-                SizedBox(
-                  width: MediaQuery
-                      .of(context)
-                      .size
-                      .width * 0.90,
-                  child: DropdownButtonFormField<String>(
-                    decoration: InputDecoration(
-                      labelText: 'Plot Nature ',
-                      contentPadding: EdgeInsets.all(10.0),
-                      filled: true,
-                      fillColor: Colors.white,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8.0),
-                      ),
-                    ),
-                    items: getBaseData.plot_nature
-                        .map(
-                          (e) =>
-                          DropdownMenuItem<String>(
-                            child: Text(e.plot_nature),
-                            value: e.id.toString(),
-                          ),
-                    )
-                        .toList(),
-                    onChanged: ((value) {
-                      setState(() {
-                        _plotNature = value;
-                      });
-                    }),
-                    value: _plotNature,
+        builder: (ctx, getBaseData, _) => Column(
+          children: <Widget>[
+            SizedBox(
+              width: MediaQuery.of(context).size.width * 0.90,
+              child: DropdownButtonFormField<String>(
+                decoration: InputDecoration(
+                  labelText: 'Plot Nature ',
+                  contentPadding: EdgeInsets.all(10.0),
+                  filled: true,
+                  fillColor: Colors.white,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8.0),
                   ),
                 ),
-              ],
+                items: getBaseData.plot_nature
+                    .map(
+                      (e) => DropdownMenuItem<String>(
+                        child: Text(e.plot_nature),
+                        value: e.id.toString(),
+                      ),
+                    )
+                    .toList(),
+                onChanged: ((value) {
+                  setState(() {
+                    _plotNature = value;
+                  });
+                }),
+                value: _plotNature,
+                validator: (value) =>
+                    value == null ? 'Select plot nature' : null,
+              ),
             ),
+          ],
+        ),
       ),
     );
   }
@@ -706,11 +676,9 @@ class _EntryFormState extends State<EntryForm> {
               decoration: InputDecoration(
                 labelText: 'Abhidhari Name',
                 labelStyle: TextStyle(
-                    color: Theme
-                        .of(context)
-                        .primaryColor, fontSize: 15.0),
+                    color: Theme.of(context).primaryColor, fontSize: 15.0),
                 contentPadding:
-                new EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
+                    new EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10.0),
                 ),
@@ -731,18 +699,16 @@ class _EntryFormState extends State<EntryForm> {
               decoration: InputDecoration(
                 labelText: 'First Party Name',
                 labelStyle: TextStyle(
-                    color: Theme
-                        .of(context)
-                        .primaryColor, fontSize: 15.0),
+                    color: Theme.of(context).primaryColor, fontSize: 15.0),
                 suffixIcon: Icon(Icons.person_add_alt, color: Colors.indigo),
                 contentPadding:
-                new EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
+                    new EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10.0),
                 ),
               ),
               validator: (value) =>
-              value!.isEmpty ? 'Please enter First Party name' : null,
+                  value!.isEmpty ? 'Please enter First Party name' : null,
               onSaved: (value) {
                 _firstPartyName = value;
               },
@@ -762,12 +728,10 @@ class _EntryFormState extends State<EntryForm> {
               decoration: InputDecoration(
                 labelText: 'First Party Contact No',
                 labelStyle: TextStyle(
-                    color: Theme
-                        .of(context)
-                        .primaryColor, fontSize: 15.0),
+                    color: Theme.of(context).primaryColor, fontSize: 15.0),
                 suffixIcon: Icon(Icons.phone, color: Colors.indigo),
                 contentPadding:
-                new EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
+                    new EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10.0),
                 ),
@@ -791,19 +755,17 @@ class _EntryFormState extends State<EntryForm> {
               decoration: InputDecoration(
                 labelText: 'First Party Address',
                 labelStyle: TextStyle(
-                    color: Theme
-                        .of(context)
-                        .primaryColor, fontSize: 15.0),
+                    color: Theme.of(context).primaryColor, fontSize: 15.0),
                 suffixIcon:
-                Icon(Icons.streetview_outlined, color: Colors.indigo),
+                    Icon(Icons.streetview_outlined, color: Colors.indigo),
                 contentPadding:
-                new EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
+                    new EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10.0),
                 ),
               ),
               validator: (value) =>
-              value!.isEmpty ? 'Please enter First Party address' : null,
+                  value!.isEmpty ? 'Please enter First Party address' : null,
               onSaved: (value) {
                 _firstPartyAddress = value;
               },
@@ -820,18 +782,16 @@ class _EntryFormState extends State<EntryForm> {
               decoration: InputDecoration(
                 labelText: 'Second Party Name',
                 labelStyle: TextStyle(
-                    color: Theme
-                        .of(context)
-                        .primaryColor, fontSize: 15.0),
+                    color: Theme.of(context).primaryColor, fontSize: 15.0),
                 suffixIcon: Icon(Icons.person_add_alt, color: Colors.indigo),
                 contentPadding:
-                new EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
+                    new EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10.0),
                 ),
               ),
               validator: (value) =>
-              value!.isEmpty ? 'Please enter Second Party name' : null,
+                  value!.isEmpty ? 'Please enter Second Party name' : null,
               onSaved: (value) {
                 _secondPartyName = value;
               },
@@ -851,12 +811,10 @@ class _EntryFormState extends State<EntryForm> {
               decoration: InputDecoration(
                 labelText: 'Second Party Contact',
                 labelStyle: TextStyle(
-                    color: Theme
-                        .of(context)
-                        .primaryColor, fontSize: 15.0),
+                    color: Theme.of(context).primaryColor, fontSize: 15.0),
                 suffixIcon: Icon(Icons.phone, color: Colors.indigo),
                 contentPadding:
-                new EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
+                    new EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10.0),
                 ),
@@ -880,19 +838,17 @@ class _EntryFormState extends State<EntryForm> {
               decoration: InputDecoration(
                 labelText: 'Second Party Address',
                 labelStyle: TextStyle(
-                    color: Theme
-                        .of(context)
-                        .primaryColor, fontSize: 15.0),
+                    color: Theme.of(context).primaryColor, fontSize: 15.0),
                 suffixIcon:
-                Icon(Icons.streetview_outlined, color: Colors.indigo),
+                    Icon(Icons.streetview_outlined, color: Colors.indigo),
                 contentPadding:
-                new EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
+                    new EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10.0),
                 ),
               ),
               validator: (value) =>
-              value!.isEmpty ? 'Please enter Second Party address' : null,
+                  value!.isEmpty ? 'Please enter Second Party address' : null,
               onSaved: (value) {
                 _secondPartyAddress = value;
               },
@@ -922,11 +878,9 @@ class _EntryFormState extends State<EntryForm> {
               decoration: InputDecoration(
                 labelText: 'Cause of Vivad',
                 labelStyle: TextStyle(
-                    color: Theme
-                        .of(context)
-                        .primaryColor, fontSize: 15.0),
+                    color: Theme.of(context).primaryColor, fontSize: 15.0),
                 contentPadding:
-                new EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
+                    new EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10.0),
                 ),
@@ -968,34 +922,32 @@ class _EntryFormState extends State<EntryForm> {
           ),
           isViolence
               ? Padding(
-            padding: EdgeInsets.only(
-              left: 0.0,
-              right: 0.0,
-              top: 10.0,
-              bottom: 5.0,
-            ),
-            child: TextFormField(
-              maxLines: 5,
-              decoration: InputDecoration(
-                labelText: 'Violence Details',
-                labelStyle: TextStyle(
-                    color: Theme
-                        .of(context)
-                        .primaryColor,
-                    fontSize: 15.0),
-                contentPadding: new EdgeInsets.symmetric(
-                    vertical: 5.0, horizontal: 10.0),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-              ),
-              validator: (value) =>
-              value!.isEmpty ? 'Please enter violence details' : null,
-              onSaved: (value) {
-                _violenceDetails = value;
-              },
-            ),
-          )
+                  padding: EdgeInsets.only(
+                    left: 0.0,
+                    right: 0.0,
+                    top: 10.0,
+                    bottom: 5.0,
+                  ),
+                  child: TextFormField(
+                    maxLines: 5,
+                    decoration: InputDecoration(
+                      labelText: 'Violence Details',
+                      labelStyle: TextStyle(
+                          color: Theme.of(context).primaryColor,
+                          fontSize: 15.0),
+                      contentPadding: new EdgeInsets.symmetric(
+                          vertical: 5.0, horizontal: 10.0),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                    ),
+                    validator: (value) =>
+                        value!.isEmpty ? 'Please enter violence details' : null,
+                    onSaved: (value) {
+                      _violenceDetails = value;
+                    },
+                  ),
+                )
               : Container(),
           Padding(
             padding: EdgeInsets.only(
@@ -1029,34 +981,32 @@ class _EntryFormState extends State<EntryForm> {
           ),
           isFir
               ? Padding(
-            padding: EdgeInsets.only(
-              left: 0.0,
-              right: 0.0,
-              top: 10.0,
-              bottom: 5.0,
-            ),
-            child: TextFormField(
-              maxLines: 5,
-              decoration: InputDecoration(
-                labelText: 'FIR Notice Order',
-                labelStyle: TextStyle(
-                    color: Theme
-                        .of(context)
-                        .primaryColor,
-                    fontSize: 15.0),
-                contentPadding: new EdgeInsets.symmetric(
-                    vertical: 5.0, horizontal: 10.0),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-              ),
-              validator: (value) =>
-              value!.isEmpty ? 'Please enter FIR details' : null,
-              onSaved: (value) {
-                _noticeOrder = value;
-              },
-            ),
-          )
+                  padding: EdgeInsets.only(
+                    left: 0.0,
+                    right: 0.0,
+                    top: 10.0,
+                    bottom: 5.0,
+                  ),
+                  child: TextFormField(
+                    maxLines: 5,
+                    decoration: InputDecoration(
+                      labelText: 'FIR Notice Order',
+                      labelStyle: TextStyle(
+                          color: Theme.of(context).primaryColor,
+                          fontSize: 15.0),
+                      contentPadding: new EdgeInsets.symmetric(
+                          vertical: 5.0, horizontal: 10.0),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                    ),
+                    validator: (value) =>
+                        value!.isEmpty ? 'Please enter FIR details' : null,
+                    onSaved: (value) {
+                      _noticeOrder = value;
+                    },
+                  ),
+                )
               : Container(),
           Padding(
             padding: EdgeInsets.only(
@@ -1090,34 +1040,32 @@ class _EntryFormState extends State<EntryForm> {
           ),
           isCourtPending
               ? Padding(
-            padding: EdgeInsets.only(
-              left: 0.0,
-              right: 0.0,
-              top: 10.0,
-              bottom: 5.0,
-            ),
-            child: TextFormField(
-              maxLines: 3,
-              decoration: InputDecoration(
-                labelText: 'Court Case Status',
-                labelStyle: TextStyle(
-                    color: Theme
-                        .of(context)
-                        .primaryColor,
-                    fontSize: 15.0),
-                contentPadding: new EdgeInsets.symmetric(
-                    vertical: 5.0, horizontal: 10.0),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-              ),
-              validator: (value) =>
-              value!.isEmpty ? 'Please enter court status' : null,
-              onSaved: (value) {
-                _courtStatus = value;
-              },
-            ),
-          )
+                  padding: EdgeInsets.only(
+                    left: 0.0,
+                    right: 0.0,
+                    top: 10.0,
+                    bottom: 5.0,
+                  ),
+                  child: TextFormField(
+                    maxLines: 3,
+                    decoration: InputDecoration(
+                      labelText: 'Court Case Status',
+                      labelStyle: TextStyle(
+                          color: Theme.of(context).primaryColor,
+                          fontSize: 15.0),
+                      contentPadding: new EdgeInsets.symmetric(
+                          vertical: 5.0, horizontal: 10.0),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                    ),
+                    validator: (value) =>
+                        value!.isEmpty ? 'Please enter court status' : null,
+                    onSaved: (value) {
+                      _courtStatus = value;
+                    },
+                  ),
+                )
               : Container(),
           Padding(
             padding: EdgeInsets.only(
@@ -1177,46 +1125,43 @@ class _EntryFormState extends State<EntryForm> {
           ),
           isDisposed == 'No'
               ? Padding(
-            padding: EdgeInsets.only(
-              left: 0.0,
-              right: 0.0,
-              top: 10.0,
-              bottom: 5.0,
-            ),
-            child: GestureDetector(
-              onTap: () => _selectDate(context),
-              child: AbsorbPointer(
-                child: TextFormField(
-                  keyboardType: TextInputType.datetime,
-                  controller: _dateTimeController,
-                  decoration: InputDecoration(
-                    labelText: 'Next Hearing Date',
-                    suffixIcon: Icon(
-                      Icons.calendar_today_outlined,
-                      color: Colors.indigo,
-                    ),
-                    labelStyle: TextStyle(
-                        color: Theme
-                            .of(context)
-                            .primaryColor,
-                        fontSize: 15.0),
-                    contentPadding: new EdgeInsets.symmetric(
-                        vertical: 5.0, horizontal: 10.0),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.0),
+                  padding: EdgeInsets.only(
+                    left: 0.0,
+                    right: 0.0,
+                    top: 10.0,
+                    bottom: 5.0,
+                  ),
+                  child: GestureDetector(
+                    onTap: () => _selectDate(context),
+                    child: AbsorbPointer(
+                      child: TextFormField(
+                        keyboardType: TextInputType.datetime,
+                        controller: _dateTimeController,
+                        decoration: InputDecoration(
+                          labelText: 'Next Hearing Date',
+                          suffixIcon: Icon(
+                            Icons.calendar_today_outlined,
+                            color: Colors.indigo,
+                          ),
+                          labelStyle: TextStyle(
+                              color: Theme.of(context).primaryColor,
+                              fontSize: 15.0),
+                          contentPadding: new EdgeInsets.symmetric(
+                              vertical: 5.0, horizontal: 10.0),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                        ),
+                        validator: (value) => value!.isEmpty
+                            ? 'Please enter next hearing date'
+                            : null,
+                        onSaved: (value) {
+                          _hearingDate = value;
+                        },
+                      ),
                     ),
                   ),
-                  validator: (value) =>
-                  value!.isEmpty
-                      ? 'Please enter next hearing date'
-                      : null,
-                  onSaved: (value) {
-                    _hearingDate = value;
-                  },
-                ),
-              ),
-            ),
-          )
+                )
               : Container(),
           Padding(
             padding: EdgeInsets.only(
@@ -1230,11 +1175,9 @@ class _EntryFormState extends State<EntryForm> {
               decoration: InputDecoration(
                 labelText: 'Remaks, if any',
                 labelStyle: TextStyle(
-                    color: Theme
-                        .of(context)
-                        .primaryColor, fontSize: 15.0),
+                    color: Theme.of(context).primaryColor, fontSize: 15.0),
                 contentPadding:
-                new EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
+                    new EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10.0),
                 ),
@@ -1250,8 +1193,7 @@ class _EntryFormState extends State<EntryForm> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Builder(
-                    builder: (context) =>
-                        ElevatedButton(
+                    builder: (context) => ElevatedButton(
                           child: Padding(
                             padding: EdgeInsets.only(left: 20.0, right: 20.0),
                             child: Text(
@@ -1266,17 +1208,20 @@ class _EntryFormState extends State<EntryForm> {
                             setState(() {
                               if (_formKey.currentState!.validate()) {
                                 _submit(context);
+                                FocusScope.of(context).requestFocus(new FocusNode());
                               } else {
                                 final snackBar = SnackBar(
                                   content: Text(
                                     'Some of the mandatory fields are blank !!!',
                                     style: TextStyle(
                                       fontSize: 16.0,
-                                    ),),
+                                    ),
+                                  ),
                                   duration: const Duration(milliseconds: 5000),
                                   backgroundColor: Colors.red[900],
                                   padding: const EdgeInsets.symmetric(
-                                    horizontal: 8.0, // Inner padding for SnackBar content.
+                                    horizontal:
+                                        8.0, // Inner padding for SnackBar content.
                                   ),
                                 );
                                 ScaffoldMessenger.of(context)
@@ -1307,13 +1252,13 @@ class _EntryFormState extends State<EntryForm> {
       });
   }
 
-  void _submit(BuildContext context) async {
+  Future<void>  _submit(BuildContext context) async {
     _formKey.currentState!.save();
-
     try {
       var plot_uuid = uuid.v4();
       var vivad_uuid = uuid.v4();
-      _plotDetail = new PlotDetail(plot_uuid: plot_uuid,
+      _plotDetail = new PlotDetail(
+          plot_uuid: plot_uuid,
           chauhaddi: _chauhaddi!,
           circle_id: _circleValue!,
           image: '',
@@ -1321,41 +1266,85 @@ class _EntryFormState extends State<EntryForm> {
           khesra_no: _khesra!,
           latitude: 0,
           longitude: 0,
-          mauza_id: int.parse(_mauzaValue!,),
+          mauza_id: int.parse(
+            _mauzaValue!,
+          ),
           panchayat_id: _panchayatValue!,
           plot_nature_id: int.parse(_plotNature!),
           plot_type_id: int.parse(_plotType!),
           rakwa: double.parse(_rakwa!),
           remarks: '',
-          thana_no: int.parse(_thanaValue!),
-          is_govtPlot: false);
+          thana_no: '',
+          is_govtPlot: 0);
 
-      _vivad = new Vivad(abhidari_name: _abhidariName!,
+      _vivadData = new Vivad(
+          abhidari_name: _abhidariName!,
           case_status: _caseStatus!,
-          cause_vivad: _vivadCause!,
+          cause_vivad: _vivadCause ?? '',
           circle_id: _circleValue!,
-          court_status: _courtStatus!,
+          court_status: _courtStatus ?? '',
           first_party_address: _firstPartyAddress!,
           first_party_contact: _firstPartyPhone!,
           first_party_name: _firstPartyName!,
-          is_courtpending: isCourtPending,
-          is_fir: isFir,
-          is_violence: isViolence,
-          mauza_id: int.parse( _mauzaValue!),
-          next_hearing_date: _hearingDate!,
-          notice_order: _noticeOrder!,
+          is_courtpending: isCourtPending ? 1 : 0,
+          is_fir: isFir ? 1 : 0,
+          is_violence: isViolence ? 1 : 0,
+          mauza_id: int.parse(_mauzaValue!),
+          next_date: _hearingDate ?? '',
+          notice_order: _noticeOrder ?? '',
           panchayat_id: _panchayatValue!,
           plot_uuid: plot_uuid,
           register_date: DateFormat("dd-MM-yyyy").format(DateTime.now()),
-          remarks: _remarks!,
+          remarks: _remarks ?? '',
           second_party_address: _secondPartyAddress!,
           second_party_contact: _secondPartPhone!,
           second_party_name: _secondPartyName!,
-          thana_no: int.parse( _thanaValue!),
-          violence_detail: _violenceDetails!,
+          thana_no: int.parse(_thanaValue!),
+          violence_detail: _violenceDetails ?? '',
           vivad_uuid: vivad_uuid);
+
+      ProgressDialog pr = new ProgressDialog(context);
+      pr.style(
+          message: 'Loading data...',
+          borderRadius: 10.0,
+          backgroundColor: Colors.white,
+          progressWidget: CircularProgressIndicator(),
+          elevation: 10.0,
+          insetAnimCurve: Curves.easeInOut,
+          progress: 0.0,
+          maxProgress: 100.0,
+          progressTextStyle: TextStyle(
+              color: Colors.black, fontSize: 13.0, fontWeight: FontWeight.w400),
+          messageTextStyle: TextStyle(
+              color: Colors.black,
+              fontSize: 14.0,
+              fontWeight: FontWeight.w600));
+
+      await pr.show();
+
+      var result = await Provider.of<AddBaseData>(context, listen: false)
+          .insertPlotData(_plotDetail!)
+          .then((value) {
+        pr.update(message: 'Saving data');
+        Provider.of<AddBaseData>(context, listen: false)
+            .insertVivadData(_vivadData!)
+            .then((value) {
+          pr.hide().whenComplete(() => null);
+          _showAlertDialog('Success', 'data saved successfully !!!');
+          _formKey.currentState?.reset();
+        // ignore: invalid_return_type_for_catch_error
+        }).catchError((handleError) {
+          pr.hide().whenComplete(() => null);
+          _showAlertDialog(
+              'Error', 'Failed to save plot data.');
+        });
+        // ignore: invalid_return_type_for_catch_error
+      }).catchError((handleError) {
+        pr.hide().whenComplete(() => null);
+        _showAlertDialog(
+          'Error', 'Failed to save vivad data.');});
     } catch (error) {
-      _showAlertDialog('Save Error :', error.toString());
+      _showAlertDialog('Submit Error :', error.toString());
     }
   }
 
@@ -1390,5 +1379,4 @@ class _EntryFormState extends State<EntryForm> {
     }
     return null;
   }
-
 }

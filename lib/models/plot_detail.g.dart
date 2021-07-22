@@ -22,8 +22,8 @@ PlotDetail _$PlotDetailFromJson(Map<String, dynamic> json) {
     plot_type_id: json['plot_type_id'] as int,
     rakwa: (json['rakwa'] as num).toDouble(),
     remarks: json['remarks'] as String,
-    thana_no: json['thana_no'] as int,
-    is_govtPlot: json['is_govtPlot'] as bool,
+    thana_no: json['thana_no'] as String,
+    is_govtPlot: json['is_govtPlot'] as int,
   );
 }
 

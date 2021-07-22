@@ -4,10 +4,12 @@ import 'dart:io';
 import 'package:bhoomi_vivad/models/circle.dart';
 import 'package:bhoomi_vivad/models/mauza.dart';
 import 'package:bhoomi_vivad/models/panchayat.dart';
+import 'package:bhoomi_vivad/models/plot_detail.dart';
 import 'package:bhoomi_vivad/models/plot_nature.dart';
 import 'package:bhoomi_vivad/models/plot_type.dart';
 import 'package:bhoomi_vivad/models/thana.dart';
 import 'package:bhoomi_vivad/models/user.dart';
+import 'package:bhoomi_vivad/models/vivad.dart';
 import 'package:bhoomi_vivad/utils/database_helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -16,7 +18,6 @@ import 'package:http/http.dart' as http;
 import '../constants.dart';
 
 class AddBaseData with ChangeNotifier {
-
   final dbHelper = DatabaseHelper.instance;
 
   String? _token;
@@ -33,10 +34,10 @@ class AddBaseData with ChangeNotifier {
     _users = userData
         .map(
           (item) => User(
-        firstName: item['first_name'],
-        id: item['id'],
-      ),
-    )
+            firstName: item['first_name'],
+            id: item['id'],
+          ),
+        )
         .toList();
     notifyListeners();
   }
@@ -44,7 +45,7 @@ class AddBaseData with ChangeNotifier {
   Future<void> getToken() async {
     final prefs = await SharedPreferences.getInstance();
     final extractedUserData =
-    json.decode(prefs.getString('userData')!) as Map<String, dynamic>;
+        json.decode(prefs.getString('userData')!) as Map<String, dynamic>;
     _token = extractedUserData['token'];
     notifyListeners();
   }
@@ -60,7 +61,7 @@ class AddBaseData with ChangeNotifier {
         notifyListeners();
         CircleList circleList = CircleList.fromJson(extractedCircleData);
         await dbHelper.deleteTableData('circle');
-        circleList.circles.forEach((Circle) async{
+        circleList.circles.forEach((Circle) async {
           await dbHelper.insertTableData('circle', Circle.toJson());
         });
       } else {
@@ -79,9 +80,11 @@ class AddBaseData with ChangeNotifier {
         HttpHeaders.authorizationHeader: "Token " + _token.toString()
       });
       if (response.statusCode == 200) {
-        final extractedPanchayatData = jsonDecode(utf8.decode(response.bodyBytes));
+        final extractedPanchayatData =
+            jsonDecode(utf8.decode(response.bodyBytes));
         notifyListeners();
-        PanchayatList panchayatList = PanchayatList.fromJson(extractedPanchayatData);
+        PanchayatList panchayatList =
+            PanchayatList.fromJson(extractedPanchayatData);
         await dbHelper.deleteTableData('panchayat');
         panchayatList.panchayats.forEach((Panchayat) async {
           await dbHelper.insertTableData('panchayat', Panchayat.toJson());
@@ -128,7 +131,7 @@ class AddBaseData with ChangeNotifier {
         notifyListeners();
         ThanaList thanaList = ThanaList.fromJson(extractedThanaData);
         await dbHelper.deleteTableData('thana');
-       thanaList.thanas.forEach((Thana) async {
+        thanaList.thanas.forEach((Thana) async {
           await dbHelper.insertTableData('thana', Thana.toJson());
         });
       } else {
@@ -148,7 +151,8 @@ class AddBaseData with ChangeNotifier {
       if (response.statusCode == 200) {
         final extractedPlotData = jsonDecode(utf8.decode(response.bodyBytes));
         notifyListeners();
-        PlotNatureList plotNatureList = PlotNatureList.fromJson(extractedPlotData);
+        PlotNatureList plotNatureList =
+            PlotNatureList.fromJson(extractedPlotData);
         await dbHelper.deleteTableData('plot_nature');
         plotNatureList.plot_natures.forEach((PlotNature) async {
           await dbHelper.insertTableData('plot_nature', PlotNature.toJson());
@@ -160,6 +164,7 @@ class AddBaseData with ChangeNotifier {
       throw error;
     }
   }
+
   Future<void> fetchAndSetPlotType() async {
     final url = base_url + 'plot-type/';
     try {
@@ -182,11 +187,29 @@ class AddBaseData with ChangeNotifier {
     }
   }
 
-  Future<void> setPlotData() async{
-
+  Future<int> insertPlotData(PlotDetail _plotDetail) async {
+    try {
+      final result =
+          await dbHelper.insertTableData('plot_detail', _plotDetail.toJson());
+      notifyListeners();
+      return result;
+    } catch (error) {
+      throw (error);
+    }
   }
 
-  Future<void> setVivadData() async{
+  Future<int> insertVivadData(Vivad _vivadData) async {
+    try {
+      final result =
+          await dbHelper.insertTableData('vivad', _vivadData.toJson());
+      notifyListeners();
+      return result;
+    } catch (error) {
+      throw (error);
+    }
+  }
 
+  Future<void> closeDatabaseInstance() async {
+    await dbHelper.closeDatabase();
   }
 }

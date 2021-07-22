@@ -34,8 +34,8 @@ class PlotDetail {
     int plot_type_id;
     double rakwa;
     String remarks;
-    int thana_no;
-    bool is_govtPlot;
+    String thana_no;
+    int is_govtPlot;
 
     PlotDetail({required this.chauhaddi, required this.circle_id, required this.image,
         required this.khata_no, required this.khesra_no, required this.latitude, required this.longitude,
