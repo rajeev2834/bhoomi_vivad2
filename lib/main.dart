@@ -1,6 +1,7 @@
 import 'package:bhoomi_vivad/providers/addBaseData.dart';
 import 'package:bhoomi_vivad/providers/auth.dart';
 import 'package:bhoomi_vivad/providers/get_base_data.dart';
+import 'package:bhoomi_vivad/screens/all_vivad/vivad_report_screen.dart';
 import 'package:bhoomi_vivad/screens/home_screen.dart';
 import 'package:bhoomi_vivad/screens/login.dart';
 import 'package:bhoomi_vivad/screens/splash_screen.dart';
@@ -49,6 +50,7 @@ class BhoomiVivad extends StatelessWidget {
           ),
           routes: {
             VivadEntryScreen.routeName: (context) => VivadEntryScreen(),
+            VivadReportScreen.routeName: (context) => VivadReportScreen(),
           },
         ),
       ),

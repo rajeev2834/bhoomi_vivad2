@@ -268,6 +268,8 @@ class Body extends StatelessWidget {
   void _moveNextScreen(BuildContext context, int index) async {
     if (index == 0) {
       await Navigator.of(context).pushNamed('/vivad_entry_screen');
+    } else if (index == 4) {
+      await Navigator.of(context).pushNamed('/vivad_report_screen');
     }
   }
 

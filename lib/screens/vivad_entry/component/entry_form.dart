@@ -1208,7 +1208,8 @@ class _EntryFormState extends State<EntryForm> {
                             setState(() {
                               if (_formKey.currentState!.validate()) {
                                 _submit(context);
-                                FocusScope.of(context).requestFocus(new FocusNode());
+                                FocusScope.of(context)
+                                    .requestFocus(new FocusNode());
                               } else {
                                 final snackBar = SnackBar(
                                   content: Text(
@@ -1248,11 +1249,11 @@ class _EntryFormState extends State<EntryForm> {
     if (picked != null && picked != DateTime.now())
       setState(() {
         _dateTime = picked;
-        _dateTimeController.text = DateFormat("dd-MM-yyyy").format(_dateTime!);
+        _dateTimeController.text = DateFormat("yyyy-MM-dd").format(_dateTime!);
       });
   }
 
-  Future<void>  _submit(BuildContext context) async {
+  Future<void> _submit(BuildContext context) async {
     _formKey.currentState!.save();
     try {
       var plot_uuid = uuid.v4();
@@ -1294,7 +1295,7 @@ class _EntryFormState extends State<EntryForm> {
           notice_order: _noticeOrder ?? '',
           panchayat_id: _panchayatValue!,
           plot_uuid: plot_uuid,
-          register_date: DateFormat("dd-MM-yyyy").format(DateTime.now()),
+          register_date: DateFormat("yyyy-MM-dd").format(DateTime.now()),
           remarks: _remarks ?? '',
           second_party_address: _secondPartyAddress!,
           second_party_contact: _secondPartPhone!,
@@ -1332,17 +1333,16 @@ class _EntryFormState extends State<EntryForm> {
           pr.hide().whenComplete(() => null);
           _showAlertDialog('Success', 'data saved successfully !!!');
           _formKey.currentState?.reset();
-        // ignore: invalid_return_type_for_catch_error
+          // ignore: invalid_return_type_for_catch_error
         }).catchError((handleError) {
           pr.hide().whenComplete(() => null);
-          _showAlertDialog(
-              'Error', 'Failed to save plot data.');
+          _showAlertDialog('Error', 'Failed to save plot data.');
         });
         // ignore: invalid_return_type_for_catch_error
       }).catchError((handleError) {
         pr.hide().whenComplete(() => null);
-        _showAlertDialog(
-          'Error', 'Failed to save vivad data.');});
+        _showAlertDialog('Error', 'Failed to save vivad data.');
+      });
     } catch (error) {
       _showAlertDialog('Submit Error :', error.toString());
     }
