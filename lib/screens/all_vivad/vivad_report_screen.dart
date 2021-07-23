@@ -1,6 +1,7 @@
 import 'package:bhoomi_vivad/models/panchayat.dart';
 import 'package:bhoomi_vivad/screens/all_vivad/filter_dialog.dart';
 import 'package:bhoomi_vivad/screens/all_vivad/help_funcs.dart';
+import 'package:bhoomi_vivad/screens/all_vivad/vivad_list_screen.dart';
 import 'package:bhoomi_vivad/utils/database_helper.dart';
 import 'package:intl/intl.dart';
 import 'help_funcs.dart';
@@ -26,16 +27,6 @@ class _VivadReportScreenState extends State<VivadReportScreen> {
   String todate_str = "";
   String fromdate_str = "";
   bool showAll = true;
-  List<DataRow> getDataRows(List rows) {
-    return rows.map((row) {
-      return DataRow(cells: [
-        DataCell(
-            Text("${row['panchayat_name']}\n(${row['panchayat_name_hn']})")),
-        DataCell(Text(row['pending'].toString())),
-        DataCell(Text(row['closed'].toString())),
-      ]);
-    }).toList();
-  }
 
   @override
   void initState() {
@@ -112,68 +103,124 @@ class _VivadReportScreenState extends State<VivadReportScreen> {
             : Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  DataTable(
-                    columns: [
-                      DataColumn(
-                        label: Text("Panchayat"),
-                        onSort: (columnIndex, sortAscending) {
-                          setState(() {
-                            if (columnIndex == _sortColumnIndex) {
-                              _sortAsc = _sortAgeAsc = sortAscending;
-                            } else {
-                              _sortColumnIndex = columnIndex;
-                              _sortAsc = _sortAgeAsc;
-                            }
-                            rows.sort((a, b) => a['panchayat_name']
-                                .compareTo(b['panchayat_name']));
-                            if (!sortAscending) {
-                              rows = rows.reversed.toList();
-                            }
-                          });
-                        },
+                  Expanded(
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.vertical,
+                      child: DataTable(
+                        sortColumnIndex: _sortColumnIndex,
+                        sortAscending: _sortAsc,
+                        columns: [
+                          DataColumn(
+                            label: Text("Panchayat"),
+                            onSort: (columnIndex, sortAscending) {
+                              setState(() {
+                                if (columnIndex == _sortColumnIndex) {
+                                  _sortAsc = _sortAgeAsc = sortAscending;
+                                } else {
+                                  _sortColumnIndex = columnIndex;
+                                  _sortAsc = _sortAgeAsc;
+                                }
+                                rows.sort((a, b) => a['panchayat_id']
+                                    .compareTo(b['panchayat_id']));
+                                if (!sortAscending) {
+                                  rows = rows.reversed.toList();
+                                }
+                              });
+                            },
+                          ),
+                          DataColumn(
+                            label: Text("Open"),
+                            numeric: true,
+                            onSort: (columnIndex, sortAscending) {
+                              setState(() {
+                                if (columnIndex == _sortColumnIndex) {
+                                  _sortAsc = _sortAgeAsc = sortAscending;
+                                } else {
+                                  _sortColumnIndex = columnIndex;
+                                  _sortAsc = _sortAgeAsc;
+                                }
+                                rows.sort((a, b) =>
+                                    a['pending'].compareTo(b['pending']));
+                                if (!sortAscending) {
+                                  rows = rows.reversed.toList();
+                                }
+                              });
+                            },
+                          ),
+                          DataColumn(
+                            label: Text("Closed"),
+                            numeric: true,
+                            onSort: (columnIndex, sortAscending) {
+                              setState(() {
+                                if (columnIndex == _sortColumnIndex) {
+                                  _sortAsc = _sortAgeAsc = sortAscending;
+                                } else {
+                                  _sortColumnIndex = columnIndex;
+                                  _sortAsc = _sortAgeAsc;
+                                }
+                                rows.sort((a, b) =>
+                                    a['closed'].compareTo(b['closed']));
+                                if (!sortAscending) {
+                                  rows = rows.reversed.toList();
+                                }
+                              });
+                            },
+                          )
+                        ],
+                        rows: rows.map((row) {
+                          return DataRow(cells: [
+                            DataCell(Text(row['panchayat_name_hn'])),
+                            DataCell(GestureDetector(
+                                child: Container(
+                                    height: 35,
+                                    width: 35,
+                                    //color: Colors.grey,
+                                    alignment: Alignment.center,
+                                    child: Text(row['pending'].toString())),
+                                onTap: () {
+                                  if (row['pending'] == 0) {
+                                    return;
+                                  }
+                                  Navigator.push(context,
+                                      MaterialPageRoute(builder: (context) {
+                                    return ListVivad(
+                                        isClosed: false,
+                                        panchayat_id: row['panchayat_id'],
+                                        panchayat_name:
+                                            row['panchayat_name_hn'],
+                                        showAll: showAll,
+                                        fromdate: fromdate_str,
+                                        todate: todate_str);
+                                  }));
+                                })),
+                            DataCell(GestureDetector(
+                                child: Container(
+                                    height: 35,
+                                    width: 35,
+                                    alignment: Alignment.center,
+                                    //color: Colors.grey,
+                                    child: Text(row['closed'].toString())),
+                                behavior: HitTestBehavior.translucent,
+                                onTap: () {
+                                  if (row['closed'] == 0) {
+                                    return;
+                                  }
+                                  Navigator.push(context,
+                                      MaterialPageRoute(builder: (context) {
+                                    return ListVivad(
+                                        isClosed: true,
+                                        panchayat_id: row['panchayat_id'],
+                                        panchayat_name:
+                                            row['panchayat_name_hn'],
+                                        showAll: showAll,
+                                        fromdate: fromdate_str,
+                                        todate: todate_str);
+                                  }));
+                                })),
+                          ]);
+                        }).toList(),
                       ),
-                      DataColumn(
-                        label: Text("Open"),
-                        numeric: true,
-                        onSort: (columnIndex, sortAscending) {
-                          setState(() {
-                            if (columnIndex == _sortColumnIndex) {
-                              _sortAsc = _sortAgeAsc = sortAscending;
-                            } else {
-                              _sortColumnIndex = columnIndex;
-                              _sortAsc = _sortAgeAsc;
-                            }
-                            rows.sort(
-                                (a, b) => a['pending'].compareTo(b['pending']));
-                            if (!sortAscending) {
-                              rows = rows.reversed.toList();
-                            }
-                          });
-                        },
-                      ),
-                      DataColumn(
-                        label: Text("Closed"),
-                        numeric: true,
-                        onSort: (columnIndex, sortAscending) {
-                          setState(() {
-                            if (columnIndex == _sortColumnIndex) {
-                              _sortAsc = _sortAgeAsc = sortAscending;
-                            } else {
-                              _sortColumnIndex = columnIndex;
-                              _sortAsc = _sortAgeAsc;
-                            }
-                            rows.sort(
-                                (a, b) => a['closed'].compareTo(b['closed']));
-                            if (!sortAscending) {
-                              rows = rows.reversed.toList();
-                            }
-                          });
-                        },
-                      )
-                    ],
-                    rows: getDataRows(rows),
-                    sortColumnIndex: _sortColumnIndex,
-                    sortAscending: _sortAsc,
+                    ),
                   )
                 ],
               ));

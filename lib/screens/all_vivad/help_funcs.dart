@@ -29,3 +29,35 @@ Future<List> getOpenClosed(bool getAll, String fromdate, String todate) async {
   print(result);
   return result;
 }
+
+Future<List> getVivads(String panchayat_id, bool isClosed, bool getAll,
+    String fromdate, String todate) async {
+  List result = [];
+  Database db = await DatabaseHelper.instance.database;
+  List<Map> res = getAll
+      ? await db.rawQuery(
+          '''SELECT vivad.circle_id, circle.circle_name_hn, vivad.panchayat_id, panchayat.panchayat_name_hn, vivad.mauza_id, mauza.mauza_name_hn, plot_detail.khata_no, plot_detail.khesra_no, plot_detail.rakwa, vivad.first_party_name, vivad.first_party_contact, vivad.second_party_name, vivad.second_party_contact, vivad.register_date, vivad.cause_vivad, vivad.case_status
+  from vivad
+  INNER JOIN circle ON circle.circle_id = vivad.circle_id
+  INNER JOIN panchayat ON panchayat.panchayat_id = vivad.panchayat_id
+  INNER JOIN mauza ON mauza.mauza_id = vivad.mauza_id
+  INNER JOIN plot_detail ON plot_detail.plot_uuid = vivad.plot_uuid
+  WHERE vivad.panchayat_id = ? AND vivad.case_status = ?
+  ORDER BY vivad.register_date DESC
+  ''', [panchayat_id, isClosed ? 'Closed' : 'Pending'])
+      : await db.rawQuery(
+          '''SELECT vivad.circle_id, circle.circle_name_hn, vivad.panchayat_id, panchayat.panchayat_name_hn, vivad.mauza_id, mauza.mauza_name_hn, plot_detail.khata_no, plot_detail.khesra_no, plot_detail.rakwa, vivad.first_party_name, vivad.first_party_contact, vivad.second_party_name, vivad.second_party_contact, vivad.register_date, vivad.cause_vivad, vivad.case_status
+  from vivad
+  INNER JOIN circle ON circle.circle_id = vivad.circle_id
+  INNER JOIN panchayat ON panchayat.panchayat_id = vivad.panchayat_id
+  INNER JOIN mauza ON mauza.mauza_id = vivad.mauza_id
+  INNER JOIN plot_detail ON plot_detail.plot_uuid = vivad.plot_uuid
+  WHERE vivad.register_date BETWEEN ? AND ? vivad.panchayat_id = ? AND vivad.case_status = ?
+  ORDER BY vivad.register_date DESC
+  ''', [fromdate, todate, panchayat_id, isClosed ? 'Closed' : 'Pending']);
+  res.forEach((element) {
+    print(element);
+  });
+  result = res.map((e) => Map.from(e)).toList();
+  return result;
+}
