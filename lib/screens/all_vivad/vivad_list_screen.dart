@@ -25,7 +25,7 @@ class ListVivad extends StatefulWidget {
 class _ListVivadState extends State<ListVivad> {
   List vivads = [];
   List vivadsFiltered = [];
-  int _sortColumnIndex = 8; //Register date
+  int _sortColumnIndex = 6; //Register date
   bool _sortAsc = true;
   TextEditingController controller = TextEditingController();
   String _searchResult = '';
@@ -46,7 +46,7 @@ class _ListVivadState extends State<ListVivad> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-            "${widget.panchayat_name} (${widget.isClosed ? 'Closed' : 'Open'})"),
+            "${vivads[0]['circle_name_hn']}, ${widget.panchayat_name} (${widget.isClosed ? 'Closed' : 'Open'})"),
       ),
       floatingActionButton: FloatingActionButton(onPressed: () async {
         getVivads('009', false, true, "", "");
@@ -99,10 +99,6 @@ class _ListVivadState extends State<ListVivad> {
                 sortColumnIndex: _sortColumnIndex,
                 sortAscending: _sortAsc,
                 columns: [
-                  DataColumn(label: Text("Circle")),
-                  DataColumn(
-                    label: Text("Panchayat"),
-                  ),
                   DataColumn(
                     label: Text("Mauza"),
                     onSort: (columnIndex, sortAscending) {
@@ -182,8 +178,6 @@ class _ListVivadState extends State<ListVivad> {
                 ],
                 rows: vivadsFiltered.map((row) {
                   return DataRow(cells: [
-                    DataCell(Text(row['circle_name_hn'] ?? "")),
-                    DataCell(Text(row['panchayat_name_hn'] ?? "")),
                     DataCell(Text(row['mauza_name_hn'] ?? "")),
                     DataCell(Text(row['first_party_name'] +
                         "\nPh: ${row['first_party_contact']}")),
