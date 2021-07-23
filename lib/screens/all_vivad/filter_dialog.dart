@@ -47,7 +47,7 @@ class _FilterDialogState extends State<FilterDialog> {
           children: [
             Text("Filter:"),
             TextButton(
-              child: Text(showAll ? "ON" : "OFF"),
+              child: Text(showAll ? "OFF" : "ON"),
               onPressed: () {
                 setState(() {
                   showAll = !showAll;

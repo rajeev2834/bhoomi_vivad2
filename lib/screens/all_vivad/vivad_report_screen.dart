@@ -20,7 +20,7 @@ class _VivadReportScreenState extends State<VivadReportScreen> {
   bool _sortAgeAsc = true;
   bool _sortHightAsc = true;
   bool _sortAsc = true;
-  int? _sortColumnIndex;
+  int _sortColumnIndex = 0;
   List rows = [];
   DateTime fromdate = DateTime.now().subtract(Duration(days: 30));
   DateTime todate = DateTime.now();
@@ -88,16 +88,16 @@ class _VivadReportScreenState extends State<VivadReportScreen> {
             )
           ],
         ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () async {
-            List<Map<String, dynamic>> data;
-            //print(await getOpenClosed());
-            data = await DatabaseHelper.instance.queryAll('vivad');
-            data.forEach((element) {
-              print(element);
-            });
-          },
-        ),
+        // floatingActionButton: FloatingActionButton(
+        //   onPressed: () async {
+        //     List<Map<String, dynamic>> data;
+        //     print(await getOpenClosed(true, "", ""));
+        //     data = await DatabaseHelper.instance.queryAll('vivad');
+        //     data.forEach((element) {
+        //       print(element);
+        //     });
+        //   },
+        // ),
         body: rows.isEmpty
             ? Center(child: Text("No Vivads Present"))
             : Column(
@@ -106,119 +106,145 @@ class _VivadReportScreenState extends State<VivadReportScreen> {
                   Expanded(
                     child: SingleChildScrollView(
                       scrollDirection: Axis.vertical,
-                      child: DataTable(
-                        sortColumnIndex: _sortColumnIndex,
-                        sortAscending: _sortAsc,
-                        columns: [
-                          DataColumn(
-                            label: Text("Panchayat"),
-                            onSort: (columnIndex, sortAscending) {
-                              setState(() {
-                                if (columnIndex == _sortColumnIndex) {
-                                  _sortAsc = _sortAgeAsc = sortAscending;
-                                } else {
-                                  _sortColumnIndex = columnIndex;
-                                  _sortAsc = _sortAgeAsc;
-                                }
-                                rows.sort((a, b) => a['panchayat_id']
-                                    .compareTo(b['panchayat_id']));
-                                if (!sortAscending) {
-                                  rows = rows.reversed.toList();
-                                }
-                              });
-                            },
-                          ),
-                          DataColumn(
-                            label: Text("Open"),
-                            numeric: true,
-                            onSort: (columnIndex, sortAscending) {
-                              setState(() {
-                                if (columnIndex == _sortColumnIndex) {
-                                  _sortAsc = _sortAgeAsc = sortAscending;
-                                } else {
-                                  _sortColumnIndex = columnIndex;
-                                  _sortAsc = _sortAgeAsc;
-                                }
-                                rows.sort((a, b) =>
-                                    a['pending'].compareTo(b['pending']));
-                                if (!sortAscending) {
-                                  rows = rows.reversed.toList();
-                                }
-                              });
-                            },
-                          ),
-                          DataColumn(
-                            label: Text("Closed"),
-                            numeric: true,
-                            onSort: (columnIndex, sortAscending) {
-                              setState(() {
-                                if (columnIndex == _sortColumnIndex) {
-                                  _sortAsc = _sortAgeAsc = sortAscending;
-                                } else {
-                                  _sortColumnIndex = columnIndex;
-                                  _sortAsc = _sortAgeAsc;
-                                }
-                                rows.sort((a, b) =>
-                                    a['closed'].compareTo(b['closed']));
-                                if (!sortAscending) {
-                                  rows = rows.reversed.toList();
-                                }
-                              });
-                            },
-                          )
-                        ],
-                        rows: rows.map((row) {
-                          return DataRow(cells: [
-                            DataCell(Text(row['panchayat_name_hn'])),
-                            DataCell(GestureDetector(
-                                child: Container(
-                                    height: 35,
-                                    width: 35,
-                                    //color: Colors.grey,
-                                    alignment: Alignment.center,
-                                    child: Text(row['pending'].toString())),
-                                onTap: () {
-                                  if (row['pending'] == 0) {
-                                    return;
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: DataTable(
+                          sortColumnIndex: _sortColumnIndex,
+                          sortAscending: _sortAsc,
+                          columns: [
+                            DataColumn(
+                              label: Text("Circle"),
+                              onSort: (columnIndex, sortAscending) {
+                                setState(() {
+                                  if (columnIndex == _sortColumnIndex) {
+                                    _sortAsc = _sortAgeAsc = sortAscending;
+                                  } else {
+                                    _sortColumnIndex = columnIndex;
+                                    _sortAsc = _sortAgeAsc;
                                   }
-                                  Navigator.push(context,
-                                      MaterialPageRoute(builder: (context) {
-                                    return ListVivad(
-                                        isClosed: false,
-                                        panchayat_id: row['panchayat_id'],
-                                        panchayat_name:
-                                            row['panchayat_name_hn'],
-                                        showAll: showAll,
-                                        fromdate: fromdate_str,
-                                        todate: todate_str);
-                                  }));
-                                })),
-                            DataCell(GestureDetector(
-                                child: Container(
-                                    height: 35,
-                                    width: 35,
-                                    alignment: Alignment.center,
-                                    //color: Colors.grey,
-                                    child: Text(row['closed'].toString())),
-                                behavior: HitTestBehavior.translucent,
-                                onTap: () {
-                                  if (row['closed'] == 0) {
-                                    return;
+                                  rows.sort((a, b) =>
+                                      a['circle_id'].compareTo(b['circle_id']));
+                                  if (!sortAscending) {
+                                    rows = rows.reversed.toList();
                                   }
-                                  Navigator.push(context,
-                                      MaterialPageRoute(builder: (context) {
-                                    return ListVivad(
-                                        isClosed: true,
-                                        panchayat_id: row['panchayat_id'],
-                                        panchayat_name:
-                                            row['panchayat_name_hn'],
-                                        showAll: showAll,
-                                        fromdate: fromdate_str,
-                                        todate: todate_str);
-                                  }));
-                                })),
-                          ]);
-                        }).toList(),
+                                });
+                              },
+                            ),
+                            DataColumn(
+                              label: Text("Panchayat"),
+                              onSort: (columnIndex, sortAscending) {
+                                setState(() {
+                                  if (columnIndex == _sortColumnIndex) {
+                                    _sortAsc = _sortAgeAsc = sortAscending;
+                                  } else {
+                                    _sortColumnIndex = columnIndex;
+                                    _sortAsc = _sortAgeAsc;
+                                  }
+                                  rows.sort((a, b) => a['panchayat_id']
+                                      .compareTo(b['panchayat_id']));
+                                  if (!sortAscending) {
+                                    rows = rows.reversed.toList();
+                                  }
+                                });
+                              },
+                            ),
+                            DataColumn(
+                              label: Text("Open"),
+                              numeric: true,
+                              onSort: (columnIndex, sortAscending) {
+                                setState(() {
+                                  if (columnIndex == _sortColumnIndex) {
+                                    _sortAsc = _sortAgeAsc = sortAscending;
+                                  } else {
+                                    _sortColumnIndex = columnIndex;
+                                    _sortAsc = _sortAgeAsc;
+                                  }
+                                  rows.sort((a, b) =>
+                                      a['pending'].compareTo(b['pending']));
+                                  if (!sortAscending) {
+                                    rows = rows.reversed.toList();
+                                  }
+                                });
+                              },
+                            ),
+                            DataColumn(
+                              label: Text("Closed"),
+                              numeric: true,
+                              onSort: (columnIndex, sortAscending) {
+                                setState(() {
+                                  if (columnIndex == _sortColumnIndex) {
+                                    _sortAsc = _sortAgeAsc = sortAscending;
+                                  } else {
+                                    _sortColumnIndex = columnIndex;
+                                    _sortAsc = _sortAgeAsc;
+                                  }
+                                  rows.sort((a, b) =>
+                                      a['closed'].compareTo(b['closed']));
+                                  if (!sortAscending) {
+                                    rows = rows.reversed.toList();
+                                  }
+                                });
+                              },
+                            )
+                          ],
+                          rows: rows.map((row) {
+                            return DataRow(cells: [
+                              DataCell(Text(row['circle_name_hn'])),
+                              DataCell(Text(row['panchayat_name_hn'])),
+                              DataCell(GestureDetector(
+                                  child: Container(
+                                      height: 35,
+                                      width: 35,
+                                      //color: Colors.grey,
+                                      alignment: Alignment.center,
+                                      child: Text(row['pending'].toString())),
+                                  onTap: () {
+                                    if (row['pending'] == 0) {
+                                      return;
+                                    }
+                                    Navigator.push(context,
+                                        MaterialPageRoute(builder: (context) {
+                                      return ListVivad(
+                                          isClosed: false,
+                                          circle_id: row['circle_id'],
+                                          circle_name: row['circle_name_hn'],
+                                          panchayat_id: row['panchayat_id'],
+                                          panchayat_name:
+                                              row['panchayat_name_hn'],
+                                          showAll: showAll,
+                                          fromdate: fromdate_str,
+                                          todate: todate_str);
+                                    }));
+                                  })),
+                              DataCell(GestureDetector(
+                                  child: Container(
+                                      height: 35,
+                                      width: 35,
+                                      alignment: Alignment.center,
+                                      //color: Colors.grey,
+                                      child: Text(row['closed'].toString())),
+                                  behavior: HitTestBehavior.translucent,
+                                  onTap: () {
+                                    if (row['closed'] == 0) {
+                                      return;
+                                    }
+                                    Navigator.push(context,
+                                        MaterialPageRoute(builder: (context) {
+                                      return ListVivad(
+                                          isClosed: true,
+                                          circle_id: row['circle_id'],
+                                          circle_name: row['circle_name_hn'],
+                                          panchayat_id: row['panchayat_id'],
+                                          panchayat_name:
+                                              row['panchayat_name_hn'],
+                                          showAll: showAll,
+                                          fromdate: fromdate_str,
+                                          todate: todate_str);
+                                    }));
+                                  })),
+                            ]);
+                          }).toList(),
+                        ),
                       ),
                     ),
                   )

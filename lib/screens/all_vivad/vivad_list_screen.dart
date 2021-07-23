@@ -5,6 +5,8 @@ class ListVivad extends StatefulWidget {
   ListVivad(
       {Key? key,
       required this.isClosed,
+      required this.circle_id,
+      required this.circle_name,
       required this.panchayat_id,
       required this.panchayat_name,
       required this.showAll,
@@ -12,6 +14,8 @@ class ListVivad extends StatefulWidget {
       required this.todate})
       : super(key: key);
   bool isClosed;
+  String circle_id;
+  String circle_name;
   String panchayat_id;
   String panchayat_name;
   bool showAll;
@@ -32,8 +36,8 @@ class _ListVivadState extends State<ListVivad> {
   @override
   void initState() {
     // TODO: implement initState
-    getVivads(widget.panchayat_id, widget.isClosed, widget.showAll,
-            widget.fromdate, widget.todate)
+    getVivads(widget.circle_id, widget.panchayat_id, widget.isClosed,
+            widget.showAll, widget.fromdate, widget.todate)
         .then((value) => setState(() {
               vivads = value;
               vivadsFiltered = vivads;
@@ -46,11 +50,11 @@ class _ListVivadState extends State<ListVivad> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-            "${vivads[0]['circle_name_hn']}, ${widget.panchayat_name} (${widget.isClosed ? 'Closed' : 'Open'})"),
+            "${widget.circle_name}, ${widget.panchayat_name} (${widget.isClosed ? 'Closed' : 'Open'})"),
       ),
-      floatingActionButton: FloatingActionButton(onPressed: () async {
-        getVivads('009', false, true, "", "");
-      }),
+      // floatingActionButton: FloatingActionButton(onPressed: () async {
+      //   //getVivads('009', false, true, "", "");
+      // }),
       body: Column(
         children: [
           Card(
