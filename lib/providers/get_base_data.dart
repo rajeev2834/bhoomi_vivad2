@@ -46,8 +46,8 @@ class GetBaseData with ChangeNotifier {
     return [..._plot_nature];
   }
 
-  Future<void> getCircleData() async {
-    final circleData = await dbHelper.queryAll('circle');
+  Future<void> getCircleData(int _userId) async {
+    final circleData = await dbHelper.queryTableByUser('circle', _userId);
     _circles = circleData
         .map(
           (e) => Circle(

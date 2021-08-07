@@ -54,38 +54,43 @@ class Body extends StatelessWidget {
                   child: FutureBuilder(
                     future: Provider.of<AddBaseData>(context, listen: false)
                         .getUserData(),
-                    builder: (ctx, snapshot) =>
-                        snapshot.connectionState == ConnectionState.waiting
-                            ? Center(
-                                child: CircularProgressIndicator(),
-                              )
-                            : Consumer<AddBaseData>(
-                                builder: (ctx, addBaseData, _) => Row(
-                                  children: <Widget>[
-                                    Text(
-                                      "Welcome,",
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .headline6!
-                                          .copyWith(
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.bold),
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsets.only(left: 5.0),
-                                    ),
-                                    Text(
-                                      addBaseData.users[0].firstName,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .headline5!
-                                          .copyWith(
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.bold),
-                                    )
-                                  ],
-                                ),
-                              ),
+                    builder: (ctx, snapshot) => snapshot.connectionState ==
+                            ConnectionState.waiting
+                        ? Center(
+                            child: CircularProgressIndicator(),
+                          )
+                        : Consumer<AddBaseData>(
+                            builder: (ctx, addBaseData, _) => addBaseData
+                                        .users.length >
+                                    0
+                                ? Row(
+                                    children: <Widget>[
+                                      Text(
+                                        "Welcome,",
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .headline6!
+                                            .copyWith(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold),
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsets.only(left: 5.0),
+                                      ),
+                                      Text(
+                                        addBaseData.users[0].firstName,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .headline5!
+                                            .copyWith(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold),
+                                      )
+                                    ],
+                                  )
+                                : Center(
+                                    child: CircularProgressIndicator(),
+                                  )),
                   ),
                 ),
                 Positioned(
@@ -212,10 +217,8 @@ class Body extends StatelessWidget {
 
   Widget VivadRelatedGrid(BuildContext context) {
     List<GridViewItem> loadedItem = [
-      GridViewItem(title: 'New Vivad Entry', icon: Icons.assignment),
-      GridViewItem(title: 'Edit Vivad', icon: Icons.edit),
+      GridViewItem(title: 'New Vivad', icon: Icons.assignment),
       GridViewItem(title: 'Pending Vivad', icon: Icons.pending_actions),
-      GridViewItem(title: 'Vivad Disposed', icon: Icons.restore_from_trash_outlined),
       GridViewItem(title: 'All Vivad', icon: Icons.work_outline_rounded),
     ];
     return Container(
@@ -267,8 +270,8 @@ class Body extends StatelessWidget {
 
   void _moveNextScreen(BuildContext context, int index) async {
     if (index == 0) {
-      await Navigator.of(context).pushNamed('/vivad_entry_screen');
-    } else if (index == 4) {
+      await Navigator.of(context).pushNamed('/upload_vivad_screen');
+    } else if (index == 2) {
       await Navigator.of(context).pushNamed('/vivad_report_screen');
     }
   }
@@ -307,7 +310,7 @@ class Body extends StatelessWidget {
             shrinkWrap: true,
             children: List.generate(
               loadedItem.length,
-                  (index) => Padding(
+              (index) => Padding(
                 padding: EdgeInsets.symmetric(
                   vertical: 10.0,
                   horizontal: 10.0,

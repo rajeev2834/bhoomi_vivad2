@@ -5,7 +5,9 @@ import 'package:bhoomi_vivad/screens/all_vivad/vivad_report_screen.dart';
 import 'package:bhoomi_vivad/screens/home_screen.dart';
 import 'package:bhoomi_vivad/screens/login.dart';
 import 'package:bhoomi_vivad/screens/splash_screen.dart';
+import 'package:bhoomi_vivad/screens/upload_vivad/upload_vivad_provider.dart';
 import 'package:bhoomi_vivad/screens/vivad_entry/vivad_entry_screen.dart';
+import 'package:bhoomi_vivad/screens/upload_vivad/upload_vivad_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -29,6 +31,9 @@ class BhoomiVivad extends StatelessWidget {
         ChangeNotifierProvider.value(
           value: GetBaseData(),
         ),
+        ChangeNotifierProvider.value(
+          value: UploadVivadProvider(),
+        ),
       ],
       child: Consumer<Auth>(
         builder: (ctx, auth, _) => MaterialApp(
@@ -49,6 +54,7 @@ class BhoomiVivad extends StatelessWidget {
                 : Login(),
           ),
           routes: {
+            UploadVivadScreen.routeName: (context) => UploadVivadScreen(),
             VivadEntryScreen.routeName: (context) => VivadEntryScreen(),
             VivadReportScreen.routeName: (context) => VivadReportScreen(),
           },

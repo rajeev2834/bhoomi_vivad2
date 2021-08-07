@@ -3,8 +3,10 @@ import 'package:bhoomi_vivad/models/thana.dart';
 import 'package:bhoomi_vivad/models/vivad.dart';
 import 'package:bhoomi_vivad/providers/addBaseData.dart';
 import 'package:bhoomi_vivad/providers/get_base_data.dart';
+import 'package:bhoomi_vivad/screens/upload_vivad/upload_vivad_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:provider/provider.dart';
@@ -12,6 +14,12 @@ import 'package:intl/intl.dart';
 import 'package:uuid/uuid.dart';
 
 class EntryForm extends StatefulWidget {
+  EntryForm({Key? key, required this.vivad_uuid, required this.isEditMode})
+      : super(key: key);
+
+  String vivad_uuid;
+  bool isEditMode;
+
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
@@ -47,6 +55,7 @@ class _EntryFormState extends State<EntryForm> {
   String? _hearingDate;
   String? _remarks;
   String? _caseStatus;
+  int? _userId;
 
   bool isViolence = false;
   bool isFir = false;
@@ -60,11 +69,44 @@ class _EntryFormState extends State<EntryForm> {
 
   var uuid = Uuid();
 
+  List vivads = [];
+
+  bool isLoading = false;
+  var _isInit = true;
+  var _initValues = {
+    'plot_uuid': '',
+    'panchayat_id': '',
+    'mauza_id': '',
+    'thana_no': '',
+    'khata_no': '',
+    'khesra_no': '',
+    'rakwa': '',
+    'chauhaddi': '',
+    'plot_type': '',
+    'plot_nature': '',
+    'abhidari': '',
+    'first_party_name': '',
+    'first_contact': '',
+    'first_address': '',
+    'second_party_name': '',
+    'second_contact': '',
+    'second_address': '',
+    'vivad_cause': '',
+    'is_violence': '',
+    'violence_detail': '',
+    'is_fir': '',
+    'fir_notice': '',
+    'is_courtpending': '',
+    'court_status': '',
+    'case_status': '',
+    'next_hearing_date': '',
+    'remarks': '',
+  };
+
   @override
   void initState() {
     // TODO: implement initState
-    _getCircleList();
-    _getPanchayatList();
+    _getUserId();
     _getThanaList();
     _getPlotType();
     _getPlotNature();
@@ -75,141 +117,214 @@ class _EntryFormState extends State<EntryForm> {
   }
 
   @override
+  void didChangeDependencies() {
+    if (_isInit) {
+      if (widget.isEditMode) {
+        var vivad_uuid = widget.vivad_uuid;
+        setState(() {
+          isLoading = true;
+        });
+        var provider = Provider.of<UploadVivadProvider>(context, listen: false);
+        provider.getVivadWithPlotDetail(vivad_uuid).then((_) {
+          vivads = provider.editVivads;
+          _circleValue = vivads[0]['circle_id'];
+          _initValues = {
+            'plot_uuid': vivads[0]['plot_uuid'],
+            'panchayat_id': vivads[0]['panchayat_id'],
+            'mauza_id': vivads[0]['mauza_id'].toString(),
+            'thana_no': vivads[0]['thana_no'].toString(),
+            'khata_no': vivads[0]['khata_no'],
+            'khesra_no': vivads[0]['khesra_no'],
+            'rakwa': vivads[0]['rakwa'].toString(),
+            'chauhaddi': vivads[0]['chauhaddi'],
+            'plot_type': vivads[0]['plot_type_id'].toString(),
+            'plot_nature': vivads[0]['plot_nature_id'].toString(),
+            'abhidari': vivads[0]['abhidari_name'],
+            'first_party_name': vivads[0]['first_party_name'],
+            'first_contact': vivads[0]['first_party_contact'],
+            'first_address': vivads[0]['first_party_address'],
+            'second_party_name': vivads[0]['second_party_name'],
+            'second_contact': vivads[0]['second_party_contact'],
+            'second_address': vivads[0]['second_party_address'],
+            'vivad_cause': vivads[0]['cause_vivad'],
+            'is_violence': vivads[0]['is_violence'].toString(),
+            'violence_detail': vivads[0]['violence_detail'],
+            'is_fir': vivads[0]['is_fir'].toString(),
+            'fir_notice': vivads[0]['notice_order'],
+            'is_courtpending': vivads[0]['is_courtpending'].toString(),
+            'court_status': vivads[0]['court_status'],
+            'case_status': vivads[0]['case_status'],
+            'next_hearing_date': vivads[0]['next_date'],
+            'remarks': vivads[0]['remarks'],
+          };
+
+          _thanaValue = _initValues['thana_no'];
+          _plotNature = _initValues['plot_nature'];
+          _plotType = _initValues['plot_type'];
+
+          isViolence =
+              int.parse(_initValues['is_violence']!) == 1 ? true : false;
+          isFir = int.parse(_initValues['is_fir']!) == 1 ? true : false;
+          isCourtPending =
+              int.parse(_initValues['is_courtpending']!) == 1 ? true : false;
+          _caseStatus = _initValues['case_status'];
+          isDisposed = _caseStatus == 'Pending' ? 'No' : 'Yes';
+          _dateTimeController.text = (_initValues['next_hearing_date']!.isEmpty
+              ? ''
+              : _initValues['next_hearing_date'])!;
+
+          setState(() {
+            isLoading = false;
+          });
+        });
+      }
+    }
+    _isInit = false;
+    super.didChangeDependencies();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Form(
-      key: _formKey,
-      child: Padding(
-        padding: EdgeInsets.all(10.0),
-        child: Column(
-          children: <Widget>[
-            Card(
-              margin: EdgeInsets.symmetric(
-                horizontal: 10.0,
-                vertical: 6.0,
-              ),
-              elevation: 5.0,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.0),
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Padding(
-                    padding: EdgeInsets.all(
-                      10.0,
+    if (isLoading) {
+      return Center(
+        child: CircularProgressIndicator(),
+      );
+    } else {
+      return Form(
+        key: _formKey,
+        child: Padding(
+          padding: EdgeInsets.all(10.0),
+          child: Column(
+            children: <Widget>[
+              Card(
+                margin: EdgeInsets.symmetric(
+                  horizontal: 10.0,
+                  vertical: 6.0,
+                ),
+                elevation: 5.0,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Padding(
+                      padding: EdgeInsets.all(
+                        10.0,
+                      ),
+                      child: CustomTitle(title: 'Basic Details'),
                     ),
-                    child: CustomTitle(title: 'Basic Details'),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.all(
-                      10.0,
+                    Padding(
+                      padding: EdgeInsets.all(
+                        10.0,
+                      ),
+                      child: CircleDropDown(context),
                     ),
-                    child: CircleDropDown(context),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.all(
-                      10.0,
+                    Padding(
+                      padding: EdgeInsets.all(
+                        10.0,
+                      ),
+                      child: PanchayatDropDown(context),
                     ),
-                    child: PanchayatDropDown(context),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.all(
-                      10.0,
+                    Padding(
+                      padding: EdgeInsets.all(
+                        10.0,
+                      ),
+                      child: MauzaDropDown(context),
                     ),
-                    child: MauzaDropDown(context),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.all(
-                      10.0,
+                    Padding(
+                      padding: EdgeInsets.all(
+                        10.0,
+                      ),
+                      child: ThanaDropDown(context),
                     ),
-                    child: ThanaDropDown(context),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-            Card(
-              margin: EdgeInsets.symmetric(
-                horizontal: 10.0,
-                vertical: 6.0,
-              ),
-              elevation: 5.0,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.0),
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Padding(
-                    padding: EdgeInsets.all(
-                      10.0,
+              Card(
+                margin: EdgeInsets.symmetric(
+                  horizontal: 10.0,
+                  vertical: 6.0,
+                ),
+                elevation: 5.0,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Padding(
+                      padding: EdgeInsets.all(
+                        10.0,
+                      ),
+                      child: CustomTitle(title: 'Plot Details'),
                     ),
-                    child: CustomTitle(title: 'Plot Details'),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.all(10.0),
-                    child: PlotDetails(),
-                  ),
-                ],
-              ),
-            ),
-            Card(
-              margin: EdgeInsets.symmetric(
-                horizontal: 10.0,
-                vertical: 6.0,
-              ),
-              elevation: 5.0,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.0),
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Padding(
-                    padding: EdgeInsets.all(
-                      10.0,
+                    Padding(
+                      padding: EdgeInsets.all(10.0),
+                      child: PlotDetails(),
                     ),
-                    child: CustomTitle(title: 'Party Details'),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.all(10.0),
-                    child: PartyDetails(),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-            Card(
-              margin: EdgeInsets.symmetric(
-                horizontal: 10.0,
-                vertical: 6.0,
-              ),
-              elevation: 5.0,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.0),
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Padding(
-                    padding: EdgeInsets.all(
-                      10.0,
+              Card(
+                margin: EdgeInsets.symmetric(
+                  horizontal: 10.0,
+                  vertical: 6.0,
+                ),
+                elevation: 5.0,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Padding(
+                      padding: EdgeInsets.all(
+                        10.0,
+                      ),
+                      child: CustomTitle(title: 'Party Details'),
                     ),
-                    child: CustomTitle(title: 'Case Details'),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.all(10.0),
-                    child: CaseDetails(),
-                  ),
-                ],
+                    Padding(
+                      padding: EdgeInsets.all(10.0),
+                      child: PartyDetails(),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
+              Card(
+                margin: EdgeInsets.symmetric(
+                  horizontal: 10.0,
+                  vertical: 6.0,
+                ),
+                elevation: 5.0,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Padding(
+                      padding: EdgeInsets.all(
+                        10.0,
+                      ),
+                      child: CustomTitle(title: 'Case Details'),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.all(10.0),
+                      child: CaseDetails(),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
-      ),
-    );
+      );
+    }
     // TODO: implement build
   }
 
@@ -262,7 +377,7 @@ class _EntryFormState extends State<EntryForm> {
                     )
                     .toList(),
                 onChanged: ((value) {
-                  _circleValue = value;
+                  _dropDownCircleSelected(value);
                 }),
                 validator: (value) =>
                     value == null ? 'Circle value required' : null,
@@ -274,9 +389,25 @@ class _EntryFormState extends State<EntryForm> {
     );
   }
 
+  Future<void> _getUserId() async {
+    var provider = Provider.of<AddBaseData>(context, listen: false);
+    await provider.getUserData().then((value) {
+      _userId = provider.users[0].id;
+      _getCircleList();
+    });
+  }
+
   Future<void> _getCircleList() async {
     var provider = Provider.of<GetBaseData>(context, listen: false);
-    await provider.getCircleData();
+    await provider.getCircleData(_userId!);
+  }
+
+  void _dropDownCircleSelected(String? value) {
+    setState(() {
+      _panchayatValue = null;
+      _circleValue = value;
+      _getPanchayatList();
+    });
   }
 
   Widget PanchayatDropDown(BuildContext context) {
@@ -291,7 +422,9 @@ class _EntryFormState extends State<EntryForm> {
             SizedBox(
               width: MediaQuery.of(context).size.width * 0.90,
               child: DropdownButtonFormField<String>(
-                value: _panchayatValue,
+                value: _initValues['panchayat_id']!.isEmpty
+                    ? _panchayatValue
+                    : _initValues['panchayat_id'],
                 decoration: InputDecoration(
                   labelText: 'Panchayat *',
                   contentPadding: EdgeInsets.all(10.0),
@@ -324,8 +457,11 @@ class _EntryFormState extends State<EntryForm> {
 
   void _dropDownPanchayatSelected(String? value) {
     setState(() {
-      _mauzaValue = null;
+      _mauzaValue = _initValues['mauza_id']!.isEmpty ? null : _initValues['mauza_id'];
       _panchayatValue = value;
+     if(widget.isEditMode && _initValues['panchayat_id'] != _panchayatValue){
+       _mauzaValue = null;
+     }
       _getMauzaList();
     });
   }
@@ -352,6 +488,7 @@ class _EntryFormState extends State<EntryForm> {
             SizedBox(
               width: MediaQuery.of(context).size.width * 0.90,
               child: DropdownButtonFormField<String>(
+                value: _mauzaValue,
                 decoration: InputDecoration(
                   labelText: 'Mauza*',
                   contentPadding: EdgeInsets.all(10.0),
@@ -376,7 +513,6 @@ class _EntryFormState extends State<EntryForm> {
                 }),
                 validator: (value) =>
                     value == null ? 'Mauza value required' : null,
-                value: _mauzaValue,
               ),
             ),
           ],
@@ -402,6 +538,7 @@ class _EntryFormState extends State<EntryForm> {
             SizedBox(
               width: MediaQuery.of(context).size.width * 0.90,
               child: DropdownButtonFormField<String>(
+                value: _thanaValue,
                 decoration: InputDecoration(
                   labelText: 'Thana ',
                   contentPadding: EdgeInsets.all(10.0),
@@ -424,7 +561,6 @@ class _EntryFormState extends State<EntryForm> {
                     _thanaValue = value;
                   });
                 }),
-                value: _thanaValue,
               ),
             ),
           ],
@@ -449,6 +585,7 @@ class _EntryFormState extends State<EntryForm> {
               bottom: 5.0,
             ),
             child: TextFormField(
+              initialValue: _initValues['khata_no'],
               keyboardType: TextInputType.number,
               decoration: InputDecoration(
                 labelText: 'Khata No',
@@ -475,6 +612,7 @@ class _EntryFormState extends State<EntryForm> {
               bottom: 5.0,
             ),
             child: TextFormField(
+              initialValue: _initValues['khesra_no'],
               decoration: InputDecoration(
                 labelText: 'Khesra No',
                 labelStyle: TextStyle(
@@ -500,6 +638,7 @@ class _EntryFormState extends State<EntryForm> {
               bottom: 5.0,
             ),
             child: TextFormField(
+              initialValue: _initValues['rakwa'],
               keyboardType: TextInputType.number,
               decoration: InputDecoration(
                 labelText: 'Rakwa (in acre)',
@@ -525,6 +664,7 @@ class _EntryFormState extends State<EntryForm> {
               bottom: 5.0,
             ),
             child: TextFormField(
+              initialValue: _initValues['chauhaddi'],
               maxLines: 2,
               decoration: InputDecoration(
                 labelText: 'Chauhaddi',
@@ -578,6 +718,7 @@ class _EntryFormState extends State<EntryForm> {
             SizedBox(
               width: MediaQuery.of(context).size.width * 0.90,
               child: DropdownButtonFormField<String>(
+                value: _plotType,
                 decoration: InputDecoration(
                   labelText: 'Plot Type ',
                   contentPadding: EdgeInsets.all(10.0),
@@ -601,7 +742,6 @@ class _EntryFormState extends State<EntryForm> {
                     _plotType = value;
                   });
                 }),
-                value: _plotType,
                 validator: (value) => value == null ? 'Select plot type' : null,
               ),
             ),
@@ -624,6 +764,7 @@ class _EntryFormState extends State<EntryForm> {
             SizedBox(
               width: MediaQuery.of(context).size.width * 0.90,
               child: DropdownButtonFormField<String>(
+                value: _plotNature,
                 decoration: InputDecoration(
                   labelText: 'Plot Nature ',
                   contentPadding: EdgeInsets.all(10.0),
@@ -646,7 +787,6 @@ class _EntryFormState extends State<EntryForm> {
                     _plotNature = value;
                   });
                 }),
-                value: _plotNature,
                 validator: (value) =>
                     value == null ? 'Select plot nature' : null,
               ),
@@ -673,6 +813,7 @@ class _EntryFormState extends State<EntryForm> {
               bottom: 5.0,
             ),
             child: TextFormField(
+              initialValue: _initValues['abhidari'],
               decoration: InputDecoration(
                 labelText: 'Abhidhari Name',
                 labelStyle: TextStyle(
@@ -696,6 +837,7 @@ class _EntryFormState extends State<EntryForm> {
               bottom: 5.0,
             ),
             child: TextFormField(
+              initialValue: _initValues['first_party_name'],
               decoration: InputDecoration(
                 labelText: 'First Party Name',
                 labelStyle: TextStyle(
@@ -722,6 +864,7 @@ class _EntryFormState extends State<EntryForm> {
               bottom: 5.0,
             ),
             child: TextFormField(
+              initialValue: _initValues['first_contact'],
               keyboardType: TextInputType.phone,
               maxLength: 10,
               maxLengthEnforcement: MaxLengthEnforcement.enforced,
@@ -750,6 +893,7 @@ class _EntryFormState extends State<EntryForm> {
               bottom: 5.0,
             ),
             child: TextFormField(
+              initialValue: _initValues['first_address'],
               keyboardType: TextInputType.streetAddress,
               maxLines: 3,
               decoration: InputDecoration(
@@ -779,6 +923,7 @@ class _EntryFormState extends State<EntryForm> {
               bottom: 5.0,
             ),
             child: TextFormField(
+              initialValue: _initValues['second_party_name'],
               decoration: InputDecoration(
                 labelText: 'Second Party Name',
                 labelStyle: TextStyle(
@@ -805,6 +950,7 @@ class _EntryFormState extends State<EntryForm> {
               bottom: 5.0,
             ),
             child: TextFormField(
+              initialValue: _initValues['second_contact'],
               keyboardType: TextInputType.phone,
               maxLength: 10,
               maxLengthEnforcement: MaxLengthEnforcement.enforced,
@@ -833,6 +979,7 @@ class _EntryFormState extends State<EntryForm> {
               bottom: 5.0,
             ),
             child: TextFormField(
+              initialValue: _initValues['second_address'],
               keyboardType: TextInputType.streetAddress,
               maxLines: 3,
               decoration: InputDecoration(
@@ -875,6 +1022,7 @@ class _EntryFormState extends State<EntryForm> {
               bottom: 5.0,
             ),
             child: TextFormField(
+              initialValue: _initValues['vivad_cause'],
               decoration: InputDecoration(
                 labelText: 'Cause of Vivad',
                 labelStyle: TextStyle(
@@ -929,6 +1077,7 @@ class _EntryFormState extends State<EntryForm> {
                     bottom: 5.0,
                   ),
                   child: TextFormField(
+                    initialValue: _initValues['violence_detail'],
                     maxLines: 5,
                     decoration: InputDecoration(
                       labelText: 'Violence Details',
@@ -988,6 +1137,7 @@ class _EntryFormState extends State<EntryForm> {
                     bottom: 5.0,
                   ),
                   child: TextFormField(
+                    initialValue: _initValues['fir_notice'],
                     maxLines: 5,
                     decoration: InputDecoration(
                       labelText: 'FIR Notice Order',
@@ -1047,6 +1197,7 @@ class _EntryFormState extends State<EntryForm> {
                     bottom: 5.0,
                   ),
                   child: TextFormField(
+                    initialValue: _initValues['court_status'],
                     maxLines: 3,
                     decoration: InputDecoration(
                       labelText: 'Court Case Status',
@@ -1171,6 +1322,7 @@ class _EntryFormState extends State<EntryForm> {
               bottom: 5.0,
             ),
             child: TextFormField(
+              initialValue: _initValues['remarks'],
               maxLines: 3,
               decoration: InputDecoration(
                 labelText: 'Remaks, if any',
@@ -1249,18 +1401,27 @@ class _EntryFormState extends State<EntryForm> {
     if (picked != null && picked != DateTime.now())
       setState(() {
         _dateTime = picked;
-        _dateTimeController.text = DateFormat("yyyy-MM-dd").format(_dateTime!);
+        _dateTimeController.text = DateFormat("dd-MM-yyyy").format(_dateTime!);
       });
   }
 
   Future<void> _submit(BuildContext context) async {
     _formKey.currentState!.save();
     try {
-      var plot_uuid = uuid.v4();
-      var vivad_uuid = uuid.v4();
+      var plot_uuid;
+      var vivad_uuid;
+
+      if (widget.isEditMode) {
+        plot_uuid = _initValues['plot_uuid'];
+        vivad_uuid = widget.vivad_uuid;
+      } else {
+        plot_uuid = uuid.v4();
+        vivad_uuid = uuid.v4();
+      }
+
       _plotDetail = new PlotDetail(
           plot_uuid: plot_uuid,
-          chauhaddi: _chauhaddi!,
+          chauhaddi: _chauhaddi ?? '',
           circle_id: _circleValue!,
           image: '',
           khata_no: _khata!,
@@ -1274,12 +1435,12 @@ class _EntryFormState extends State<EntryForm> {
           plot_nature_id: int.parse(_plotNature!),
           plot_type_id: int.parse(_plotType!),
           rakwa: double.parse(_rakwa!),
-          remarks: '',
+          remarks: _remarks ?? '',
           thana_no: '',
           is_govtPlot: 0);
 
       _vivadData = new Vivad(
-          abhidari_name: _abhidariName!,
+          abhidari_name: _abhidariName ?? '',
           case_status: _caseStatus!,
           cause_vivad: _vivadCause ?? '',
           circle_id: _circleValue!,
@@ -1295,7 +1456,7 @@ class _EntryFormState extends State<EntryForm> {
           notice_order: _noticeOrder ?? '',
           panchayat_id: _panchayatValue!,
           plot_uuid: plot_uuid,
-          register_date: DateFormat("yyyy-MM-dd").format(DateTime.now()),
+          register_date: DateFormat("dd-MM-yyyy").format(DateTime.now()),
           remarks: _remarks ?? '',
           second_party_address: _secondPartyAddress!,
           second_party_contact: _secondPartPhone!,
@@ -1323,26 +1484,52 @@ class _EntryFormState extends State<EntryForm> {
 
       await pr.show();
 
-      var result = await Provider.of<AddBaseData>(context, listen: false)
-          .insertPlotData(_plotDetail!)
-          .then((value) {
-        pr.update(message: 'Saving data');
-        Provider.of<AddBaseData>(context, listen: false)
-            .insertVivadData(_vivadData!)
+      if (widget.isEditMode) {
+        await Provider.of<UploadVivadProvider>(context, listen: false)
+            .updatePlotDetail(_plotDetail!)
             .then((value) {
-          pr.hide().whenComplete(() => null);
-          _showAlertDialog('Success', 'data saved successfully !!!');
-          _formKey.currentState?.reset();
+          pr.update(message: 'Updating data');
+          Provider.of<UploadVivadProvider>(context, listen: false)
+              .updateVivadData(_vivadData!)
+              .then((value) {
+            pr.hide().whenComplete(() => null);
+            if (value == 1) {
+              _showAlertDialog('Success', 'Data updated successfully');
+            }else{
+              _showAlertDialog('Failed', 'Data updation failed');
+            }
+            // ignore: invalid_return_type_for_catch_error
+          }).catchError((handleError) {
+            pr.hide().whenComplete(() => null);
+            _showAlertDialog('Error', 'Failed to update plot data.');
+          });
           // ignore: invalid_return_type_for_catch_error
         }).catchError((handleError) {
           pr.hide().whenComplete(() => null);
-          _showAlertDialog('Error', 'Failed to save plot data.');
+          _showAlertDialog('Error', 'Failed to save vivad data.');
         });
-        // ignore: invalid_return_type_for_catch_error
-      }).catchError((handleError) {
-        pr.hide().whenComplete(() => null);
-        _showAlertDialog('Error', 'Failed to save vivad data.');
-      });
+      } else {
+        var result = await Provider.of<AddBaseData>(context, listen: false)
+            .insertPlotData(_plotDetail!)
+            .then((value) {
+          pr.update(message: 'Saving data');
+          Provider.of<AddBaseData>(context, listen: false)
+              .insertVivadData(_vivadData!)
+              .then((value) {
+            pr.hide().whenComplete(() => null);
+            _showAlertDialog('Success', 'Data saved successfully');
+            _formKey.currentState?.reset();
+            // ignore: invalid_return_type_for_catch_error
+          }).catchError((handleError) {
+            pr.hide().whenComplete(() => null);
+            _showAlertDialog('Error', 'Failed to save plot data.');
+          });
+          // ignore: invalid_return_type_for_catch_error
+        }).catchError((handleError) {
+          pr.hide().whenComplete(() => null);
+          _showAlertDialog('Error', 'Failed to save vivad data.');
+        });
+      }
     } catch (error) {
       _showAlertDialog('Submit Error :', error.toString());
     }
