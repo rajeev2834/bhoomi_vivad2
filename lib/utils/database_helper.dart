@@ -47,23 +47,23 @@ class DatabaseHelper {
         'CREATE TABLE plot_type (id integer primary key, plot_type text)');
     await db.execute(
         'CREATE TABLE plot_detail (plot_uuid text primary key, circle_id text, panchayat_id text, mauza_id integer, thana_no text,'
-            ' khata_no text, khesra_no text, rakwa decimal, chauhaddi text, plot_type_id integer, plot_nature_id integer, latitude decimal,'
+            ' khata_no text, khesra_no text, rakwa decimal, chauhaddi text, plot_type_id integer, plot_nature_id integer, vivad_uuid text, latitude decimal, '
             'longitude decimal, image blob, is_govtPlot boolean not null check (is_govtPlot in (0, 1)), remarks text,'
             ' Foreign Key (circle_id) REFERENCES circle (circle_id) on delete no action on update no action,'
             ' FOREIGN KEY (panchayat_id) References panchayat (panchayat_id) on delete no action on update no action,'
             ' FOREIGN KEY (mauza_id) References mauza (mauza_id) on delete no action on update no action,'
             ' Foreign Key (plot_type_id) References plot_type (id) on delete no action on update no action,'
-            'Foreign Key (plot_nature_id) References plot_nature (id) on delete no action on update no action )');
+            ' Foreign Key (plot_nature_id) References plot_nature (id) on delete no action on update no action ,'
+            ' Foreign Key (vivad_uuid) References vivad (vivad_uuid) on delete no action on update no action' );
     await db.execute(
         'CREATE TABLE vivad (vivad_uuid text primary key, circle_id text, panchayat_id text, mauza_id integer, thana_no int, first_party_name text,'
             'first_party_contact text, first_party_address text, second_party_name text, second_party_contact text, second_party_address text,'
-            'abhidari_name text, plot_uuid text, cause_vivad text, is_violence boolean not null check (is_violence in (0, 1)), violence_detail text,'
+            'abhidari_name text, cause_vivad text, is_violence boolean not null check (is_violence in (0, 1)), violence_detail text,'
             ' is_fir boolean not null check (is_fir in (0, 1)), notice_order text, is_courtpending boolean not null check (is_courtpending in (0, 1)),'
             ' court_status text, case_status text,register_date date, next_date date, remarks text,'
             ' Foreign Key (circle_id) REFERENCES circle (circle_id) on delete no action on update no action,'
             ' FOREIGN KEY (panchayat_id) References panchayat (panchayat_id) on delete no action on update no action,'
-            ' FOREIGN KEY (mauza_id) References mauza (mauza_id) on delete no action on update no action,'
-            ' Foreign Key (plot_uuid) References plot_detail (plot_uuid) on delete no action on update no action )');
+            ' FOREIGN KEY (mauza_id) References mauza (mauza_id) on delete no action on update no action,');
     await db.execute(
         'CREATE TABLE hearing (vivad_uuid text, is_first_present boolean not null check (is_first_present in (0, 1)),'
             ' is_second_present boolean not null check (is_second_present in (0, 1)), hearing_date date,remarks text, '

@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:bhoomi_vivad/constants.dart';
 import 'package:bhoomi_vivad/models/plot_detail.dart';
+import 'package:bhoomi_vivad/models/plot_detail_api.dart';
 import 'package:bhoomi_vivad/models/vivad.dart';
 import 'package:bhoomi_vivad/utils/database_helper.dart';
 import 'package:flutter/cupertino.dart';
@@ -70,7 +71,7 @@ class UploadVivadProvider with ChangeNotifier {
   Future<int> updateVivadData(Vivad _vivad) async {
     try {
       final result =
-          await dbHelper.updatePlotVivadData('vivad', _vivad.toJson());
+      await dbHelper.updatePlotVivadData('vivad', _vivad.toJson());
       notifyListeners();
       return result;
     } catch (error) {
@@ -89,26 +90,26 @@ class UploadVivadProvider with ChangeNotifier {
 
   Future<void> uploadVivadData() async {
     final plotDetail = await dbHelper.queryAll('plot_detail');
-    List<PlotDetail> _plotDetail = [];
+    List<PlotDetailApi> _plotDetailApi = [];
     plotDetail.forEach((element) {
-      var res = PlotDetail.fromJson(element);
-      _plotDetail.add(res);
+      var res = PlotDetailApi.fromJson(element);
+      _plotDetailApi.add(res);
     });
 
-    final _urlPlot = base_url + 'plot/';
+    final _urlPlot = 'http://192.168.1.35:8000/api/v1/plot/';
     final _urlVivad = base_url + 'vivad/';
 
     try {
-      print(jsonEncode(_plotDetail));
       final response = await http.post(Uri.parse(_urlPlot),
           headers: {
-            HttpHeaders.authorizationHeader: "Token " + _token.toString(),
-            'Content-Type': 'application/x-www-form-urlencoded',
-
+            HttpHeaders.authorizationHeader:
+            "Token 525d5bc1efb8a5706521458369f8b16c5a0020a9",
+            "Content-Type": "application/json; charset=UTF-8",
           },
-          body: jsonEncode(_plotDetail));
-
+          body: jsonEncode(_plotDetailApi[0]));
+      print(jsonEncode(_plotDetailApi[0]));
       print(response.body);
+
     } catch (error) {
       throw (error);
     }
