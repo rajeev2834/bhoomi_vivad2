@@ -1,9 +1,6 @@
 import 'package:bhoomi_vivad/models/circle.dart';
-import 'package:bhoomi_vivad/models/mauza.dart';
 import 'package:bhoomi_vivad/models/panchayat.dart';
-import 'package:bhoomi_vivad/models/plot_nature.dart';
-import 'package:bhoomi_vivad/models/plot_type.dart';
-import 'package:bhoomi_vivad/models/thana.dart';
+import 'package:bhoomi_vivad/models/vivad_type.dart';
 import 'package:bhoomi_vivad/utils/database_helper.dart';
 import 'package:flutter/material.dart';
 
@@ -22,29 +19,12 @@ class GetBaseData with ChangeNotifier {
     return [..._panchayats];
   }
 
-  List<Mauza> _mauzas = [];
+  List<VivadType> _vivadTypes = [];
 
-  List<Mauza> get mauzas {
-    return [..._mauzas];
+  List<VivadType> get vivadTypes{
+    return [..._vivadTypes];
   }
 
-  List<Thana> _thanas = [];
-
-  List<Thana> get thanas {
-    return [..._thanas];
-  }
-
-  List<PlotType> _plot_types = [];
-
-  List<PlotType> get plot_types {
-    return [..._plot_types];
-  }
-
-  List<PlotNature> _plot_nature = [];
-
-  List<PlotNature> get plot_nature {
-    return [..._plot_nature];
-  }
 
   Future<void> getCircleData(int _userId) async {
     final circleData = await dbHelper.queryTableByUser('circle', _userId);
@@ -61,7 +41,6 @@ class GetBaseData with ChangeNotifier {
 
   Future<void> getPanchayatData() async {
     final panchayatData = await dbHelper.queryAll('panchayat');
-    print(panchayatData.length);
     _panchayats = panchayatData
         .map(
           (e) => Panchayat(
@@ -74,52 +53,14 @@ class GetBaseData with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> getMauzaData(String? panchayatId) async {
-    final mauzaData =
-        await dbHelper.queryMauzaByPanchayat('mauza', panchayatId!);
-    _mauzas = mauzaData
-        .map(
-          (e) => Mauza(
-            circle_id: e['circle_id'],
-            panchayat_id: e['panchayat_id'],
-            mauza_id: e['mauza_id'],
-            mauza_name_hn: e['mauza_name_hn'],
-          ),
-        )
-        .toList();
+  Future<void> getVivadTypeData() async{
+    final vivadTypeData = await dbHelper.queryAll('vivad_type');
+    _vivadTypes = vivadTypeData.map((e) => VivadType(
+        id: e['id'],
+        vivad_type_hn: e['vivad_type_hn']),
+    )
+    .toList();
     notifyListeners();
   }
 
-  Future<void> getThanaData() async {
-    final thanaData = await dbHelper.queryAll('thana');
-    _thanas = thanaData
-        .map(
-          (e) => Thana(
-              circle_id: e['circle_id'],
-              thana_id: e['thana_id'],
-              thana_name_hn: e['thana_name_hn']),
-        )
-        .toList();
-    notifyListeners();
-  }
-
-  Future<void> getPlotTypeData() async {
-    final plotTypeData = await dbHelper.queryAll('plot_type');
-    _plot_types = plotTypeData
-        .map(
-          (e) => PlotType(id: e['id'], plot_type: e['plot_type']),
-        )
-        .toList();
-    notifyListeners();
-  }
-
-  Future<void> getPlotNatureData() async {
-    final plotNatureData = await dbHelper.queryAll('plot_nature');
-    _plot_nature = plotNatureData
-        .map(
-          (e) => PlotNature(id: e['id'], plot_nature: e['plot_nature']),
-        )
-        .toList();
-    notifyListeners();
-  }
 }

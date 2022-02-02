@@ -38,7 +38,7 @@ class _HomeScreenState extends State<HomeScreen>{
       ),
       automaticallyImplyLeading: true,
       titleSpacing: 0,
-      title: Text('Bhoomi Bank'),
+      title: Text('Bhoomi Vivad'),
       actions: <Widget>[
         Padding(
           padding: EdgeInsets.only(right: 10.0),

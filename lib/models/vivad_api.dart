@@ -2,30 +2,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-part 'vivad.g.dart';
+part 'vivad_api.g.dart';
 
-class VivadList {
-  final List<Vivad> vivads;
-
-  VivadList({
-    required this.vivads,
-  });
-
-  factory VivadList.fromJson(List<dynamic> parsedJson) {
-    List<Vivad> vivads = [];
-    vivads = parsedJson.map((i) => Vivad.fromJson(i)).toList();
-
-    return new VivadList(vivads: vivads);
-  }
-}
 
 @JsonSerializable()
-class Vivad {
+class VivadApi {
   String vivad_uuid;
   String register_no;
   String register_date;
-  String circle_id;
-  int panchayat_id;
+  String circle;
+  int panchayat;
   String first_party_address;
   String first_party_contact;
   String first_party_name;
@@ -38,7 +24,7 @@ class Vivad {
   String khesra_no;
   String rakwa;
   String chauhaddi;
-  int vivad_type_id;
+  int vivad_type;
   String case_detail;
   int is_violence;
   String violence_detail;
@@ -50,13 +36,13 @@ class Vivad {
   String next_hearing_date;
   String remarks;
 
-  Vivad(
+  VivadApi(
       {
         required this.vivad_uuid,
         required this.register_no,
         required this.register_date,
-        required this.circle_id,
-        required this.panchayat_id,
+        required this.circle,
+        required this.panchayat,
         required this.first_party_address,
         required this.first_party_contact,
         required this.first_party_name,
@@ -69,7 +55,7 @@ class Vivad {
         required this.khesra_no,
         required this.rakwa,
         required this.chauhaddi,
-        required this.vivad_type_id,
+        required this.vivad_type,
         required this.case_detail,
         required this.is_violence,
         required this.violence_detail,
@@ -80,9 +66,9 @@ class Vivad {
         required this.case_status,
         required this.next_hearing_date,
         required this.remarks,
-});
+      });
 
-  factory Vivad.fromJson(Map<String, dynamic> json) => _$VivadFromJson(json);
+  factory VivadApi.fromJson(Map<String, dynamic> json) => _$VivadApiFromJson(json);
 
-  Map<String, dynamic> toJson() => _$VivadToJson(this);
+  Map<String, dynamic> toJson() => _$VivadApiToJson(this);
 }

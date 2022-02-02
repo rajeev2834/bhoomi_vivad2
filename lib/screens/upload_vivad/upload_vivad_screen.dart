@@ -26,7 +26,7 @@ class _UploadVivadScreenState extends State<UploadVivadScreen> {
       child: Scaffold(
         appBar: AppBar(
           titleSpacing: 0,
-          title: Text('New Vivad List'),
+          title: Text('Newly Registered Cases'),
           actions: <Widget>[
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -75,7 +75,7 @@ class _UploadVivadScreenState extends State<UploadVivadScreen> {
             elevation: 0.0,
             child: new Icon(Icons.add),
             backgroundColor: Theme.of(context).primaryColor,
-            tooltip: 'Enter new vivad',
+            tooltip: 'Enter New Case',
             onPressed: () async {
               await Navigator.push(
                 context,
@@ -135,7 +135,7 @@ class _UploadVivadScreenState extends State<UploadVivadScreen> {
               builder: (ctx, uploadVivadProvider, _) {
               if (uploadVivadProvider.result.length == 0) {
                 return Center(
-                  child: Text('Please enter new vivad'),
+                  child: Text('Click on Plus Sign to register new Cases'),
                 );
               } else {
                 if (count == null ||
@@ -205,7 +205,7 @@ class _UploadVivadScreenState extends State<UploadVivadScreen> {
                                               child: Text(
                                                 uploadVivadProvider
                                                         .result[index]
-                                                    ['mauza_name_hn'],
+                                                    ['mauza'],
                                                 style: TextStyle(
                                                   fontSize: 14.0,
                                                 ),
@@ -306,6 +306,26 @@ class _UploadVivadScreenState extends State<UploadVivadScreen> {
                                           fontSize: 14.0,
                                         ),
                                         maxLines: 2,
+                                      ),
+                                      SizedBox(
+                                        height: 10.0,
+                                      ),
+                                      Text(
+                                        'Vivad Reason :',
+                                        style: TextStyle(
+                                          fontSize: 14.0,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: 5.0,
+                                      ),
+                                      Text(
+                                        uploadVivadProvider.result[index]
+                                        ['vivad_type_hn'],
+                                        style: TextStyle(
+                                          fontSize: 14.0,
+                                        ),
                                       ),
                                     ],
                                   ),

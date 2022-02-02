@@ -22,7 +22,7 @@ class PanchayatList{
 @JsonSerializable()
 class Panchayat {
     String circle_id;
-    String panchayat_id;
+    int panchayat_id;
     String panchayat_name;
     String panchayat_name_hn;
 

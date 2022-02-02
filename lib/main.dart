@@ -38,7 +38,7 @@ class BhoomiVivad extends StatelessWidget {
       child: Consumer<Auth>(
         builder: (ctx, auth, _) => MaterialApp(
           debugShowCheckedModeBanner: false,
-          title: "Bhoomi Bank Nawada",
+          title: "Bhoomi Vivad",
           theme: ThemeData(
             primarySwatch: Colors.indigo,
             visualDensity: VisualDensity.adaptivePlatformDensity,

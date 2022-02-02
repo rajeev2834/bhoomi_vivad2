@@ -37,15 +37,15 @@ class VivadEntryScreen extends StatelessWidget {
   AppBar _buildEditAppBar(BuildContext buildContext, String vivad_uuid) {
     return AppBar(
       titleSpacing: 0.0,
-      title: Text('Edit Bhoomi Vivad'),
+      title: Text('Edit Registered Case'),
       actions: <Widget>[
         Padding(
           padding: EdgeInsets.only(right: 10.0),
           child: Tooltip(
-            message: 'Delete Vivad',
+            message: 'Delete Case',
             child: GestureDetector(
               onTap: () {
-                _showAlertDialog('Delete', 'confirm to delete the vivad !!!',
+                _showAlertDialog('Delete', 'confirm to delete this Case !!!',
                     buildContext, vivad_uuid);
               },
               child: Icon(
@@ -62,7 +62,7 @@ class VivadEntryScreen extends StatelessWidget {
   AppBar _buildAddAppBar(BuildContext buildContext) {
     return AppBar(
       titleSpacing: 0.0,
-      title: Text('Bhoomi Vivad Entry'),
+      title: Text('New Case Registration'),
     );
   }
 

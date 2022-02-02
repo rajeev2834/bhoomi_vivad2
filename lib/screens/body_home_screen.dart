@@ -135,16 +135,6 @@ class Body extends StatelessWidget {
             margin: EdgeInsets.only(left: 10.0, top: 10.0),
             child: VivadRelatedGrid(context),
           ),
-          SizedBox(
-            height: 20.0,
-          ),
-          CustomTitle(
-            title: 'Bhoomi Bank Related',
-          ),
-          Container(
-            margin: EdgeInsets.only(left: 10.0, top: 10.0),
-            child: BankRelatedGrid(context),
-          ),
         ],
       ),
     );
@@ -164,27 +154,12 @@ class Body extends StatelessWidget {
           Provider.of<AddBaseData>(context, listen: false)
               .fetchAndSetPanchayat()
               .then((value) {
-            pr.update(message: "Loading Mauza data");
+            pr.update(message: 'Loading Vivad Type data');
             Provider.of<AddBaseData>(context, listen: false)
-                .fetchAndSetMauza()
+                .fetchAndSetVivadType()
                 .then((value) {
-              pr.update(message: 'Loading Thana');
-              Provider.of<AddBaseData>(context, listen: false)
-                  .fetchAndSetThana()
-                  .then((value) {
-                pr.update(message: 'Loading Plot Type');
-                Provider.of<AddBaseData>(context, listen: false)
-                    .fetchAndSetPlotType()
-                    .then((value) {
-                  pr.update(message: 'Loading Plot Nature');
-                  Provider.of<AddBaseData>(context, listen: false)
-                      .fetchAndSetPlotNature()
-                      .then((value) {
-                    pr.update(message: "All data loaded.");
-                    pr.hide().whenComplete(() => null);
-                  });
-                });
-              });
+              pr.update(message: "All data loaded.");
+              pr.hide().whenComplete(() => null);
             });
           });
           // ignore: invalid_return_type_for_catch_error
@@ -217,9 +192,7 @@ class Body extends StatelessWidget {
 
   Widget VivadRelatedGrid(BuildContext context) {
     List<GridViewItem> loadedItem = [
-      GridViewItem(title: 'New Vivad', icon: Icons.assignment),
-      GridViewItem(title: 'Pending Vivad', icon: Icons.pending_actions),
-      GridViewItem(title: 'All Vivad', icon: Icons.work_outline_rounded),
+      GridViewItem(title: 'Register New Case', icon: Icons.app_registration),
     ];
     return Container(
       child: Padding(
@@ -248,12 +221,13 @@ class Body extends StatelessWidget {
                           Icon(
                             loadedItem[index].icon,
                             color: Colors.indigo,
-                            size: 33.0,
+                            size: 50.0,
                           ),
                           Text(
                             loadedItem[index].title,
+                            textAlign: TextAlign.center,
                             style: TextStyle(
-                              fontSize: 12.0,
+                              fontSize: 14.0,
                               fontWeight: FontWeight.w500,
                             ),
                           ),
@@ -293,59 +267,6 @@ class Body extends StatelessWidget {
       ],
     );
     showDialog(context: context, builder: (_) => alertDialog);
-  }
-
-  Widget BankRelatedGrid(BuildContext context) {
-    List<GridViewItem> loadedItem = [
-      GridViewItem(title: 'Survey Plots', icon: Icons.image_search_outlined),
-      GridViewItem(title: 'Search Plots', icon: Icons.search_outlined),
-      GridViewItem(title: 'All Plots', icon: Icons.landscape_outlined),
-    ];
-    return Container(
-      child: Padding(
-        padding: EdgeInsets.all(8.0),
-        child: GridView.count(
-            crossAxisCount: 3,
-            mainAxisSpacing: 5,
-            shrinkWrap: true,
-            children: List.generate(
-              loadedItem.length,
-              (index) => Padding(
-                padding: EdgeInsets.symmetric(
-                  vertical: 10.0,
-                  horizontal: 10.0,
-                ),
-                child: GestureDetector(
-                  onTap: () {
-                    _moveNextScreen(context, index);
-                  },
-                  child: Card(
-                    elevation: 5.0,
-                    child: Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: <Widget>[
-                          Icon(
-                            loadedItem[index].icon,
-                            color: Colors.indigoAccent,
-                            size: 33.0,
-                          ),
-                          Text(
-                            loadedItem[index].title,
-                            style: TextStyle(
-                              fontSize: 12.0,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            )),
-      ),
-    );
   }
 }
 

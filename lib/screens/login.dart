@@ -54,8 +54,24 @@ class _LoginState extends State<Login> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
+                        Row(
+                          children: <Widget>[
+                            SizedBox(height: 10,),
+                            Image.asset(
+                              'assets/images/cm-image.png',
+                              width: 100,
+                              height: 100,
+                            ),
+                            Spacer(),
+                            Image.asset(
+                              'assets/images/bihar-govt.png',
+                              width: 100,
+                              height: 100,
+                            ),
+                          ],
+                        ),
                         SizedBox(
-                          height: 40.0,
+                          height: 20.0,
                         ),
                         Image.asset(
                           'assets/images/BhoomiBank.png',
@@ -66,7 +82,7 @@ class _LoginState extends State<Login> {
                           height: 20.0,
                         ),
                         Text(
-                          'Bhoomi Bank',
+                          'Bhoomi Vivad Tracker',
                           style: TextStyle(
                               fontSize: 24,
                               fontWeight: FontWeight.bold,
@@ -75,7 +91,7 @@ class _LoginState extends State<Login> {
                                   .primaryColorDark),
                         ),
                         SizedBox(
-                          height: 10.0,
+                          height: 15.0,
                         ),
                         Text(
                           'District Revenue Department, Nawada',

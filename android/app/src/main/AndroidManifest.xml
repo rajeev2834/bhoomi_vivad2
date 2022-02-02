@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.bhoomi_vivad">
    <application
-        android:label="Bhoomi Bank"
+        android:label="Bhoomi Vivad"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

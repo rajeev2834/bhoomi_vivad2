@@ -2,14 +2,11 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:bhoomi_vivad/models/circle.dart';
-import 'package:bhoomi_vivad/models/mauza.dart';
 import 'package:bhoomi_vivad/models/panchayat.dart';
-import 'package:bhoomi_vivad/models/plot_detail.dart';
-import 'package:bhoomi_vivad/models/plot_nature.dart';
-import 'package:bhoomi_vivad/models/plot_type.dart';
-import 'package:bhoomi_vivad/models/thana.dart';
+
 import 'package:bhoomi_vivad/models/user.dart';
 import 'package:bhoomi_vivad/models/vivad.dart';
+import 'package:bhoomi_vivad/models/vivad_type.dart';
 import 'package:bhoomi_vivad/utils/database_helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -97,104 +94,27 @@ class AddBaseData with ChangeNotifier {
     }
   }
 
-  Future<void> fetchAndSetMauza() async {
-    final url = base_url + 'mauza/';
+  Future<void> fetchAndSetVivadType() async {
+    final url = base_url + 'vivad-type/';
     try {
       final response = await http.get(Uri.parse(url), headers: {
         HttpHeaders.authorizationHeader: "Token " + _token.toString()
       });
       if (response.statusCode == 200) {
-        final extractedMauzaData = jsonDecode(utf8.decode(response.bodyBytes));
+        final extractedVivadTypeData =
+        jsonDecode(utf8.decode(response.bodyBytes));
         notifyListeners();
-        MauzaList mauzaList = MauzaList.fromJson(extractedMauzaData);
-        await dbHelper.deleteTableData('mauza');
-        mauzaList.mauzas.forEach((Mauza) async {
-          await dbHelper.insertTableData('mauza', Mauza.toJson());
+        VivadTypeList vivadTypeList =
+        VivadTypeList.fromJson(extractedVivadTypeData);
+        await dbHelper.deleteTableData('vivad_type');
+        vivadTypeList.vivadTypes.forEach((VivadType) async {
+          await dbHelper.insertTableData('vivad_type', VivadType.toJson());
         });
       } else {
-        throw HttpException("Unable to load Mauza data!!!");
+        throw HttpException("Unable to load Vivad Type data!!!");
       }
     } catch (error) {
       throw error;
-    }
-  }
-
-  Future<void> fetchAndSetThana() async {
-    final url = base_url + 'thana/';
-    try {
-      final response = await http.get(Uri.parse(url), headers: {
-        HttpHeaders.authorizationHeader: "Token " + _token.toString()
-      });
-      if (response.statusCode == 200) {
-        final extractedThanaData = jsonDecode(utf8.decode(response.bodyBytes));
-        print(extractedThanaData);
-        notifyListeners();
-        ThanaList thanaList = ThanaList.fromJson(extractedThanaData);
-        await dbHelper.deleteTableData('thana');
-        thanaList.thanas.forEach((Thana) async {
-          await dbHelper.insertTableData('thana', Thana.toJson());
-        });
-      } else {
-        throw HttpException("Unable to load Thana data!!!");
-      }
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  Future<void> fetchAndSetPlotNature() async {
-    final url = base_url + 'plot-nature/';
-    try {
-      final response = await http.get(Uri.parse(url), headers: {
-        HttpHeaders.authorizationHeader: "Token " + _token.toString()
-      });
-      if (response.statusCode == 200) {
-        final extractedPlotData = jsonDecode(utf8.decode(response.bodyBytes));
-        notifyListeners();
-        PlotNatureList plotNatureList =
-            PlotNatureList.fromJson(extractedPlotData);
-        await dbHelper.deleteTableData('plot_nature');
-        plotNatureList.plot_natures.forEach((PlotNature) async {
-          await dbHelper.insertTableData('plot_nature', PlotNature.toJson());
-        });
-      } else {
-        throw HttpException("Unable to load Plot Nature data!!!");
-      }
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  Future<void> fetchAndSetPlotType() async {
-    final url = base_url + 'plot-type/';
-    try {
-      final response = await http.get(Uri.parse(url), headers: {
-        HttpHeaders.authorizationHeader: "Token " + _token.toString()
-      });
-      if (response.statusCode == 200) {
-        final extractedPlotData = jsonDecode(utf8.decode(response.bodyBytes));
-        notifyListeners();
-        PlotTypeList plotTypeList = PlotTypeList.fromJson(extractedPlotData);
-        await dbHelper.deleteTableData('plot_type');
-        plotTypeList.plot_types.forEach((PlotType) async {
-          await dbHelper.insertTableData('plot_type', PlotType.toJson());
-        });
-      } else {
-        throw HttpException("Unable to load Plot Type data!!!");
-      }
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  Future<int> insertPlotData(PlotDetail _plotDetail) async {
-    try {
-      final result =
-          await dbHelper.insertTableData('plot_detail', _plotDetail.toJson());
-      notifyListeners();
-      return result;
-    } catch (error) {
-      throw (error);
     }
   }
 
