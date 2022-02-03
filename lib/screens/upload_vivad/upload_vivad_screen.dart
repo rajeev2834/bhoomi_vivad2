@@ -111,9 +111,14 @@ class _UploadVivadScreenState extends State<UploadVivadScreen> {
         TextButton(
           onPressed: () {
             Navigator.of(context).pop();
-            Navigator.of(context).pushReplacementNamed('/upload_vivad_screen');
+            //Navigator.of(context).pushReplacementNamed('/upload_vivad_screen');
               Provider.of<UploadVivadProvider>(context, listen: false).getToken().then((_){
-                Provider.of<UploadVivadProvider>(context, listen: false).uploadVivadData();
+                Provider.of<UploadVivadProvider>(context, listen: false).uploadVivadData().then((value){
+                  var message = "Total: "+value.toString()+" Vivad data uploaded successfully. !!!";
+                 _showResultDialog(context, 'Success',  message);
+                }).catchError((handleError){
+                  _showResultDialog(context, 'Error', handleError.toString());
+                });
               });
           },
           child: Text(
@@ -135,7 +140,7 @@ class _UploadVivadScreenState extends State<UploadVivadScreen> {
       actions: <Widget>[
         TextButton(
           onPressed: () {
-            Navigator.of(context).pop();
+            Navigator.of(context).pop(title);
           },
           child: Text(
             'Ok',
@@ -144,7 +149,11 @@ class _UploadVivadScreenState extends State<UploadVivadScreen> {
         )
       ],
     );
-    showDialog(context: context, builder: (_) => alertDialog);
+    showDialog(context: context, builder: (_) => alertDialog).then((value){
+      if(value == "Success"){
+        Navigator.of(context).popAndPushNamed('/upload_vivad_screen');
+      }
+    });
   }
 
   Widget getVivadList() {

@@ -76,7 +76,7 @@ class UploadVivadProvider with ChangeNotifier {
     }
   }
 
-  Future<void> uploadVivadData() async {
+  Future<int> uploadVivadData() async {
 
     final vivadData = await dbHelper.queryAll('vivad');
     List<VivadApi> _vivadApiList = [];
@@ -93,13 +93,14 @@ class UploadVivadProvider with ChangeNotifier {
       },
         body: jsonEncode(_vivadApiList)
       );
-
+      //print(response.body);
+      notifyListeners();
       if(response.statusCode == 201){
-        await dbHelper.deleteTableData('vivad');
+        int result = await dbHelper.deleteTableData('vivad');
+        return result;
       }else {
         throw HttpException("Unable to upload Vivad data !!!");
       }
-      notifyListeners();
     }catch(error){
       throw(error);
     }

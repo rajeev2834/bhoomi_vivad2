@@ -1252,7 +1252,8 @@ class _EntryFormState extends State<EntryForm> {
                     ),
                   ),
                 )
-              : Container(),
+              : Container(
+          ),
           Padding(
             padding: EdgeInsets.only(
               left: 0.0,
@@ -1311,7 +1312,7 @@ class _EntryFormState extends State<EntryForm> {
                                     ),
                                   ),
                                   duration: const Duration(milliseconds: 5000),
-                                  backgroundColor: Colors.red[900],
+
                                   padding: const EdgeInsets.symmetric(
                                     horizontal:
                                         8.0, // Inner padding for SnackBar content.
@@ -1349,6 +1350,7 @@ class _EntryFormState extends State<EntryForm> {
     _formKey.currentState!.save();
     try {
       var vivad_uuid;
+      var success = 1;
 
       if (widget.isEditMode) {
         vivad_uuid = widget.vivad_uuid;
@@ -1411,14 +1413,18 @@ class _EntryFormState extends State<EntryForm> {
             .then((value) {
           pr.hide().whenComplete(() => null);
           if (value == 1) {
-            _showAlertDialog('Success', 'Data updated successfully');
+             success = 0;
+            _showAlertDialog('Success', 'Data updated successfully', success);
+
           } else {
-            _showAlertDialog('Failed', 'Data updation failed');
+             success = 1;
+            _showAlertDialog('Failed', 'Data updation failed', success);
+
           }
           // ignore: invalid_return_type_for_catch_error
         }).catchError((handleError) {
           pr.hide().whenComplete(() => null);
-          _showAlertDialog('Error', 'Failed to update plot data.');
+          _showAlertDialog('Error', 'Failed to update vivad data.', success);
         });
         // ignore: invalid_return_type_for_catch_error
       } else {
@@ -1426,28 +1432,31 @@ class _EntryFormState extends State<EntryForm> {
             .insertVivadData(_vivadData!)
             .then((value) {
           pr.hide().whenComplete(() => null);
-          _showAlertDialog('Success', 'Data saved successfully');
+           success = 0;
+          _showAlertDialog('Success', 'Data saved successfully', success);
           _formKey.currentState?.reset();
           // ignore: invalid_return_type_for_catch_error
         }).catchError((handleError) {
           pr.hide().whenComplete(() => null);
-          _showAlertDialog('Error', 'Failed to save plot data.');
+          success = 1;
+          _showAlertDialog('Error', 'Failed to save vivad data.', success);
         });
         // ignore: invalid_return_type_for_catch_error
       }
     } catch (error) {
-      _showAlertDialog('Submit Error :', error.toString());
+      _showAlertDialog('Submit Error :', error.toString(), 1);
     }
+
   }
 
-  void _showAlertDialog(String title, String message) {
+  void _showAlertDialog(String title, String message, int success) {
     AlertDialog alertDialog = AlertDialog(
       title: Text(title),
       content: Text(message),
       actions: <Widget>[
         TextButton(
           onPressed: () {
-            Navigator.of(context).pop();
+            Navigator.of(context).pop(success);
           },
           child: Text(
             'Ok',
@@ -1456,7 +1465,12 @@ class _EntryFormState extends State<EntryForm> {
         )
       ],
     );
-    showDialog(context: context, builder: (_) => alertDialog);
+    showDialog(context: context, builder: (_) => alertDialog).then((value){
+      if(value == 0){
+        Navigator.of(context).popUntil(ModalRoute.withName('/upload_vivad_screen'));
+      }
+    });
+
   }
 
   String? validatePhone(String? value) {
