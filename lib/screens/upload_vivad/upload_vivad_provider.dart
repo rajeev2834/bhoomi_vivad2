@@ -91,10 +91,15 @@ class UploadVivadProvider with ChangeNotifier {
         HttpHeaders.authorizationHeader: "Token " + _token.toString(),
         "Content-Type" : "application/json; charset=UTF-8",
       },
-        body: jsonEncode(_vivadApiList[0])
+        body: jsonEncode(_vivadApiList)
       );
-      print(jsonEncode(_vivadApiList[0]));
-      print(response.body);
+
+      if(response.statusCode == 201){
+        await dbHelper.deleteTableData('vivad');
+      }else {
+        throw HttpException("Unable to upload Vivad data !!!");
+      }
+      notifyListeners();
     }catch(error){
       throw(error);
     }

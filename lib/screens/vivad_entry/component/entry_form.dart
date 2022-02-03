@@ -1341,7 +1341,7 @@ class _EntryFormState extends State<EntryForm> {
     if (picked != null && picked != DateTime.now())
       setState(() {
         _dateTime = picked;
-        controller.text = DateFormat("yyyy-MM-DD").format(_dateTime!);
+        controller.text = DateFormat("yyyy-MM-dd").format(_dateTime!);
       });
   }
 

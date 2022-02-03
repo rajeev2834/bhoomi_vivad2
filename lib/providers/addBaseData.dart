@@ -65,7 +65,6 @@ class AddBaseData with ChangeNotifier {
         throw HttpException("Unable to load Circle data!!!");
       }
     } catch (error) {
-      print('error try');
       throw (error);
     }
   }

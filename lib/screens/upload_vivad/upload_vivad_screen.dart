@@ -1,7 +1,9 @@
 import 'package:bhoomi_vivad/screens/upload_vivad/upload_vivad_provider.dart';
 import 'package:bhoomi_vivad/screens/vivad_entry/vivad_entry_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:progress_dialog/progress_dialog.dart';
 import 'package:provider/provider.dart';
+import '../../models/http_exception.dart';
 
 class UploadVivadScreen extends StatefulWidget {
   static const routeName = '/upload_vivad_screen';
@@ -37,8 +39,11 @@ class _UploadVivadScreenState extends State<UploadVivadScreen> {
                   children: <Widget>[
                     new IconButton(
                         onPressed: () {
-                          _showAlertDialog(
-                              'Sync data', 'Want to upload data on server ?');
+                          count != null ?
+                          _showAlertDialog('Sync data',
+                              'Want to upload data on server ?')
+                              :
+                              _showResultDialog(context, "Sync Error", "Please register a Case first !!!");
                         },
                         icon: Icon(
                           Icons.cloud_upload,
@@ -49,7 +54,8 @@ class _UploadVivadScreenState extends State<UploadVivadScreen> {
                             top: 10,
                             right: 0,
                             child: new Container(
-                              padding: EdgeInsets.symmetric(horizontal: 6, vertical: 2.0),
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 6, vertical: 2.0),
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
                                 color: Colors.red[900],
@@ -106,9 +112,9 @@ class _UploadVivadScreenState extends State<UploadVivadScreen> {
           onPressed: () {
             Navigator.of(context).pop();
             Navigator.of(context).pushReplacementNamed('/upload_vivad_screen');
-            Provider.of<UploadVivadProvider>(context, listen: false).getToken().then((_){
-              Provider.of<UploadVivadProvider>(context, listen: false).uploadVivadData();
-            });
+              Provider.of<UploadVivadProvider>(context, listen: false).getToken().then((_){
+                Provider.of<UploadVivadProvider>(context, listen: false).uploadVivadData();
+              });
           },
           child: Text(
             'Yes',
@@ -117,6 +123,25 @@ class _UploadVivadScreenState extends State<UploadVivadScreen> {
             ),
           ),
         ),
+      ],
+    );
+    showDialog(context: context, builder: (_) => alertDialog);
+  }
+
+  void _showResultDialog(BuildContext context, String title, String message) {
+    AlertDialog alertDialog = AlertDialog(
+      title: Text(title),
+      content: Text(message),
+      actions: <Widget>[
+        TextButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          child: Text(
+            'Ok',
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+        )
       ],
     );
     showDialog(context: context, builder: (_) => alertDialog);
@@ -139,7 +164,8 @@ class _UploadVivadScreenState extends State<UploadVivadScreen> {
                 );
               } else {
                 if (count == null ||
-                    count < uploadVivadProvider.result.length || uploadVivadProvider.result.length == 0) {
+                    count < uploadVivadProvider.result.length ||
+                    uploadVivadProvider.result.length == 0) {
                   WidgetsBinding.instance!.addPostFrameCallback((_) {
                     setState(() {
                       count = uploadVivadProvider.result.length;
@@ -204,8 +230,7 @@ class _UploadVivadScreenState extends State<UploadVivadScreen> {
                                             Expanded(
                                               child: Text(
                                                 uploadVivadProvider
-                                                        .result[index]
-                                                    ['mauza'],
+                                                    .result[index]['mauza'],
                                                 style: TextStyle(
                                                   fontSize: 14.0,
                                                 ),
@@ -322,7 +347,7 @@ class _UploadVivadScreenState extends State<UploadVivadScreen> {
                                       ),
                                       Text(
                                         uploadVivadProvider.result[index]
-                                        ['vivad_type_hn'],
+                                            ['vivad_type_hn'],
                                         style: TextStyle(
                                           fontSize: 14.0,
                                         ),
@@ -331,11 +356,15 @@ class _UploadVivadScreenState extends State<UploadVivadScreen> {
                                   ),
                                 ),
                                 onTap: () async {
-                                  var vivad_uuid = uploadVivadProvider.result[index]['vivad_uuid'];
-                                  await Navigator.of(context).pushNamed('/vivad_entry_screen', arguments: {
-                                    'vivad_uuid': vivad_uuid,
-                                    'isEditMode': true,
-                                  },).then((_) => setState(() {}));
+                                  var vivad_uuid = uploadVivadProvider
+                                      .result[index]['vivad_uuid'];
+                                  await Navigator.of(context).pushNamed(
+                                    '/vivad_entry_screen',
+                                    arguments: {
+                                      'vivad_uuid': vivad_uuid,
+                                      'isEditMode': true,
+                                    },
+                                  ).then((_) => setState(() {}));
                                 },
                               ),
                             ),
