@@ -33,7 +33,7 @@ class _HomeScreenState extends State<HomeScreen>{
     return AppBar(
       elevation: 0,
       leading: IconButton(
-        icon: Image.asset("assets/images/BhoomiBank.png"),
+        icon: Image.asset("assets/images/bhoomi_bank.png"),
         onPressed: () {},
       ),
       automaticallyImplyLeading: true,

@@ -114,7 +114,7 @@ class _UploadVivadScreenState extends State<UploadVivadScreen> {
             //Navigator.of(context).pushReplacementNamed('/upload_vivad_screen');
               Provider.of<UploadVivadProvider>(context, listen: false).getToken().then((_){
                 Provider.of<UploadVivadProvider>(context, listen: false).uploadVivadData().then((value){
-                  var message = "Total: "+value.toString()+" Vivad data uploaded successfully. !!!";
+                  var message = "Total: "+value.toString()+" Vivad uploaded successfully. !!!";
                  _showResultDialog(context, 'Success',  message);
                 }).catchError((handleError){
                   _showResultDialog(context, 'Error', handleError.toString());

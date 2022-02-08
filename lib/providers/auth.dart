@@ -11,6 +11,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class Auth with ChangeNotifier {
   String? _token;
+  String? _status;
   final dbHelper = DatabaseHelper.instance;
 
   bool get isAuth {
@@ -18,9 +19,11 @@ class Auth with ChangeNotifier {
   }
 
   dynamic get token {
-    if (_token != null) return _token;
+    if (_token != null && _status != "True") return _token;
     return null;
   }
+
+
 
   Future<void> _authenticate(String username, String password) async {
     final url = base_url + 'token/';
@@ -41,12 +44,15 @@ class Auth with ChangeNotifier {
       if (responseData['non_field_errors'] != null) {
         throw HttpException(responseData['non_field_errors'][0]);
       }
+      if(username.toUpperCase() == "TEST")
+        _status = 'True';
       _token = responseData['token'];
       //await fetchAndSetCircle();
       notifyListeners();
       final prefs = await SharedPreferences.getInstance();
       final userData = json.encode({
         'token': _token,
+        'status': _status,
       });
       prefs.setString('userData', userData);
     } catch (error) {
@@ -66,12 +72,18 @@ class Auth with ChangeNotifier {
     final extractedUserData =
         json.decode(prefs.getString('userData')!) as Map<String, dynamic>;
     _token = extractedUserData['token'];
+    _status = extractedUserData['status'];
+
+    if(_status == "True")
+      return false;
+
     notifyListeners();
     return true;
   }
 
   Future<void> logout() async {
     _token = null;
+    _status = null;
     notifyListeners();
     final prefs = await SharedPreferences.getInstance();
     prefs.clear();
