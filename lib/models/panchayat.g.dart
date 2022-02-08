@@ -8,7 +8,7 @@ part of 'panchayat.dart';
 
 Panchayat _$PanchayatFromJson(Map<String, dynamic> json) {
   return Panchayat(
-    circle_id: json['circle_id'] as String,
+    circle_id: json['circle'] as String,
     panchayat_id: json['id'] as int,
     panchayat_name: json['panchayat_name'] as String,
     panchayat_name_hn: json['panchayat_name_hn'] as String,

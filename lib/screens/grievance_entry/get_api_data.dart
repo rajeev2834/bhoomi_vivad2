@@ -13,6 +13,7 @@ import '../../constants.dart';
 import 'package:http/http.dart' as http;
 
 class GetApiData with ChangeNotifier {
+  final dbHelper = DatabaseHelper.instance;
   String? _token;
 
   dynamic get token {
@@ -54,78 +55,29 @@ class GetApiData with ChangeNotifier {
   }
 
   Future<void> getCircleList() async {
-    final url = base_url + 'circle/';
-    try {
-      final response = await http.get(Uri.parse(url), headers: {
-        HttpHeaders.authorizationHeader: "Token " + _token.toString()
-      });
-      if (response.statusCode == 200) {
-        final extractedCircleData = jsonDecode(utf8.decode(response.bodyBytes));
-        _circles = extractedCircleData
-            .map(
-              (e) => Circle(
-                  circleId: e['circle_id'],
-                  circleNameHn: e['circle_name_hn'],
-                  user: e['user']),
-            )
-            .toList();
-        notifyListeners();
-      } else {
-        throw HttpException("Unable to load Circle data!!!");
-      }
-    } catch (error) {
-      throw (error);
-    }
+    final circleData = await dbHelper.queryAll('circle');
+    _circles = circleData
+        .map(
+          (e) => Circle(
+              circleId: e['circle_id'],
+              circleNameHn: e['circle_name_hn'],
+              user: e['user']),
+    )
+        .toList();
+    notifyListeners();
   }
 
   Future<void> getPanchayatList(String circleId) async {
-    final qParams = {
-      'circle': circleId,
-    };
-    final uri = Uri.https(base_url, 'panchayat/', qParams);
-    try {
-      final response = await http.get(uri, headers: {
-        HttpHeaders.authorizationHeader: "Token " + _token.toString(),
-        HttpHeaders.contentTypeHeader: 'application/json',
-      });
-      if (response.statusCode == 200) {
-        final extractedCircleData = jsonDecode(utf8.decode(response.bodyBytes));
-        _circles = extractedCircleData
-            .map(
-              (e) => Circle(
-                  circleId: e['circle_id'],
-                  circleNameHn: e['circle_name_hn'],
-                  user: e['user']),
-            )
-            .toList();
-        notifyListeners();
-      } else {
-        throw HttpException("Unable to load Circle data!!!");
-      }
-    } catch (error) {
-      throw (error);
-    }
-  }
-
-  Future<void> getVivadType() async {
-    final url = base_url + 'vivad-type/';
-    try {
-      final response = await http.get(Uri.parse(url), headers: {
-        HttpHeaders.authorizationHeader: "Token " + _token.toString()
-      });
-      if (response.statusCode == 200) {
-        final extractedVivadType = jsonDecode(utf8.decode(response.bodyBytes));
-        _vivadTypes = extractedVivadType
-            .map(
-              (e) => VivadType(id: e['id'], vivad_type_hn: e['vivad_type_hn']),
-            )
-            .toList();
-        notifyListeners();
-      } else {
-        throw HttpException("Unable to load Circle data!!!");
-      }
-    } catch (error) {
-      throw (error);
-    }
+    final panchayatData = await dbHelper.queryPanchayatByCircle(circleId);
+    _panchayats = panchayatData
+        .map(
+          (e) => Panchayat(
+          circle_id: e['circle_id'],
+          panchayat_id: e['panchayat_id'],
+          panchayat_name: e['panchayat_name'],
+          panchayat_name_hn: e['panchayat_name_hn']),
+    )
+        .toList();
+    notifyListeners();
   }
 }

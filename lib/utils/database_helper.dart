@@ -64,6 +64,15 @@ class DatabaseHelper {
     return await db.query(table);
   }
 
+  Future<List<Map<String, dynamic>>> queryPanchayatByCircle(String circleId) async{
+
+    Database db = await instance.database;
+   var result = await db.rawQuery(''' SELECT * from panchayat where circle_id = ?''',
+            [circleId]);
+
+    return result;
+  }
+
   Future<List<Map<String, dynamic>>> queryTableByUser(String table,
       int _userId) async {
     final Database db = await instance.database;

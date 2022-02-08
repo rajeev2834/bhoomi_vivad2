@@ -38,4 +38,8 @@ class Grievance {
       required this.khata_no,
       required this.demand_no,
       required this.vivad_reason});
+
+  factory Grievance.fromJson(Map<String, dynamic> json) => _$GrievnaceFromJson(json);
+
+  Map<String, dynamic> toJson() => _$GrievnaceToJson(this);
 }

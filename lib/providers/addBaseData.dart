@@ -13,17 +13,22 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
 import '../constants.dart';
+import 'auth.dart';
 
 class AddBaseData with ChangeNotifier {
   final dbHelper = DatabaseHelper.instance;
 
   String? _token;
-  String? _circle_id;
 
   List<User> _users = [];
 
   List<User> get users {
     return [..._users];
+  }
+
+  dynamic get token {
+    if (_token != null) return _token;
+    return null;
   }
 
   Future<void> getUserData() async {
@@ -47,6 +52,12 @@ class AddBaseData with ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> checkAndSetToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    if (!prefs.containsKey('userData')) {
+      await new Auth().signin("Test", "Test@123");
+    }
+  }
   Future<void> fetchAndSetCircle() async {
     final url = base_url + 'circle/';
     try {

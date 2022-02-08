@@ -1,3 +1,5 @@
+import 'package:bhoomi_vivad/providers/addBaseData.dart';
+import 'package:bhoomi_vivad/providers/get_base_data.dart';
 import 'package:bhoomi_vivad/screens/grievance_entry/get_api_data.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -60,11 +62,20 @@ class _GrievanceEntryScreen extends State<GrievanceEntryScreen> {
   }
 
   Future<void> _getAndSetToken() async {
-    var provider = Provider.of<GetApiData>(context, listen: false);
+    var provider = Provider.of<AddBaseData>(context, listen: false);
     await provider.checkAndSetToken().then((_) async {
       await provider.getToken().then((_) async {
-        await provider.getCircleList().then((_) async {
-          await provider.getVivadType();
+        await provider.fetchAndSetCircle().then((_) async {
+          await provider.fetchAndSetPanchayat().then((value) async {
+            await provider.fetchAndSetVivadType().then((value) async {
+              await Provider.of<GetApiData>(context, listen: false)
+                  .getCircleList()
+                  .then((value) async {
+                await Provider.of<GetBaseData>(context, listen: false)
+                    .getVivadTypeData();
+              });
+            });
+          });
         });
       });
     }).catchError((handleError) {
@@ -91,14 +102,36 @@ class _GrievanceEntryScreen extends State<GrievanceEntryScreen> {
     showDialog(context: context, builder: (_) => alertDialog);
   }
 
+
   Future<void> _submit(BuildContext context) async {
     _formKey.currentState!.save();
-
-
   }
 
   @override
-  Widget build(BuildContext context) => GestureDetector(
+  Widget build(BuildContext context) => WillPopScope(
+    onWillPop: () async {
+      bool willLeave = false;
+      // show the confirm dialog
+      await showDialog(
+          context: context,
+          builder: (_) => AlertDialog(
+            title: const Text('Confirm'),
+            content: Text('Are you sure want to exit ?'),
+            actions: [
+              TextButton(
+                  onPressed: () {
+                    willLeave = true;
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text('Yes')),
+             ElevatedButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: const Text('No'))
+            ],
+          ));
+      return willLeave;
+    },
+    child: GestureDetector(
         onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
         child: Scaffold(
           appBar: AppBar(
@@ -217,7 +250,7 @@ class _GrievanceEntryScreen extends State<GrievanceEntryScreen> {
             ),
           ),
         ),
-      );
+      ),);
 
   List<Step> getSteps() => [
         Step(
@@ -384,8 +417,6 @@ class _GrievanceEntryScreen extends State<GrievanceEntryScreen> {
                   borderRadius: BorderRadius.circular(10.0),
                 ),
               ),
-              validator: (value) =>
-                  value!.isEmpty ? 'Please enter Vadi Father Name' : null,
               onSaved: (value) {
                 data._partyFatherName = value;
               },
@@ -621,7 +652,8 @@ class _GrievanceEntryScreen extends State<GrievanceEntryScreen> {
   void _dropDownCircleSelected(String? value) {
     setState(() {
       data._circleValue = value;
-      _getPanchayatList(data._circleValue!);
+      data._panchayatValue = null;
+      _getPanchayatList(value!);
     });
   }
 
@@ -658,7 +690,7 @@ class _GrievanceEntryScreen extends State<GrievanceEntryScreen> {
               _dropDownPanchayatSelected(value);
             }),
             validator: (value) =>
-                value == null ? 'Circle value required' : null,
+                value == null ? 'Panchayat value required' : null,
           ),
         ),
       ),
@@ -673,8 +705,8 @@ class _GrievanceEntryScreen extends State<GrievanceEntryScreen> {
 
   Widget VivadTypeDropDown(BuildContext context) {
     return Container(
-      child: Consumer<GetApiData>(
-        builder: (ctx, getApiData, _) => SizedBox(
+      child: Consumer<GetBaseData>(
+        builder: (ctx, getBaseData, _) => SizedBox(
           width: MediaQuery.of(context).size.width * 0.90,
           child: DropdownButtonFormField<String>(
             value: data._vivadType,
@@ -687,7 +719,7 @@ class _GrievanceEntryScreen extends State<GrievanceEntryScreen> {
                 borderRadius: BorderRadius.circular(8.0),
               ),
             ),
-            items: getApiData.vivadTypes
+            items: getBaseData.vivadTypes
                 .map(
                   (e) => DropdownMenuItem<String>(
                     child: Text(e.vivad_type_hn),
