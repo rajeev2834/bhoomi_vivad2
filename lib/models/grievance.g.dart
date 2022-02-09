@@ -5,7 +5,7 @@ part of 'grievance.dart';
 // **************************************************************************
 // JsonSerializableGenerator
 //
-  Grievance _$GrievnaceFromJson(Map<String, dynamic> json) {
+  Grievance _$GrievanceFromJson(Map<String, dynamic> json) {
         return Grievance(
             address: json['address'] as String,
             circle: json['circle']  as String,
@@ -26,7 +26,7 @@ part of 'grievance.dart';
         );
     }
 
-    Map<String, dynamic> _$GrievnaceToJson(Grievance instance) => <String, dynamic>{
+    Map<String, dynamic> _$GrievanceToJson(Grievance instance) => <String, dynamic>{
         'address': instance.address,
         'circle': instance.circle,
         'contact': instance.contact,

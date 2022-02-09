@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'grievance.g.dart';
@@ -39,7 +40,8 @@ class Grievance {
       required this.demand_no,
       required this.vivad_reason});
 
-  factory Grievance.fromJson(Map<String, dynamic> json) => _$GrievnaceFromJson(json);
+  factory Grievance.fromJson(Map<String, dynamic> json) =>
+      _$GrievanceFromJson(json);
 
-  Map<String, dynamic> toJson() => _$GrievnaceToJson(this);
+  Map<String, dynamic> toJson() => _$GrievanceToJson(this);
 }

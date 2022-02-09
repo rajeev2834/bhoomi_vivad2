@@ -1,9 +1,14 @@
+import 'dart:async';
+
+import 'package:bhoomi_vivad/models/grievance.dart';
 import 'package:bhoomi_vivad/providers/addBaseData.dart';
 import 'package:bhoomi_vivad/providers/get_base_data.dart';
 import 'package:bhoomi_vivad/screens/grievance_entry/get_api_data.dart';
+import 'package:bhoomi_vivad/screens/splash_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:progress_dialog/progress_dialog.dart';
 import 'package:provider/provider.dart';
 
 List<GlobalKey<FormState>> formKeys = [
@@ -46,6 +51,21 @@ class _GrievanceEntryScreen extends State<GrievanceEntryScreen> {
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   int _currentStep = 0;
+  Grievance? _grievance;
+
+  TextEditingController nameController = TextEditingController();
+  TextEditingController fatherNameController = TextEditingController();
+  TextEditingController contactController = TextEditingController();
+  TextEditingController addressController = TextEditingController();
+  TextEditingController vadiController = TextEditingController();
+  TextEditingController vadiFatherController = TextEditingController();
+  TextEditingController vadiContactController = TextEditingController();
+  TextEditingController vadiAddressController = TextEditingController();
+  TextEditingController mauzaController = TextEditingController();
+  TextEditingController khataController = TextEditingController();
+  TextEditingController khesraController = TextEditingController();
+  TextEditingController demandController = TextEditingController();
+  TextEditingController grievanceController = TextEditingController();
 
   static GrievnaceData data = GrievnaceData();
 
@@ -58,6 +78,19 @@ class _GrievanceEntryScreen extends State<GrievanceEntryScreen> {
   @override
   void dispose() {
     // TODO: implement dispose
+    nameController.dispose();
+    fatherNameController.dispose();
+    addressController.dispose();
+    contactController.dispose();
+    vadiAddressController.dispose();
+    vadiContactController.dispose();
+    vadiController.dispose();
+    vadiFatherController.dispose();
+    mauzaController.dispose();
+    khataController.dispose();
+    khesraController.dispose();
+    demandController.dispose();
+    grievanceController.dispose();
     super.dispose();
   }
 
@@ -72,7 +105,8 @@ class _GrievanceEntryScreen extends State<GrievanceEntryScreen> {
                   .getCircleList()
                   .then((value) async {
                 await Provider.of<GetBaseData>(context, listen: false)
-                    .getVivadTypeData();
+                    .getVivadTypeData()
+                    .then((_) {});
               });
             });
           });
@@ -102,155 +136,194 @@ class _GrievanceEntryScreen extends State<GrievanceEntryScreen> {
     showDialog(context: context, builder: (_) => alertDialog);
   }
 
+ Future<void> _submit(BuildContext context) async{
 
-  Future<void> _submit(BuildContext context) async {
-    _formKey.currentState!.save();
+    _grievance = new Grievance(
+        circle: data._circleValue!,
+        panchayat: int.parse(data._panchayatValue!),
+        name: nameController.text,
+        contact: contactController.text,
+        father_name: fatherNameController.text,
+        address: addressController.text,
+        party_name: vadiController.text,
+        party_father_name: vadiFatherController.text,
+        party_contact: vadiContactController.text,
+        party_address: vadiAddressController.text,
+        mauza: mauzaController.text,
+        vivad_type: int.parse(data._vivadType!),
+        khesra_no: int.parse(khesraController.text),
+        khata_no: int.parse(khataController.text),
+        demand_no: demandController.text,
+        vivad_reason: grievanceController.text);
+
+    ProgressDialog pr = new ProgressDialog(context);
+    pr.style(
+        message: 'Loading data...',
+        borderRadius: 10.0,
+        backgroundColor: Colors.white,
+        progressWidget: CircularProgressIndicator(),
+        elevation: 10.0,
+        insetAnimCurve: Curves.easeInOut,
+        progress: 0.0,
+        maxProgress: 100.0,
+        progressTextStyle: TextStyle(
+            color: Colors.black, fontSize: 13.0, fontWeight: FontWeight.w400),
+        messageTextStyle: TextStyle(
+            color: Colors.black,
+            fontSize: 14.0,
+            fontWeight: FontWeight.w600));
+
+    //await pr.show();
+    Provider.of<GetApiData>(context, listen: false).uploadGrievanceData(_grievance!);
+
   }
 
   @override
   Widget build(BuildContext context) => WillPopScope(
-    onWillPop: () async {
-      bool willLeave = false;
-      // show the confirm dialog
-      await showDialog(
-          context: context,
-          builder: (_) => AlertDialog(
-            title: const Text('Confirm'),
-            content: Text('Are you sure want to exit ?'),
-            actions: [
-              TextButton(
-                  onPressed: () {
-                    willLeave = true;
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text('Yes')),
-             ElevatedButton(
-                  onPressed: () => Navigator.of(context).pop(),
-                  child: const Text('No'))
-            ],
-          ));
-      return willLeave;
-    },
-    child: GestureDetector(
-        onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
-        child: Scaffold(
-          appBar: AppBar(
-            titleSpacing: 0.0,
-            title: Text(
-              "Post Your Grievnace here",
+        onWillPop: () async {
+          bool willLeave = false;
+          // show the confirm dialog
+          await showDialog(
+              context: context,
+              builder: (_) => AlertDialog(
+                    title: const Text('Confirm'),
+                    content: Text('Are you sure want to exit ?'),
+                    actions: [
+                      TextButton(
+                          onPressed: () {
+                            willLeave = true;
+                            Navigator.of(context).pop();
+                          },
+                          child: const Text('Yes')),
+                      ElevatedButton(
+                          onPressed: () => Navigator.of(context).pop(),
+                          child: const Text('No'))
+                    ],
+                  ));
+          return willLeave;
+        },
+        child: GestureDetector(
+          onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+          child: Scaffold(
+            appBar: AppBar(
+              titleSpacing: 0.0,
+              title: Text(
+                "Post Your Grievnace here",
+              ),
             ),
-          ),
-          body: Form(
-            key: _formKey,
-            child: Stepper(
-              controlsBuilder: (BuildContext context, ControlsDetails details) {
-                return Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: <Widget>[
-                    _currentStep == 0
-                        ? TextButton(
-                            onPressed: details.onStepContinue,
-                            child: const Text(
-                              'NEXT',
-                            ),
-                            style: TextButton.styleFrom(
-                              primary: Colors.white,
-                              backgroundColor: Colors.indigo,
-                            ),
-                          )
-                        : _currentStep == 1
-                            ? Container(
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  children: [
-                                    TextButton(
+            body: Form(
+              key: _formKey,
+              child: Stepper(
+                controlsBuilder:
+                    (BuildContext context, ControlsDetails details) {
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      _currentStep == 0
+                          ? TextButton(
+                              onPressed: details.onStepContinue,
+                              child: const Text(
+                                'NEXT',
+                              ),
+                              style: TextButton.styleFrom(
+                                primary: Colors.white,
+                                backgroundColor: Colors.indigo,
+                              ),
+                            )
+                          : _currentStep == 1
+                              ? Container(
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                    children: [
+                                      TextButton(
+                                        onPressed: details.onStepCancel,
+                                        child: const Text('BACK'),
+                                        style: TextButton.styleFrom(
+                                          primary: Colors.white,
+                                          backgroundColor: Colors.indigo,
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width: 20.0,
+                                      ),
+                                      TextButton(
+                                        onPressed: details.onStepContinue,
+                                        child: const Text('NEXT'),
+                                        style: TextButton.styleFrom(
+                                          primary: Colors.white,
+                                          backgroundColor: Colors.indigo,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              : _currentStep >= 2
+                                  ? Container(
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          TextButton(
+                                            onPressed: details.onStepCancel,
+                                            child: const Text('BACK'),
+                                            style: TextButton.styleFrom(
+                                              primary: Colors.white,
+                                              backgroundColor: Colors.indigo,
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            width: 20.0,
+                                          ),
+                                          TextButton(
+                                            onPressed: details.onStepContinue,
+                                            child: const Text('SAVE'),
+                                            style: TextButton.styleFrom(
+                                              primary: Colors.white,
+                                              backgroundColor: Colors.indigo,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    )
+                                  : TextButton(
                                       onPressed: details.onStepCancel,
                                       child: const Text('BACK'),
-                                      style: TextButton.styleFrom(
-                                        primary: Colors.white,
-                                        backgroundColor: Colors.indigo,
-                                      ),
                                     ),
-                                    SizedBox(
-                                      width: 20.0,
-                                    ),
-                                    TextButton(
-                                      onPressed: details.onStepContinue,
-                                      child: const Text('NEXT'),
-                                      style: TextButton.styleFrom(
-                                        primary: Colors.white,
-                                        backgroundColor: Colors.indigo,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              )
-                            : _currentStep >= 2
-                                ? Container(
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        TextButton(
-                                          onPressed: details.onStepCancel,
-                                          child: const Text('BACK'),
-                                          style: TextButton.styleFrom(
-                                            primary: Colors.white,
-                                            backgroundColor: Colors.indigo,
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          width: 20.0,
-                                        ),
-                                        TextButton(
-                                          onPressed: details.onStepContinue,
-                                          child: const Text('SAVE'),
-                                          style: TextButton.styleFrom(
-                                            primary: Colors.white,
-                                            backgroundColor: Colors.indigo,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  )
-                                : TextButton(
-                                    onPressed: details.onStepCancel,
-                                    child: const Text('BACK'),
-                                  ),
-                  ],
-                );
-              },
-              type: StepperType.horizontal,
-              steps: getSteps(),
-              currentStep: _currentStep,
-              onStepContinue: () {
-                final isLastStep = _currentStep == getSteps().length - 1;
-                if (formKeys[_currentStep].currentState!.validate()) {
-                  if (isLastStep) {
-                    print("completed");
-                    _submit(context);
-                  } else {
-                    setState(() => _currentStep += 1);
+                    ],
+                  );
+                },
+                type: StepperType.horizontal,
+                steps: getSteps(),
+                currentStep: _currentStep,
+                onStepContinue: () {
+                  final isLastStep = _currentStep == getSteps().length - 1;
+                  if (formKeys[_currentStep].currentState!.validate()) {
+                    if (isLastStep) {
+                      print("completed");
+                      _submit(context);
+                    } else {
+                      setState(() => _currentStep += 1);
+                    }
                   }
-                }
-              },
-              onStepCancel: () {
-                _currentStep == 0
-                    ? null
-                    : setState(() {
-                        _currentStep -= 1;
-                      });
-              },
-              onStepTapped: (int index) {
-                if (formKeys[_currentStep].currentState!.validate()) {
-                  setState(() => _currentStep = index);
-                }
-              },
+                },
+                onStepCancel: () {
+                  _currentStep == 0
+                      ? null
+                      : setState(() {
+                          _currentStep -= 1;
+                        });
+                },
+                onStepTapped: (int index) {
+                  if (formKeys[_currentStep].currentState!.validate()) {
+                    setState(() => _currentStep = index);
+                  }
+                },
+              ),
             ),
           ),
         ),
-      ),);
+      );
 
   List<Step> getSteps() => [
         Step(
@@ -288,6 +361,7 @@ class _GrievanceEntryScreen extends State<GrievanceEntryScreen> {
           Padding(
             padding: EdgeInsets.all(10.0),
             child: TextFormField(
+              controller: nameController,
               maxLength: 50,
               decoration: InputDecoration(
                 labelText: 'Parivadi Name',
@@ -309,6 +383,7 @@ class _GrievanceEntryScreen extends State<GrievanceEntryScreen> {
           Padding(
             padding: EdgeInsets.all(10.0),
             child: TextFormField(
+              controller: fatherNameController,
               maxLength: 50,
               decoration: InputDecoration(
                 labelText: 'Parivadi Father Name',
@@ -329,6 +404,7 @@ class _GrievanceEntryScreen extends State<GrievanceEntryScreen> {
           Padding(
             padding: EdgeInsets.all(10.0),
             child: TextFormField(
+              controller: contactController,
               keyboardType: TextInputType.phone,
               maxLength: 10,
               maxLengthEnforcement: MaxLengthEnforcement.enforced,
@@ -352,6 +428,7 @@ class _GrievanceEntryScreen extends State<GrievanceEntryScreen> {
           Padding(
             padding: EdgeInsets.all(10.0),
             child: TextFormField(
+              controller: addressController,
               maxLines: 5,
               maxLength: 100,
               decoration: InputDecoration(
@@ -384,6 +461,7 @@ class _GrievanceEntryScreen extends State<GrievanceEntryScreen> {
           Padding(
             padding: EdgeInsets.all(10.0),
             child: TextFormField(
+              controller: vadiController,
               maxLength: 50,
               decoration: InputDecoration(
                 labelText: 'Vadi Name',
@@ -405,6 +483,7 @@ class _GrievanceEntryScreen extends State<GrievanceEntryScreen> {
           Padding(
             padding: EdgeInsets.all(10.0),
             child: TextFormField(
+              controller: vadiFatherController,
               maxLength: 50,
               decoration: InputDecoration(
                 labelText: 'Vadi Father Name',
@@ -425,6 +504,7 @@ class _GrievanceEntryScreen extends State<GrievanceEntryScreen> {
           Padding(
             padding: EdgeInsets.all(10.0),
             child: TextFormField(
+              controller: vadiContactController,
               keyboardType: TextInputType.phone,
               maxLength: 10,
               maxLengthEnforcement: MaxLengthEnforcement.enforced,
@@ -448,6 +528,7 @@ class _GrievanceEntryScreen extends State<GrievanceEntryScreen> {
           Padding(
             padding: EdgeInsets.all(10.0),
             child: TextFormField(
+              controller: vadiAddressController,
               maxLength: 100,
               maxLines: 5,
               decoration: InputDecoration(
@@ -486,6 +567,7 @@ class _GrievanceEntryScreen extends State<GrievanceEntryScreen> {
           Padding(
             padding: EdgeInsets.all(10.0),
             child: TextFormField(
+              controller: mauzaController,
               maxLength: 50,
               decoration: InputDecoration(
                 labelText: 'Mauza',
@@ -508,6 +590,7 @@ class _GrievanceEntryScreen extends State<GrievanceEntryScreen> {
           Padding(
             padding: EdgeInsets.all(10.0),
             child: TextFormField(
+              controller: khataController,
               maxLength: 10,
               keyboardType: TextInputType.number,
               decoration: InputDecoration(
@@ -531,6 +614,7 @@ class _GrievanceEntryScreen extends State<GrievanceEntryScreen> {
           Padding(
             padding: EdgeInsets.all(10.0),
             child: TextFormField(
+              controller: khesraController,
               keyboardType: TextInputType.number,
               maxLength: 10,
               decoration: InputDecoration(
@@ -555,6 +639,7 @@ class _GrievanceEntryScreen extends State<GrievanceEntryScreen> {
           Padding(
             padding: EdgeInsets.all(10.0),
             child: TextFormField(
+              controller: demandController,
               keyboardType: TextInputType.phone,
               maxLength: 10,
               decoration: InputDecoration(
@@ -577,6 +662,7 @@ class _GrievanceEntryScreen extends State<GrievanceEntryScreen> {
           Padding(
             padding: EdgeInsets.all(10.0),
             child: TextFormField(
+              controller: grievanceController,
               maxLength: 500,
               maxLines: 7,
               decoration: InputDecoration(
@@ -728,12 +814,18 @@ class _GrievanceEntryScreen extends State<GrievanceEntryScreen> {
                 )
                 .toList(),
             onChanged: ((value) {
-              _dropDownPanchayatSelected(value);
+              _dropDownVivadTypeSelected(value);
             }),
             validator: (value) => value == null ? 'Vivad Type required' : null,
           ),
         ),
       ),
     );
+  }
+
+  void _dropDownVivadTypeSelected(String? value) {
+    setState(() {
+      data._vivadType = value;
+    });
   }
 }

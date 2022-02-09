@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:bhoomi_vivad/models/circle.dart';
+import 'package:bhoomi_vivad/models/grievance.dart';
 import 'package:bhoomi_vivad/models/panchayat.dart';
 import 'package:bhoomi_vivad/models/vivad_type.dart';
 import 'package:bhoomi_vivad/providers/auth.dart';
@@ -79,5 +80,29 @@ class GetApiData with ChangeNotifier {
     )
         .toList();
     notifyListeners();
+  }
+
+  Future<bool> uploadGrievanceData(Grievance grievance) async{
+   print(jsonEncode(grievance));
+   return false;
+   /* final url = base_url + '/grievance';
+    bool status = false;
+    try{
+      final response = await http.post(Uri.parse(url), headers: {
+        "Content-Type" : "application/json; charset=UTF-8",
+      },
+          body: jsonEncode(grievance);
+      );
+      //print(response.body);
+      notifyListeners();
+      if(response.statusCode == 201){
+        status = true;
+        return status;
+      }else {
+        throw HttpException("Unable to upload Grievance data !!!");
+      }
+    }catch(error){
+      throw(error);
+    }*/
   }
 }
