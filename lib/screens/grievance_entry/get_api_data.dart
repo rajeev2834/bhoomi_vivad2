@@ -83,17 +83,15 @@ class GetApiData with ChangeNotifier {
   }
 
   Future<bool> uploadGrievanceData(Grievance grievance) async{
-   print(jsonEncode(grievance));
-   return false;
-   /* final url = base_url + '/grievance';
+   final url = base_url + 'grievance/';
     bool status = false;
     try{
       final response = await http.post(Uri.parse(url), headers: {
         "Content-Type" : "application/json; charset=UTF-8",
       },
-          body: jsonEncode(grievance);
+          body: jsonEncode(grievance)
       );
-      //print(response.body);
+      //print(response.statusCode);
       notifyListeners();
       if(response.statusCode == 201){
         status = true;
@@ -103,6 +101,6 @@ class GetApiData with ChangeNotifier {
       }
     }catch(error){
       throw(error);
-    }*/
+    }
   }
 }

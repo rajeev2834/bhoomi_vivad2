@@ -136,8 +136,7 @@ class _GrievanceEntryScreen extends State<GrievanceEntryScreen> {
     showDialog(context: context, builder: (_) => alertDialog);
   }
 
- Future<void> _submit(BuildContext context) async{
-
+  Future<void> _submit(BuildContext context) async {
     _grievance = new Grievance(
         circle: data._circleValue!,
         panchayat: int.parse(data._panchayatValue!),
@@ -156,26 +155,15 @@ class _GrievanceEntryScreen extends State<GrievanceEntryScreen> {
         demand_no: demandController.text,
         vivad_reason: grievanceController.text);
 
-    ProgressDialog pr = new ProgressDialog(context);
-    pr.style(
-        message: 'Loading data...',
-        borderRadius: 10.0,
-        backgroundColor: Colors.white,
-        progressWidget: CircularProgressIndicator(),
-        elevation: 10.0,
-        insetAnimCurve: Curves.easeInOut,
-        progress: 0.0,
-        maxProgress: 100.0,
-        progressTextStyle: TextStyle(
-            color: Colors.black, fontSize: 13.0, fontWeight: FontWeight.w400),
-        messageTextStyle: TextStyle(
-            color: Colors.black,
-            fontSize: 14.0,
-            fontWeight: FontWeight.w600));
+    Provider.of<GetApiData>(context, listen: false)
+        .uploadGrievanceData(_grievance!)
+        .then((value) {
+      _showResultDialog(
+          context, 'Success', 'Grievance submitted successfully !!!');
 
-    //await pr.show();
-    Provider.of<GetApiData>(context, listen: false).uploadGrievanceData(_grievance!);
-
+    }).catchError((handleError) {
+      _showResultDialog(context, 'Error', handleError.toString());
+    });
   }
 
   @override
@@ -194,10 +182,10 @@ class _GrievanceEntryScreen extends State<GrievanceEntryScreen> {
                             willLeave = true;
                             Navigator.of(context).pop();
                           },
-                          child: const Text('Yes')),
+                          child: const Text('Exit')),
                       ElevatedButton(
                           onPressed: () => Navigator.of(context).pop(),
-                          child: const Text('No'))
+                          child: const Text('Cancel'))
                     ],
                   ));
           return willLeave;
