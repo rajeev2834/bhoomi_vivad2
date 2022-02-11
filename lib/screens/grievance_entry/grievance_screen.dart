@@ -2,9 +2,11 @@ import 'dart:async';
 
 import 'package:bhoomi_vivad/models/grievance.dart';
 import 'package:bhoomi_vivad/providers/addBaseData.dart';
+import 'package:bhoomi_vivad/providers/auth.dart';
 import 'package:bhoomi_vivad/providers/get_base_data.dart';
 import 'package:bhoomi_vivad/screens/grievance_entry/get_api_data.dart';
 import 'package:bhoomi_vivad/screens/splash_screen.dart';
+import 'package:bhoomi_vivad/utils/loading_dialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -49,6 +51,7 @@ class GrievanceEntryScreen extends StatefulWidget {
 
 class _GrievanceEntryScreen extends State<GrievanceEntryScreen> {
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final GlobalKey<State> _keyLoader = GlobalKey<State>();
 
   int _currentStep = 0;
   Grievance? _grievance;
@@ -68,11 +71,16 @@ class _GrievanceEntryScreen extends State<GrievanceEntryScreen> {
   TextEditingController grievanceController = TextEditingController();
 
   static GrievnaceData data = GrievnaceData();
+  bool _isLoading = false;
 
   @override
   void initState() {
     super.initState();
+    setState(() {
+      _isLoading = true;
+    });
     _getAndSetToken();
+
   }
 
   @override
@@ -94,7 +102,28 @@ class _GrievanceEntryScreen extends State<GrievanceEntryScreen> {
     super.dispose();
   }
 
+  void _clearTextField(){
+    nameController.clear();
+    fatherNameController.clear();
+    addressController.clear();
+    contactController.clear();
+    vadiAddressController.clear();
+    vadiContactController.clear();
+    vadiFatherController.clear();
+    vadiController.clear();
+    mauzaController.clear();
+    khataController.clear();
+    khesraController.clear();
+    demandController.clear();
+    grievanceController.clear();
+
+    setState(() {
+
+    });
+  }
+
   Future<void> _getAndSetToken() async {
+
     var provider = Provider.of<AddBaseData>(context, listen: false);
     await provider.checkAndSetToken().then((_) async {
       await provider.getToken().then((_) async {
@@ -106,14 +135,20 @@ class _GrievanceEntryScreen extends State<GrievanceEntryScreen> {
                   .then((value) async {
                 await Provider.of<GetBaseData>(context, listen: false)
                     .getVivadTypeData()
-                    .then((_) {});
+                    .then((_) {setState(() {
+                      _isLoading = false;
+                    });});
               });
             });
           });
         });
       });
     }).catchError((handleError) {
-      _showResultDialog(context, 'Error', handleError.toString());
+      if (handleError.toString().contains('SocketException')){
+        _showResultDialog(context, 'Network Error', 'Check your Internet and try again !!!');
+      }else{
+        _showResultDialog(context, 'Error', handleError.toString());
+      }
     });
   }
 
@@ -155,19 +190,24 @@ class _GrievanceEntryScreen extends State<GrievanceEntryScreen> {
         demand_no: demandController.text,
         vivad_reason: grievanceController.text);
 
-    Provider.of<GetApiData>(context, listen: false)
+    Dialogs.showLoadingDialog(context, _keyLoader);
+
+
+    await Provider.of<GetApiData>(context, listen: false)
         .uploadGrievanceData(_grievance!)
         .then((value) {
+      Navigator.of(this.context,rootNavigator: true).pop();
       _showResultDialog(
           context, 'Success', 'Grievance submitted successfully !!!');
-
+      _formKey.currentState?.reset();
+      _clearTextField();
     }).catchError((handleError) {
       _showResultDialog(context, 'Error', handleError.toString());
     });
   }
 
   @override
-  Widget build(BuildContext context) => WillPopScope(
+  Widget build(BuildContext context) => _isLoading ? MySplashScreen() : WillPopScope(
         onWillPop: () async {
           bool willLeave = false;
           // show the confirm dialog
@@ -179,6 +219,7 @@ class _GrievanceEntryScreen extends State<GrievanceEntryScreen> {
                     actions: [
                       TextButton(
                           onPressed: () {
+                            Provider.of<Auth>(context, listen: false).logout();
                             willLeave = true;
                             Navigator.of(context).pop();
                           },
@@ -364,7 +405,7 @@ class _GrievanceEntryScreen extends State<GrievanceEntryScreen> {
               ),
               validator: (value) => value!.isEmpty ? 'Please enter Name' : null,
               onSaved: (value) {
-                data._name = value;
+                  nameController.text = value.toString();
               },
             ),
           ),
@@ -385,7 +426,7 @@ class _GrievanceEntryScreen extends State<GrievanceEntryScreen> {
                 ),
               ),
               onSaved: (value) {
-                data._fatherName = value;
+                fatherNameController.text = value.toString();
               },
             ),
           ),
@@ -409,7 +450,7 @@ class _GrievanceEntryScreen extends State<GrievanceEntryScreen> {
               ),
               validator: validatePhone,
               onSaved: (value) {
-                data._contact = value;
+                contactController.text = value.toString();
               },
             ),
           ),
@@ -430,7 +471,7 @@ class _GrievanceEntryScreen extends State<GrievanceEntryScreen> {
                 ),
               ),
               onSaved: (value) {
-                data._address = value;
+               addressController.text = value.toString();
               },
             ),
           ),
@@ -464,7 +505,7 @@ class _GrievanceEntryScreen extends State<GrievanceEntryScreen> {
               ),
               validator: (value) => value!.isEmpty ? 'Please enter Name' : null,
               onSaved: (value) {
-                data._partyName = value;
+                vadiController.text = value.toString();
               },
             ),
           ),
@@ -484,8 +525,8 @@ class _GrievanceEntryScreen extends State<GrievanceEntryScreen> {
                   borderRadius: BorderRadius.circular(10.0),
                 ),
               ),
-              onSaved: (value) {
-                data._partyFatherName = value;
+             onSaved: (value) {
+                vadiFatherController.text = value.toString();
               },
             ),
           ),
@@ -508,8 +549,8 @@ class _GrievanceEntryScreen extends State<GrievanceEntryScreen> {
                 ),
               ),
               validator: validatePhone,
-              onSaved: (value) {
-                data._partyContact = value;
+             onSaved: (value) {
+                vadiContactController.text = value.toString();
               },
             ),
           ),
@@ -532,7 +573,7 @@ class _GrievanceEntryScreen extends State<GrievanceEntryScreen> {
               validator: (value) =>
                   value!.isEmpty ? 'Please enter Vadi Address' : null,
               onSaved: (value) {
-                data._partyAddress = value;
+                vadiAddressController.text = value.toString();
               },
             ),
           ),
@@ -571,7 +612,7 @@ class _GrievanceEntryScreen extends State<GrievanceEntryScreen> {
               validator: (value) =>
                   value!.isEmpty ? 'Please enter Mauza' : null,
               onSaved: (value) {
-                data._mauza = value;
+                mauzaController.text = value.toString();
               },
             ),
           ),
@@ -595,7 +636,7 @@ class _GrievanceEntryScreen extends State<GrievanceEntryScreen> {
               validator: (value) =>
                   value!.isEmpty ? 'Please enter Khata No' : null,
               onSaved: (value) {
-                data._khata = value;
+               khataController.text = value.toString();
               },
             ),
           ),
@@ -620,7 +661,7 @@ class _GrievanceEntryScreen extends State<GrievanceEntryScreen> {
               validator: (value) =>
                   value!.isEmpty ? 'Please enter Khesra No' : null,
               onSaved: (value) {
-                data._khesra = value;
+               khesraController.text = value.toString();
               },
             ),
           ),
@@ -643,7 +684,7 @@ class _GrievanceEntryScreen extends State<GrievanceEntryScreen> {
                 ),
               ),
               onSaved: (value) {
-                data._demand = value;
+                demandController.text = value.toString();
               },
             ),
           ),
@@ -666,7 +707,7 @@ class _GrievanceEntryScreen extends State<GrievanceEntryScreen> {
               validator: (value) =>
                   value!.isEmpty ? 'Please enter Grievance detail' : null,
               onSaved: (value) {
-                data._grievnace = value;
+                grievanceController.text = value.toString();
               },
             ),
           ),

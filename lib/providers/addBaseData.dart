@@ -57,6 +57,7 @@ class AddBaseData with ChangeNotifier {
     if (!prefs.containsKey('userData')) {
       await new Auth().signin("Test", "Test@123");
     }
+    notifyListeners();
   }
   Future<void> fetchAndSetCircle() async {
     final url = base_url + 'circle/';

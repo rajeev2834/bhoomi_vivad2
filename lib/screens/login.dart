@@ -29,14 +29,8 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery
-        .of(context)
-        .size
-        .width;
-    double height = MediaQuery
-        .of(context)
-        .size
-        .height;
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
     // TODO: implement build
     return Scaffold(
       body: new GestureDetector(
@@ -56,7 +50,9 @@ class _LoginState extends State<Login> {
                       children: <Widget>[
                         Row(
                           children: <Widget>[
-                            SizedBox(height: 10,),
+                            SizedBox(
+                              height: 10,
+                            ),
                             Image.asset(
                               'assets/images/cm-image.png',
                               width: 100,
@@ -86,9 +82,7 @@ class _LoginState extends State<Login> {
                           style: TextStyle(
                               fontSize: 24,
                               fontWeight: FontWeight.bold,
-                              color: Theme
-                                  .of(context)
-                                  .primaryColorDark),
+                              color: Theme.of(context).primaryColorDark),
                         ),
                         SizedBox(
                           height: 15.0,
@@ -98,9 +92,7 @@ class _LoginState extends State<Login> {
                           style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
-                              color: Theme
-                                  .of(context)
-                                  .hintColor),
+                              color: Theme.of(context).hintColor),
                         ),
                         SizedBox(
                           height: 20.0,
@@ -125,7 +117,9 @@ class _LoginState extends State<Login> {
                               decoration: InputDecoration(
                                 labelText: 'User Name',
                                 labelStyle: TextStyle(
-                                  color: Colors.indigo, fontSize: 15.0,),
+                                  color: Colors.indigo,
+                                  fontSize: 15.0,
+                                ),
                                 prefixIcon: Icon(Icons.account_circle_rounded),
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(20.0),
@@ -158,17 +152,16 @@ class _LoginState extends State<Login> {
                               decoration: InputDecoration(
                                 labelText: 'Password',
                                 labelStyle: TextStyle(
-                                    color: Theme
-                                        .of(context)
-                                        .primaryColor, fontSize: 15.0),
+                                    color: Theme.of(context).primaryColor,
+                                    fontSize: 15.0),
                                 prefixIcon: Icon(Icons.lock_sharp),
                                 suffixIcon: IconButton(
                                   icon: Icon(_showPassword
                                       ? Icons.visibility
                                       : Icons.visibility_off),
                                   onPressed: () {
-                                    setState(() =>
-                                    this._showPassword = !this._showPassword);
+                                    setState(() => this._showPassword =
+                                        !this._showPassword);
                                   },
                                 ),
                                 border: OutlineInputBorder(
@@ -185,43 +178,44 @@ class _LoginState extends State<Login> {
                         ),
                         _isLoading
                             ? Center(
-                          child: CircularProgressIndicator(),
-                        )
+                                child: CircularProgressIndicator(),
+                              )
                             : Padding(
-                          padding: const EdgeInsets.all(10.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Builder(
-                                  builder: (context) =>
-                                      ElevatedButton(
-                                        child: Padding(
-                                          padding: EdgeInsets.only(
-                                              left: 20.0, right: 20.0),
-                                          child: Text(
-                                            'Login',
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.w500,
-                                                fontSize: 20,
-                                                color: Colors.white),
-                                          ),
-                                        ),
-                                        onPressed: () {
-                                          setState(() {
-                                            if (_formKey.currentState!
-                                                .validate()) {
-                                              _submit();
-                                            }
-                                          });
-                                        },
-                                      )),
-                            ],
-                          ),
-                        ),
+                                padding: const EdgeInsets.all(10.0),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    Builder(
+                                        builder: (context) => ElevatedButton(
+                                              child: Padding(
+                                                padding: EdgeInsets.only(
+                                                    left: 20.0, right: 20.0),
+                                                child: Text(
+                                                  'Login',
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                      fontSize: 20,
+                                                      color: Colors.white),
+                                                ),
+                                              ),
+                                              onPressed: () {
+                                                setState(() {
+                                                  if (_formKey.currentState!
+                                                      .validate()) {
+                                                    _submit();
+                                                  }
+                                                });
+                                              },
+                                            )),
+                                  ],
+                                ),
+                              ),
                       ],
                     ),
                   ),
-                ))),),
+                ))),
+      ),
     );
   }
 
@@ -234,7 +228,10 @@ class _LoginState extends State<Login> {
           onPressed: () {
             Navigator.of(context).pop();
           },
-          child: Text('Ok', style: TextStyle(fontWeight: FontWeight.bold),),
+          child: Text(
+            'Ok',
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
         ),
       ],
     );
@@ -247,14 +244,15 @@ class _LoginState extends State<Login> {
       _isLoading = true;
     });
     try {
-      await Provider.of<Auth>(context, listen: false)
-          .signin(
-        _authData['username'],
-        _authData['password'],
-      )
-          .then((value) {
-        Provider.of<Auth>(context, listen: false).fetchAndSetUser();
-      });
+      await 
+         Provider.of<Auth>(context, listen: false)
+            .signin(
+          _authData['username'],
+          _authData['password'],
+        )
+            .then((value) {
+          Provider.of<Auth>(context, listen: false).fetchAndSetUser();
+        });
     } on HttpException catch (error) {
       var errorMessage = error.toString();
       _showAlertDialog('Error: ', errorMessage);
