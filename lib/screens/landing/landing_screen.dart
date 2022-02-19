@@ -124,7 +124,7 @@ class Landing extends StatelessWidget {
 
   void _moveNextScreen(BuildContext context, int index) async {
     if (index == 0) {
-      Navigator.of(context).pushNamed('/grievance_screen');
+      Navigator.of(context).pushNamed('/otp_screen');
     } else if (index == 1) {
       Navigator.of(context).push(new MaterialPageRoute(
           builder: (context) => LoginToHome()));

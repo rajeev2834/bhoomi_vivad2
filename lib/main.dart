@@ -9,6 +9,8 @@ import 'package:bhoomi_vivad/screens/landing/landing_screen.dart';
 import 'package:bhoomi_vivad/screens/login.dart';
 import 'package:bhoomi_vivad/screens/splash_screen.dart';
 import 'package:bhoomi_vivad/screens/upload_vivad/upload_vivad_provider.dart';
+import 'package:bhoomi_vivad/screens/verify_otp/send_otp_screen.dart';
+import 'package:bhoomi_vivad/screens/verify_otp/verify_otp_screen.dart';
 import 'package:bhoomi_vivad/screens/vivad_entry/vivad_entry_screen.dart';
 import 'package:bhoomi_vivad/screens/upload_vivad/upload_vivad_screen.dart';
 import 'package:flutter/material.dart';
@@ -51,6 +53,8 @@ class BhoomiVivad extends StatelessWidget {
           home: Landing(),
           routes: {
             GrievanceEntryScreen.routeName: (context) => GrievanceEntryScreen(),
+           SendOTPScreen.routeName: (context) => SendOTPScreen(),
+            VerifyOTPScreen.routeName: (context) => VerifyOTPScreen(),
             Login.routeName: (context) => Login(),
             HomeScreen.routeName: (context) => HomeScreen(),
             UploadVivadScreen.routeName: (context) => UploadVivadScreen(),
