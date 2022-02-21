@@ -10,6 +10,7 @@ import 'package:bhoomi_vivad/screens/login.dart';
 import 'package:bhoomi_vivad/screens/splash_screen.dart';
 import 'package:bhoomi_vivad/screens/upload_vivad/upload_vivad_provider.dart';
 import 'package:bhoomi_vivad/screens/verify_otp/send_otp_screen.dart';
+import 'package:bhoomi_vivad/screens/verify_otp/verify_otp_provider.dart';
 import 'package:bhoomi_vivad/screens/verify_otp/verify_otp_screen.dart';
 import 'package:bhoomi_vivad/screens/vivad_entry/vivad_entry_screen.dart';
 import 'package:bhoomi_vivad/screens/upload_vivad/upload_vivad_screen.dart';
@@ -42,6 +43,9 @@ class BhoomiVivad extends StatelessWidget {
         ChangeNotifierProvider.value(
           value: GetApiData(),
         ),
+        ChangeNotifierProvider.value(
+          value: VerifyOTPProvider(),
+        ),
       ],
       child: MaterialApp(
           debugShowCheckedModeBanner: false,
@@ -53,7 +57,7 @@ class BhoomiVivad extends StatelessWidget {
           home: Landing(),
           routes: {
             GrievanceEntryScreen.routeName: (context) => GrievanceEntryScreen(),
-           SendOTPScreen.routeName: (context) => SendOTPScreen(),
+            SendOTPScreen.routeName: (context) => SendOTPScreen(),
             VerifyOTPScreen.routeName: (context) => VerifyOTPScreen(),
             Login.routeName: (context) => Login(),
             HomeScreen.routeName: (context) => HomeScreen(),

@@ -1,7 +1,11 @@
+import 'package:bhoomi_vivad/models/mobile_device.dart';
+import 'package:bhoomi_vivad/screens/verify_otp/verify_otp_provider.dart';
+import 'package:bhoomi_vivad/utils/loading_dialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:bhoomi_vivad/models/http_exception.dart';
+import 'package:provider/provider.dart';
 
 class SendOTPScreen extends StatefulWidget {
   static const routeName = '/otp_screen';
@@ -15,6 +19,9 @@ class SendOTPScreen extends StatefulWidget {
 
 class _SendOTPScreen extends State<SendOTPScreen> {
   final _formKey = GlobalKey<FormState>();
+  final GlobalKey<State> _keyLoader = GlobalKey<State>();
+
+  MobileDevice? _mobileDevice;
 
   TextEditingController contactController = TextEditingController();
 
@@ -88,103 +95,115 @@ class _SendOTPScreen extends State<SendOTPScreen> {
                       ),
                     ),
                     Expanded(
-                        flex: 3,
-                        child: Column(
-                          children: <Widget>[
-                            Container(
-                              constraints: const BoxConstraints(
-                                maxWidth: 500,
-                              ),
-                                margin: const EdgeInsets.symmetric(horizontal: 10),
-                                child: RichText(
-                                  textAlign: TextAlign.center,
-                                  text: TextSpan(children: <TextSpan>[
-                                    TextSpan(text: 'We will send you an ', style: TextStyle(color: Colors.indigo)),
-                                    TextSpan(
-                                        text: 'One Time Password ', style: TextStyle(color: Colors.indigo, fontWeight: FontWeight.bold)),
-                                    TextSpan(text: 'on this mobile number', style: TextStyle(color: Colors.indigo)),
-                                  ]),
-                                ),
+                      flex: 3,
+                      child: Column(
+                        children: <Widget>[
+                          Container(
+                            constraints: const BoxConstraints(
+                              maxWidth: 500,
                             ),
-                            Container(
-                              height: 100,
-                              constraints: const BoxConstraints(
-                                  maxWidth: 500
-                              ),
-                              margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 50),
-                              child: TextFormField(
-                                controller: contactController,
-                                keyboardType: TextInputType.phone,
-                                maxLength: 10,
-                                maxLines: 1,
-                                maxLengthEnforcement: MaxLengthEnforcement.enforced,
-                                decoration: InputDecoration(
-                                  labelText: 'Enter Mobile No',
-                                  labelStyle: TextStyle(
-                                      color: Theme.of(context).primaryColor,
-                                      fontSize: 15.0),
-                                  suffixIcon: Icon(Icons.phone_android_rounded,
-                                      color: Colors.indigo),
-                                  contentPadding: new EdgeInsets.symmetric(
-                                      vertical: 5.0, horizontal: 10.0),
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10.0),
-                                  ),
-                                ),
-                                validator: validatePhone,
-                                onSaved: (value) {
-                                 _mobileData['phone_number'] = value;
-                                },
-                              ),
+                            margin: const EdgeInsets.symmetric(horizontal: 10),
+                            child: RichText(
+                              textAlign: TextAlign.center,
+                              text: TextSpan(children: <TextSpan>[
+                                TextSpan(
+                                    text: 'We will send you an ',
+                                    style: TextStyle(color: Colors.indigo)),
+                                TextSpan(
+                                    text: 'One Time Password ',
+                                    style: TextStyle(
+                                        color: Colors.indigo,
+                                        fontWeight: FontWeight.bold)),
+                                TextSpan(
+                                    text: 'on this mobile number',
+                                    style: TextStyle(color: Colors.indigo)),
+                              ]),
                             ),
-                            Container(
-                              margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                              constraints: const BoxConstraints(
-                                  maxWidth: 500
-                              ),
-                              child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  primary: Colors.indigo,
-                                  shape: const RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.all(Radius.circular(14.0))
-                                  ),
+                          ),
+                          Container(
+                            height: 100,
+                            constraints: const BoxConstraints(maxWidth: 500),
+                            margin: const EdgeInsets.symmetric(
+                                horizontal: 20, vertical: 50),
+                            child: TextFormField(
+                              controller: contactController,
+                              keyboardType: TextInputType.phone,
+                              maxLength: 10,
+                              maxLines: 1,
+                              maxLengthEnforcement:
+                                  MaxLengthEnforcement.enforced,
+                              decoration: InputDecoration(
+                                labelText: 'Enter Mobile No',
+                                labelStyle: TextStyle(
+                                    color: Theme.of(context).primaryColor,
+                                    fontSize: 15.0),
+                                suffixIcon: Icon(Icons.phone_android_rounded,
+                                    color: Colors.indigo),
+                                contentPadding: new EdgeInsets.symmetric(
+                                    vertical: 5.0, horizontal: 10.0),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10.0),
                                 ),
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: <Widget>[
-                                      Text(
-                                        'Send OTP',
-                                        style: TextStyle(color: Colors.white, fontSize: 16.0,),
+                              ),
+                              validator: validatePhone,
+                              onSaved: (value) {
+                                _mobileData['phone_number'] = value;
+                              },
+                            ),
+                          ),
+                          Container(
+                            margin: const EdgeInsets.symmetric(
+                                horizontal: 20, vertical: 10),
+                            constraints: const BoxConstraints(maxWidth: 500),
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                primary: Colors.indigo,
+                                shape: const RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.all(
+                                        Radius.circular(14.0))),
+                              ),
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 8, horizontal: 8),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: <Widget>[
+                                    Text(
+                                      'Send OTP',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 16.0,
                                       ),
-                                      Container(
-                                        padding: const EdgeInsets.all(8),
-                                        decoration: BoxDecoration(
-                                          borderRadius: const BorderRadius.all(Radius.circular(20)),
-                                          color: Colors.indigo,
-                                        ),
-                                        child: Icon(
-                                          Icons.arrow_forward_ios,
-                                          color: Colors.white,
-                                          size: 16,
-                                        ),
-                                      )
-                                    ],
-                                  ),
+                                    ),
+                                    Container(
+                                      padding: const EdgeInsets.all(8),
+                                      decoration: BoxDecoration(
+                                        borderRadius: const BorderRadius.all(
+                                            Radius.circular(20)),
+                                        color: Colors.indigo,
+                                      ),
+                                      child: Icon(
+                                        Icons.arrow_forward_ios,
+                                        color: Colors.white,
+                                        size: 16,
+                                      ),
+                                    )
+                                  ],
                                 ),
-                                onPressed: (){
-                                  setState(() {
-                                    if (_formKey.currentState!
-                                        .validate()) {
-                                      _generateOTP();
-                                    }
-                                  });
-                                },
                               ),
+                              onPressed: () {
+                                setState(() {
+                                  if (_formKey.currentState!.validate()) {
+                                    _generateOTP();
+                                  }
+                                });
+                              },
                             ),
-                          ],
-                        ),),
+                          ),
+                        ],
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -230,8 +249,27 @@ class _SendOTPScreen extends State<SendOTPScreen> {
   Future<void> _generateOTP() async {
     _formKey.currentState!.save();
     try {
-      print("move to otp page");
-      Navigator.of(context).pushNamed('/verify_otp');
+      _mobileDevice = new MobileDevice(
+          phone_number: _mobileData['phone_number'],
+          device_info: '',
+          device_imei: '');
+      Dialogs.showLoadingDialog(context, _keyLoader);
+      await Provider.of<VerifyOTPProvider>(context, listen: false)
+          .uploadMobileData(_mobileDevice!)
+          .then((value) {
+        Navigator.of(this.context, rootNavigator: true).pop();
+        Navigator.of(context).pushNamed('/verify_otp',
+        arguments: {
+          'phone_number' : _mobileData['phone_number'],
+        },);
+      }).catchError((handleError) {
+        Navigator.of(this.context, rootNavigator: true).pop();
+        if (handleError.toString().contains('SocketException')) {
+          _showToast(context, 'Please check your Network and try again.');
+        } else {
+          _showToast(context, handleError.toString());
+        }
+      });
     } on HttpException catch (error) {
       var errorMessage = error.toString();
       _showAlertDialog('Error: ', errorMessage);
@@ -240,5 +278,14 @@ class _SendOTPScreen extends State<SendOTPScreen> {
           'Could not connect to the server. Please try again later !!!';
       _showAlertDialog('Error :', errorMessage);
     }
+  }
+
+  void _showToast(BuildContext context, String message) {
+    final scaffold = ScaffoldMessenger.of(context);
+    scaffold.showSnackBar(
+      SnackBar(
+        content: Text(message),
+      ),
+    );
   }
 }

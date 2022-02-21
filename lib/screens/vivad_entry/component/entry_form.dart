@@ -680,7 +680,7 @@ class _EntryFormState extends State<EntryForm> {
                   borderRadius: BorderRadius.circular(10.0),
                 ),
               ),
-              validator: validatePhone,
+              validator: validatePhoneCharacter,
               onSaved: (value) {
                 _secondPartPhone = value;
               },
@@ -710,8 +710,6 @@ class _EntryFormState extends State<EntryForm> {
                   borderRadius: BorderRadius.circular(10.0),
                 ),
               ),
-              validator: (value) =>
-                  value!.isEmpty ? 'Please enter Second Party address' : null,
               onSaved: (value) {
                 _secondPartyAddress = value;
               },
@@ -787,6 +785,7 @@ class _EntryFormState extends State<EntryForm> {
               bottom: 5.0,
             ),
             child: TextFormField(
+              keyboardType: TextInputType.number,
               initialValue: _initValues['khesra_no'],
               decoration: InputDecoration(
                 labelText: 'Khesra',
@@ -811,6 +810,7 @@ class _EntryFormState extends State<EntryForm> {
               bottom: 5.0,
             ),
             child: TextFormField(
+              keyboardType: TextInputType.number,
               initialValue: _initValues['khata_no'],
               decoration: InputDecoration(
                 labelText: 'Khata No',
@@ -895,6 +895,7 @@ class _EntryFormState extends State<EntryForm> {
             SizedBox(
               width: MediaQuery.of(context).size.width * 0.90,
               child: DropdownButtonFormField<String>(
+                isExpanded: true,
                 value: _vivadType,
                 decoration: InputDecoration(
                   labelText: 'Vivad Reason',
@@ -1374,8 +1375,8 @@ class _EntryFormState extends State<EntryForm> {
         first_party_address: _firstPartyAddress!,
         first_party_contact: _firstPartyPhone!,
         first_party_name: _firstPartyName!,
-        second_party_address: _secondPartyAddress!,
-        second_party_contact: _secondPartPhone!,
+        second_party_address: _secondPartyAddress ?? '',
+        second_party_contact: _secondPartPhone ?? '',
         second_party_name: _secondPartyName!,
         vivad_type_id: int.parse(_vivadType!),
         case_detail: _caseDetail!,
@@ -1481,6 +1482,19 @@ class _EntryFormState extends State<EntryForm> {
     } else if (value.length != 10) {
       return 'Contact no. must be of 10 digits';
     } else if (!regExp.hasMatch(value)) {
+      return 'Contact no. must be in digits';
+    }
+    return null;
+  }
+
+  String? validatePhoneCharacter(String? value) {
+    String pattern = r'(^[0-9]*$)';
+    RegExp regExp = new RegExp(pattern);
+    if (value?.length == 0)
+      return null;
+    else if (value?.length != 10) {
+      return 'Contact no. must be of 10 digits';
+    } else if (!regExp.hasMatch(value!)) {
       return 'Contact no. must be in digits';
     }
     return null;

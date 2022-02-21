@@ -80,7 +80,6 @@ class _GrievanceEntryScreen extends State<GrievanceEntryScreen> {
       _isLoading = true;
     });
     _getAndSetToken();
-
   }
 
   @override
@@ -102,7 +101,7 @@ class _GrievanceEntryScreen extends State<GrievanceEntryScreen> {
     super.dispose();
   }
 
-  void _clearTextField(){
+  void _clearTextField() {
     nameController.clear();
     fatherNameController.clear();
     addressController.clear();
@@ -117,13 +116,10 @@ class _GrievanceEntryScreen extends State<GrievanceEntryScreen> {
     demandController.clear();
     grievanceController.clear();
 
-    setState(() {
-
-    });
+    setState(() {});
   }
 
   Future<void> _getAndSetToken() async {
-
     var provider = Provider.of<AddBaseData>(context, listen: false);
     await provider.checkAndSetToken().then((_) async {
       await provider.getToken().then((_) async {
@@ -135,18 +131,21 @@ class _GrievanceEntryScreen extends State<GrievanceEntryScreen> {
                   .then((value) async {
                 await Provider.of<GetBaseData>(context, listen: false)
                     .getVivadTypeData()
-                    .then((_) {setState(() {
-                      _isLoading = false;
-                    });});
+                    .then((_) {
+                  setState(() {
+                    _isLoading = false;
+                  });
+                });
               });
             });
           });
         });
       });
     }).catchError((handleError) {
-      if (handleError.toString().contains('SocketException')){
-        _showResultDialog(context, 'Network Error', 'Check your Internet and try again !!!');
-      }else{
+      if (handleError.toString().contains('SocketException')) {
+        _showResultDialog(
+            context, 'Network Error', 'Check your Internet and try again !!!');
+      } else {
         _showResultDialog(context, 'Error', handleError.toString());
       }
     });
@@ -192,11 +191,10 @@ class _GrievanceEntryScreen extends State<GrievanceEntryScreen> {
 
     Dialogs.showLoadingDialog(context, _keyLoader);
 
-
     await Provider.of<GetApiData>(context, listen: false)
         .uploadGrievanceData(_grievance!)
         .then((value) {
-      Navigator.of(this.context,rootNavigator: true).pop();
+      Navigator.of(this.context, rootNavigator: true).pop();
       _showResultDialog(
           context, 'Success', 'Grievance submitted successfully !!!');
       _formKey.currentState?.reset();
@@ -207,152 +205,156 @@ class _GrievanceEntryScreen extends State<GrievanceEntryScreen> {
   }
 
   @override
-  Widget build(BuildContext context) => _isLoading ? MySplashScreen() : WillPopScope(
-        onWillPop: () async {
-          bool willLeave = false;
-          // show the confirm dialog
-          await showDialog(
-              context: context,
-              builder: (_) => AlertDialog(
-                    title: const Text('Confirm'),
-                    content: Text('Are you sure want to exit ?'),
-                    actions: [
-                      TextButton(
-                          onPressed: () {
-                            Provider.of<Auth>(context, listen: false).logout();
-                            willLeave = true;
-                            Navigator.of(context).pop();
-                          },
-                          child: const Text('Exit')),
-                      ElevatedButton(
-                          onPressed: () => Navigator.of(context).pop(),
-                          child: const Text('Cancel'))
-                    ],
-                  ));
-          return willLeave;
-        },
-        child: GestureDetector(
-          onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
-          child: Scaffold(
-            appBar: AppBar(
-              titleSpacing: 0.0,
-              title: Text(
-                "Post Your Grievnace here",
+  Widget build(BuildContext context) => _isLoading
+      ? MySplashScreen()
+      : WillPopScope(
+          onWillPop: () async {
+            bool willLeave = false;
+            // show the confirm dialog
+            await showDialog(
+                context: context,
+                builder: (_) => AlertDialog(
+                      title: const Text('Confirm'),
+                      content: Text('Are you sure want to exit ?'),
+                      actions: [
+                        TextButton(
+                            onPressed: () {
+                              Provider.of<Auth>(context, listen: false)
+                                  .logout();
+                              willLeave = true;
+                              Navigator.popUntil(
+                                  context, ModalRoute.withName('/'));
+                            },
+                            child: const Text('Exit')),
+                        ElevatedButton(
+                            onPressed: () => Navigator.of(context).pop(),
+                            child: const Text('Cancel'))
+                      ],
+                    ));
+            return willLeave;
+          },
+          child: GestureDetector(
+            onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+            child: Scaffold(
+              appBar: AppBar(
+                titleSpacing: 0.0,
+                title: Text(
+                  "Post Your Grievnace here",
+                ),
               ),
-            ),
-            body: Form(
-              key: _formKey,
-              child: Stepper(
-                controlsBuilder:
-                    (BuildContext context, ControlsDetails details) {
-                  return Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: <Widget>[
-                      _currentStep == 0
-                          ? TextButton(
-                              onPressed: details.onStepContinue,
-                              child: const Text(
-                                'NEXT',
-                              ),
-                              style: TextButton.styleFrom(
-                                primary: Colors.white,
-                                backgroundColor: Colors.indigo,
-                              ),
-                            )
-                          : _currentStep == 1
-                              ? Container(
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceAround,
-                                    children: [
-                                      TextButton(
+              body: Form(
+                key: _formKey,
+                child: Stepper(
+                  controlsBuilder:
+                      (BuildContext context, ControlsDetails details) {
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: <Widget>[
+                        _currentStep == 0
+                            ? TextButton(
+                                onPressed: details.onStepContinue,
+                                child: const Text(
+                                  'NEXT',
+                                ),
+                                style: TextButton.styleFrom(
+                                  primary: Colors.white,
+                                  backgroundColor: Colors.indigo,
+                                ),
+                              )
+                            : _currentStep == 1
+                                ? Container(
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceAround,
+                                      children: [
+                                        TextButton(
+                                          onPressed: details.onStepCancel,
+                                          child: const Text('BACK'),
+                                          style: TextButton.styleFrom(
+                                            primary: Colors.white,
+                                            backgroundColor: Colors.indigo,
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          width: 20.0,
+                                        ),
+                                        TextButton(
+                                          onPressed: details.onStepContinue,
+                                          child: const Text('NEXT'),
+                                          style: TextButton.styleFrom(
+                                            primary: Colors.white,
+                                            backgroundColor: Colors.indigo,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  )
+                                : _currentStep >= 2
+                                    ? Container(
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            TextButton(
+                                              onPressed: details.onStepCancel,
+                                              child: const Text('BACK'),
+                                              style: TextButton.styleFrom(
+                                                primary: Colors.white,
+                                                backgroundColor: Colors.indigo,
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              width: 20.0,
+                                            ),
+                                            TextButton(
+                                              onPressed: details.onStepContinue,
+                                              child: const Text('SAVE'),
+                                              style: TextButton.styleFrom(
+                                                primary: Colors.white,
+                                                backgroundColor: Colors.indigo,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      )
+                                    : TextButton(
                                         onPressed: details.onStepCancel,
                                         child: const Text('BACK'),
-                                        style: TextButton.styleFrom(
-                                          primary: Colors.white,
-                                          backgroundColor: Colors.indigo,
-                                        ),
                                       ),
-                                      SizedBox(
-                                        width: 20.0,
-                                      ),
-                                      TextButton(
-                                        onPressed: details.onStepContinue,
-                                        child: const Text('NEXT'),
-                                        style: TextButton.styleFrom(
-                                          primary: Colors.white,
-                                          backgroundColor: Colors.indigo,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                )
-                              : _currentStep >= 2
-                                  ? Container(
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          TextButton(
-                                            onPressed: details.onStepCancel,
-                                            child: const Text('BACK'),
-                                            style: TextButton.styleFrom(
-                                              primary: Colors.white,
-                                              backgroundColor: Colors.indigo,
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            width: 20.0,
-                                          ),
-                                          TextButton(
-                                            onPressed: details.onStepContinue,
-                                            child: const Text('SAVE'),
-                                            style: TextButton.styleFrom(
-                                              primary: Colors.white,
-                                              backgroundColor: Colors.indigo,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    )
-                                  : TextButton(
-                                      onPressed: details.onStepCancel,
-                                      child: const Text('BACK'),
-                                    ),
-                    ],
-                  );
-                },
-                type: StepperType.horizontal,
-                steps: getSteps(),
-                currentStep: _currentStep,
-                onStepContinue: () {
-                  final isLastStep = _currentStep == getSteps().length - 1;
-                  if (formKeys[_currentStep].currentState!.validate()) {
-                    if (isLastStep) {
-                      print("completed");
-                      _submit(context);
-                    } else {
-                      setState(() => _currentStep += 1);
+                      ],
+                    );
+                  },
+                  type: StepperType.horizontal,
+                  steps: getSteps(),
+                  currentStep: _currentStep,
+                  onStepContinue: () {
+                    final isLastStep = _currentStep == getSteps().length - 1;
+                    if (formKeys[_currentStep].currentState!.validate()) {
+                      if (isLastStep) {
+                        print("completed");
+                        _submit(context);
+                      } else {
+                        setState(() => _currentStep += 1);
+                      }
                     }
-                  }
-                },
-                onStepCancel: () {
-                  _currentStep == 0
-                      ? null
-                      : setState(() {
-                          _currentStep -= 1;
-                        });
-                },
-                onStepTapped: (int index) {
-                  if (formKeys[_currentStep].currentState!.validate()) {
-                    setState(() => _currentStep = index);
-                  }
-                },
+                  },
+                  onStepCancel: () {
+                    _currentStep == 0
+                        ? null
+                        : setState(() {
+                            _currentStep -= 1;
+                          });
+                  },
+                  onStepTapped: (int index) {
+                    if (formKeys[_currentStep].currentState!.validate()) {
+                      setState(() => _currentStep = index);
+                    }
+                  },
+                ),
               ),
             ),
           ),
-        ),
-      );
+        );
 
   List<Step> getSteps() => [
         Step(
@@ -405,7 +407,7 @@ class _GrievanceEntryScreen extends State<GrievanceEntryScreen> {
               ),
               validator: (value) => value!.isEmpty ? 'Please enter Name' : null,
               onSaved: (value) {
-                  nameController.text = value.toString();
+                nameController.text = value.toString();
               },
             ),
           ),
@@ -471,7 +473,7 @@ class _GrievanceEntryScreen extends State<GrievanceEntryScreen> {
                 ),
               ),
               onSaved: (value) {
-               addressController.text = value.toString();
+                addressController.text = value.toString();
               },
             ),
           ),
@@ -525,7 +527,7 @@ class _GrievanceEntryScreen extends State<GrievanceEntryScreen> {
                   borderRadius: BorderRadius.circular(10.0),
                 ),
               ),
-             onSaved: (value) {
+              onSaved: (value) {
                 vadiFatherController.text = value.toString();
               },
             ),
@@ -548,8 +550,8 @@ class _GrievanceEntryScreen extends State<GrievanceEntryScreen> {
                   borderRadius: BorderRadius.circular(10.0),
                 ),
               ),
-              validator: validatePhone,
-             onSaved: (value) {
+              validator: validatePhoneCharacter,
+              onSaved: (value) {
                 vadiContactController.text = value.toString();
               },
             ),
@@ -636,7 +638,7 @@ class _GrievanceEntryScreen extends State<GrievanceEntryScreen> {
               validator: (value) =>
                   value!.isEmpty ? 'Please enter Khata No' : null,
               onSaved: (value) {
-               khataController.text = value.toString();
+                khataController.text = value.toString();
               },
             ),
           ),
@@ -661,7 +663,7 @@ class _GrievanceEntryScreen extends State<GrievanceEntryScreen> {
               validator: (value) =>
                   value!.isEmpty ? 'Please enter Khesra No' : null,
               onSaved: (value) {
-               khesraController.text = value.toString();
+                khesraController.text = value.toString();
               },
             ),
           ),
@@ -724,6 +726,19 @@ class _GrievanceEntryScreen extends State<GrievanceEntryScreen> {
     } else if (value.length != 10) {
       return 'Contact no. must be of 10 digits';
     } else if (!regExp.hasMatch(value)) {
+      return 'Contact no. must be in digits';
+    }
+    return null;
+  }
+
+  String? validatePhoneCharacter(String? value) {
+    String pattern = r'(^[0-9]*$)';
+    RegExp regExp = new RegExp(pattern);
+    if (value?.length == 0)
+      return null;
+    else if (value?.length != 10) {
+      return 'Contact no. must be of 10 digits';
+    } else if (!regExp.hasMatch(value!)) {
       return 'Contact no. must be in digits';
     }
     return null;
@@ -824,6 +839,7 @@ class _GrievanceEntryScreen extends State<GrievanceEntryScreen> {
         builder: (ctx, getBaseData, _) => SizedBox(
           width: MediaQuery.of(context).size.width * 0.90,
           child: DropdownButtonFormField<String>(
+            isExpanded: true,
             value: data._vivadType,
             decoration: InputDecoration(
               labelText: 'Vivad Type *',
