@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:bhoomi_vivad/providers/auth.dart';
 import 'package:bhoomi_vivad/screens/login.dart';
 import 'package:flutter/cupertino.dart';
@@ -17,6 +19,12 @@ class Landing extends StatelessWidget {
     // TODO: implement build
     return Scaffold(
       backgroundColor: Colors.white,
+      bottomNavigationBar: BottomAppBar(
+        child: Image.asset(
+              'assets/images/Nic_logo2-01.png',
+              height: 40,
+            ),
+      ),
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
@@ -126,8 +134,8 @@ class Landing extends StatelessWidget {
     if (index == 0) {
       Navigator.of(context).pushNamed('/otp_screen');
     } else if (index == 1) {
-      Navigator.of(context).push(new MaterialPageRoute(
-          builder: (context) => LoginToHome()));
+      Navigator.of(context)
+          .push(new MaterialPageRoute(builder: (context) => LoginToHome()));
     }
   }
 }
@@ -151,7 +159,8 @@ class LoginToHome extends StatelessWidget {
               builder: (ctx, authResultSnapshot) =>
                   authResultSnapshot.connectionState == ConnectionState.waiting
                       ? MySplashScreen()
-                      : Login(),),
+                      : Login(),
+            ),
     );
   }
 }
