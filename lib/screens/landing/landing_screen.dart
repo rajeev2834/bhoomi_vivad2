@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:bhoomi_vivad/providers/auth.dart';
 import 'package:bhoomi_vivad/screens/login.dart';
 import 'package:flutter/cupertino.dart';

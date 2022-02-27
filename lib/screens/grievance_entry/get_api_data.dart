@@ -82,7 +82,7 @@ class GetApiData with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<bool> uploadGrievanceData(Grievance grievance) async{
+  Future<String> uploadGrievanceData(Grievance grievance) async{
    final url = base_url + 'grievance/';
     bool status = false;
     try{
@@ -91,11 +91,12 @@ class GetApiData with ChangeNotifier {
       },
           body: jsonEncode(grievance)
       );
-      //print(response.statusCode);
+      //print(response.body);
+      final id = jsonDecode(response.body)['id'];
       notifyListeners();
       if(response.statusCode == 201){
         status = true;
-        return status;
+        return id;
       }else {
         throw HttpException("Unable to upload Grievance data !!!");
       }

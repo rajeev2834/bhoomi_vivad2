@@ -194,12 +194,18 @@ class _GrievanceEntryScreen extends State<GrievanceEntryScreen> {
     await Provider.of<GetApiData>(context, listen: false)
         .uploadGrievanceData(_grievance!)
         .then((value) {
+          print(value);
       Navigator.of(this.context, rootNavigator: true).pop();
       _showResultDialog(
           context, 'Success', 'Grievance submitted successfully !!!');
       _formKey.currentState?.reset();
       _clearTextField();
+      Navigator.of(context).pushNamed('/tracking_id',
+        arguments: {
+          'tracking_id' : value,
+        },);
     }).catchError((handleError) {
+      Navigator.of(this.context, rootNavigator: true).pop();
       _showResultDialog(context, 'Error', handleError.toString());
     });
   }
