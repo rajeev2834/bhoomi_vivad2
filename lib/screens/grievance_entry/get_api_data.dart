@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:bhoomi_vivad/models/case_status.dart';
 import 'package:bhoomi_vivad/models/circle.dart';
 import 'package:bhoomi_vivad/models/grievance.dart';
 import 'package:bhoomi_vivad/models/panchayat.dart';
@@ -63,7 +64,7 @@ class GetApiData with ChangeNotifier {
               circleId: e['circle_id'],
               circleNameHn: e['circle_name_hn'],
               user: e['user']),
-    )
+        )
         .toList();
     notifyListeners();
   }
@@ -73,35 +74,55 @@ class GetApiData with ChangeNotifier {
     _panchayats = panchayatData
         .map(
           (e) => Panchayat(
-          circle_id: e['circle_id'],
-          panchayat_id: e['panchayat_id'],
-          panchayat_name: e['panchayat_name'],
-          panchayat_name_hn: e['panchayat_name_hn']),
-    )
+              circle_id: e['circle_id'],
+              panchayat_id: e['panchayat_id'],
+              panchayat_name: e['panchayat_name'],
+              panchayat_name_hn: e['panchayat_name_hn']),
+        )
         .toList();
     notifyListeners();
   }
 
-  Future<String> uploadGrievanceData(Grievance grievance) async{
-   final url = base_url + 'grievance/';
+  Future<String> uploadGrievanceData(Grievance grievance) async {
+    final url = base_url + 'grievance/';
     bool status = false;
-    try{
-      final response = await http.post(Uri.parse(url), headers: {
-        "Content-Type" : "application/json; charset=UTF-8",
-      },
-          body: jsonEncode(grievance)
-      );
+    try {
+      final response = await http.post(Uri.parse(url),
+          headers: {
+            "Content-Type": "application/json; charset=UTF-8",
+          },
+          body: jsonEncode(grievance));
       //print(response.body);
       final id = jsonDecode(response.body)['id'];
       notifyListeners();
-      if(response.statusCode == 201){
+      if (response.statusCode == 201) {
         status = true;
         return id;
-      }else {
+      } else {
         throw HttpException("Unable to upload Grievance data !!!");
       }
-    }catch(error){
-      throw(error);
+    } catch (error) {
+      throw (error);
+    }
+  }
+
+  Future<dynamic> getGrievanceStatus(String trackingId) async {
+    if (trackingId.startsWith('GR')) {
+      final url = Uri.https(base_url, 'grievance', {'q':'{trackingId}'});
+      try {
+        final response = await http.get(url);
+        if (response.statusCode == 200) {
+          final extractedGrievanceData =
+              jsonDecode(utf8.decode(response.bodyBytes));
+          CaseStatus _caseStatus = CaseStatus.fromJson(extractedGrievanceData);
+          notifyListeners();
+          return _caseStatus;
+        } else {
+          throw HttpException("Unable to load Grievance status!!!");
+        }
+      } catch (error) {
+        throw (error);
+      }
     }
   }
 }

@@ -1,7 +1,10 @@
 import 'package:bhoomi_vivad/providers/auth.dart';
+import 'package:bhoomi_vivad/screens/grievance_entry/grievance_status_screen.dart';
 import 'package:bhoomi_vivad/screens/login.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:path/path.dart';
 import 'package:provider/provider.dart';
 
 import '../home_screen.dart';
@@ -19,9 +22,9 @@ class Landing extends StatelessWidget {
       backgroundColor: Colors.white,
       bottomNavigationBar: BottomAppBar(
         child: Image.asset(
-              'assets/images/Nic_logo2-01.png',
-              height: 40,
-            ),
+          'assets/images/Nic_logo2-01.png',
+          height: 40,
+        ),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -46,7 +49,7 @@ class Landing extends StatelessWidget {
                       style: TextStyle(color: Colors.grey),
                     ),
                     SizedBox(
-                      height: 50.0,
+                      height: 40.0,
                     ),
                     LandingScreenListView(context),
                   ],
@@ -62,6 +65,8 @@ class Landing extends StatelessWidget {
   Widget LandingScreenListView(BuildContext context) {
     List<ListViewItem> loadedItem = [
       ListViewItem(title: 'Citizen Grievnace', icon: Icons.people_alt_rounded),
+      ListViewItem(
+          title: 'Track Grievance', icon: Icons.pending_actions_rounded),
       ListViewItem(title: 'Admin Login', icon: Icons.admin_panel_settings),
     ];
     return Container(
@@ -74,6 +79,10 @@ class Landing extends StatelessWidget {
               height: 30.0,
             ),
             CardItemView(context, loadedItem[1], 1),
+            SizedBox(
+              height: 30.0,
+            ),
+            CardItemView(context, loadedItem[2], 2),
           ],
         ),
       ),
@@ -132,9 +141,122 @@ class Landing extends StatelessWidget {
     if (index == 0) {
       Navigator.of(context).pushNamed('/otp_screen');
     } else if (index == 1) {
+      return BottomSheetView(context);
+    } else if (index == 2) {
       Navigator.of(context)
           .push(new MaterialPageRoute(builder: (context) => LoginToHome()));
     }
+  }
+
+  Future<dynamic> BottomSheetView(BuildContext buildContext) {
+    final _trackingIdController = TextEditingController();
+    String? _errorText = '';
+    return showModalBottomSheet(
+        context: buildContext,
+        isScrollControlled: true,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(20.0),
+                topRight: Radius.circular(20.0))),
+        builder: (BuildContext context) {
+          return Padding(
+            padding: MediaQuery.of(context).viewInsets,
+            child: Container(
+            height:250,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Container(
+                  alignment: Alignment.center,
+                  margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 20.0),
+                  child: Text(
+                    'Please enter tracking id to see status',
+                    style: TextStyle(
+                        fontSize: 17.0,
+                        color: Theme.of(context).primaryColor,
+                        fontWeight: FontWeight.w600),
+                  ),
+                ),
+                Container(
+                  margin:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+                  child: TextField(
+                    maxLength: 16,
+                    maxLines: 1,
+                    maxLengthEnforcement: MaxLengthEnforcement.enforced,
+                    controller: _trackingIdController,
+                    decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderSide: new BorderSide(
+                            color: Theme.of(context).primaryColorDark,
+                          ),
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        hintText: 'Tracker Id',
+                        prefixIcon: Icon(Icons.sticky_note_2_rounded, color: Colors.indigo,)),
+                  ),
+                ),
+                Container(
+                  alignment: Alignment.bottomRight,
+                  margin:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                  constraints: const BoxConstraints(maxWidth: 500),
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.indigo,
+                      shape: const RoundedRectangleBorder(
+                          borderRadius:
+                              BorderRadius.all(Radius.circular(14.0))),
+                    ),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 8, horizontal: 8),
+                      child: Text(
+                        'Search',
+                        style: TextStyle(
+                          fontSize: 16,
+                        ),
+                      ),
+                    ),
+                    onPressed: () {
+                      String value = _trackingIdController.text;
+                      if(value.isEmpty || value.length < 16){
+                        _showResultDialog(context, '', 'Please enter valid Tracking Id');
+                      }else if(!value.startsWith('GR')){
+                        _showResultDialog(context, '', 'Tracking Id must starts with GR');
+                      }
+                      else{
+                        Navigator.of(context).pushNamed('/grievance_status',
+                          arguments: {
+                            'tracking_id' : value,
+                          },);
+                      }
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),);
+        });
+  }
+
+  void _showResultDialog(BuildContext context, String title, String message) {
+    AlertDialog alertDialog = AlertDialog(
+      title: Text(title),
+      content: Text(message),
+      actions: <Widget>[
+        TextButton(
+          onPressed: () {
+            Navigator.of(context).pop(title);
+          },
+          child: Text(
+            'Ok',
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+        )
+      ],
+    );
+    showDialog(context: context, builder: (_) => alertDialog);
   }
 }
 

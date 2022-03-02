@@ -4,6 +4,7 @@ import 'package:bhoomi_vivad/providers/get_base_data.dart';
 import 'package:bhoomi_vivad/screens/all_vivad/vivad_report_screen.dart';
 import 'package:bhoomi_vivad/screens/grievance_entry/get_api_data.dart';
 import 'package:bhoomi_vivad/screens/grievance_entry/grievance_screen.dart';
+import 'package:bhoomi_vivad/screens/grievance_entry/grievance_status_screen.dart';
 import 'package:bhoomi_vivad/screens/grievance_entry/tracking_id_screen.dart';
 import 'package:bhoomi_vivad/screens/home_screen.dart';
 import 'package:bhoomi_vivad/screens/landing/landing_screen.dart';
@@ -60,6 +61,7 @@ class BhoomiVivad extends StatelessWidget {
             SendOTPScreen.routeName: (context) => SendOTPScreen(),
             VerifyOTPScreen.routeName: (context) => VerifyOTPScreen(),
             TrackingIdScreen.routeName: (context) => TrackingIdScreen(),
+            GrievanceStatus.routeName: (context) => GrievanceStatus(),
             Login.routeName: (context) => Login(),
             HomeScreen.routeName: (context) => HomeScreen(),
             UploadVivadScreen.routeName: (context) => UploadVivadScreen(),
