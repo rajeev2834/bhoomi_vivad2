@@ -1,5 +1,4 @@
 import 'package:bhoomi_vivad/models/case_status.dart';
-import 'package:bhoomi_vivad/models/grievance.dart';
 import 'package:bhoomi_vivad/screens/grievance_entry/get_api_data.dart';
 import 'package:bhoomi_vivad/screens/splash_screen.dart';
 import 'package:flutter/cupertino.dart';
@@ -21,8 +20,9 @@ class GrievanceStatus extends StatefulWidget {
 }
 
 class _GrievanceStatus extends State<GrievanceStatus> {
+
   TextEditingController _trackingId = TextEditingController();
-  late final Future<CaseStatus> _caseStatus;
+  late Future<CaseStatus> _caseStatus;
 
   @override
   void initState() {
@@ -38,6 +38,7 @@ class _GrievanceStatus extends State<GrievanceStatus> {
   }
 
   Future<void> getGrievanceData(String _trackingId) async {
+    print(_trackingId);
     var provider = Provider.of<GetApiData>(context, listen: false);
     await provider.getGrievanceStatus(_trackingId).then((value) {
       _caseStatus = value;
@@ -59,7 +60,7 @@ class _GrievanceStatus extends State<GrievanceStatus> {
         ),
         body: FutureBuilder<CaseStatus>(
             future: _caseStatus,
-            builder: (BuildContext context, AsyncSnapshot<CaseStatus> snapshot) {
+            builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return MySplashScreen();
               }
@@ -69,7 +70,8 @@ class _GrievanceStatus extends State<GrievanceStatus> {
                 );
               }
               else {
-                final data = snapshot.data !;
+                final data = snapshot.data!;
+                print(data);
                 return SafeArea(
                   child: SingleChildScrollView(
                     scrollDirection: Axis.vertical,

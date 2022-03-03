@@ -8,14 +8,14 @@ part of 'case_status.dart';
 CaseStatus _$CaseStatusFromJson(Map<String, dynamic> json) {
   return CaseStatus(
     address: json['address'] as String,
-    circle: json['circle']  as String,
+    circle: json['circle_name']  as String,
     contact: json['contact'] as String,
     father_name: json['father_name'] as String,
     mauza: json['mauza'] as String,
     name: json['name'] as String,
-    panchayat: json['panchayat'] as String,
+    panchayat: json['panchayat_name'] as String,
     vivad_reason: json['vivad_reason'] as String,
-    vivad_type: json['vivad_type'] as String,
+    vivad_type: json['vivad_type_name'] as String,
     case_status: json['case_status'] as String,
   );
 }

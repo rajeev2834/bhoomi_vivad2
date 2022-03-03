@@ -108,7 +108,8 @@ class GetApiData with ChangeNotifier {
 
   Future<dynamic> getGrievanceStatus(String trackingId) async {
     if (trackingId.startsWith('GR')) {
-      final url = Uri.https(base_url, 'grievance', {'q':'{trackingId}'});
+      final url = Uri.https(base_url, 'grievance/', {'grievance_id':'{trackingId}'});
+      print(url);
       try {
         final response = await http.get(url);
         if (response.statusCode == 200) {
