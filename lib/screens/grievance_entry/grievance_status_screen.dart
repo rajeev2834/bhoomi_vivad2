@@ -6,11 +6,14 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class GrievanceStatus extends StatefulWidget {
-  final tracking_id;
 
-  GrievanceStatus({this.tracking_id});
+  GrievanceStatus({Key? key, required this.trackingId})
+      : super(key: key);
+
+  String trackingId;
 
   static const routeName = '/grievance_status';
+
 
   @override
   State<StatefulWidget> createState() {
@@ -21,30 +24,33 @@ class GrievanceStatus extends StatefulWidget {
 
 class _GrievanceStatus extends State<GrievanceStatus> {
 
-  TextEditingController _trackingId = TextEditingController();
-  late Future<CaseStatus> _caseStatus;
+  TextEditingController _trackingIdController = TextEditingController();
+  bool _isLoading = false;
+  CaseStatus? _caseStatus;
+
 
   @override
   void initState() {
     super.initState();
-    _trackingId.text = widget.tracking_id;
-    getGrievanceData(_trackingId.text);
+    setState(() {
+      _isLoading = true;
+    });
+    _trackingIdController.text = widget.trackingId;
+    var provider = Provider.of<GetApiData>(context, listen: false);
+    provider.getGrievanceStatus(_trackingIdController.text).then((value) async{
+      _caseStatus = provider.caseStatus;
+      print(_caseStatus?.circle);
+      setState(() {
+        _isLoading = false;
+      });
+    });
   }
+
 
   @override
   void dispose() {
-    _trackingId.dispose();
+    _trackingIdController.dispose();
     super.dispose();
-  }
-
-  Future<void> getGrievanceData(String _trackingId) async {
-    print(_trackingId);
-    var provider = Provider.of<GetApiData>(context, listen: false);
-    await provider.getGrievanceStatus(_trackingId).then((value) {
-      _caseStatus = value;
-    }).catchError((onError) {
-
-    });
   }
 
   @override
@@ -58,11 +64,11 @@ class _GrievanceStatus extends State<GrievanceStatus> {
           titleSpacing: 0.0,
           title: Text('Grievance Status'),
         ),
-        body: FutureBuilder<CaseStatus>(
-            future: _caseStatus,
+        body: _isLoading ? MySplashScreen() :FutureBuilder(
+            future: ,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return MySplashScreen();
+                return CircularProgressIndicator();
               }
               else if (snapshot.hasError) {
                 return Center(
@@ -91,7 +97,7 @@ class _GrievanceStatus extends State<GrievanceStatus> {
                                 fontSize: 14.0,
                                 fontWeight: FontWeight.w600,
                               ),)),
-                              Expanded(child: Text(_trackingId.text,
+                              Expanded(child: Text(_trackingIdController.text,
                                 style: TextStyle(
                                   fontSize: 14.0,
                                   fontWeight: FontWeight.w600,

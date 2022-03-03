@@ -61,7 +61,6 @@ class BhoomiVivad extends StatelessWidget {
             SendOTPScreen.routeName: (context) => SendOTPScreen(),
             VerifyOTPScreen.routeName: (context) => VerifyOTPScreen(),
             TrackingIdScreen.routeName: (context) => TrackingIdScreen(),
-            GrievanceStatus.routeName: (context) => GrievanceStatus(),
             Login.routeName: (context) => Login(),
             HomeScreen.routeName: (context) => HomeScreen(),
             UploadVivadScreen.routeName: (context) => UploadVivadScreen(),

@@ -41,6 +41,12 @@ class GetApiData with ChangeNotifier {
     return [..._vivadTypes];
   }
 
+  CaseStatus? _caseStatus;
+
+  CaseStatus? get caseStatus{
+    return  _caseStatus;
+  }
+
   Future<void> getToken() async {
     final prefs = await SharedPreferences.getInstance();
     final extractedUserData =
@@ -106,18 +112,20 @@ class GetApiData with ChangeNotifier {
     }
   }
 
-  Future<dynamic> getGrievanceStatus(String trackingId) async {
+  Future<void> getGrievanceStatus(String trackingId) async {
     if (trackingId.startsWith('GR')) {
-      final url = Uri.https(base_url, 'grievance/', {'grievance_id':'{trackingId}'});
-      print(url);
+      var url = Uri.parse(base_url).authority;
+      final uri = Uri.http(url, '/api/grievance/', {"grievance_id": trackingId});
       try {
-        final response = await http.get(url);
+        final response = await http.get(uri, headers: {
+          HttpHeaders.contentTypeHeader : 'application/json',
+        });
         if (response.statusCode == 200) {
           final extractedGrievanceData =
               jsonDecode(utf8.decode(response.bodyBytes));
-          CaseStatus _caseStatus = CaseStatus.fromJson(extractedGrievanceData);
-          notifyListeners();
-          return _caseStatus;
+
+         _caseStatus = CaseStatus.fromJson(extractedGrievanceData[0]);
+         notifyListeners();
         } else {
           throw HttpException("Unable to load Grievance status!!!");
         }
