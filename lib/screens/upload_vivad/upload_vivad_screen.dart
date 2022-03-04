@@ -39,11 +39,11 @@ class _UploadVivadScreenState extends State<UploadVivadScreen> {
                   children: <Widget>[
                     new IconButton(
                         onPressed: () {
-                          count != null ?
-                          _showAlertDialog('Sync data',
-                              'Want to upload data on server ?')
-                              :
-                              _showResultDialog(context, "Sync Error", "Please register a Case first !!!");
+                          count != null
+                              ? _showAlertDialog('Sync data',
+                                  'Want to upload data on server ?')
+                              : _showResultDialog(context, "Sync Error",
+                                  "Please register a Case first !!!");
                         },
                         icon: Icon(
                           Icons.cloud_upload,
@@ -112,14 +112,20 @@ class _UploadVivadScreenState extends State<UploadVivadScreen> {
           onPressed: () {
             Navigator.of(context).pop();
             //Navigator.of(context).pushReplacementNamed('/upload_vivad_screen');
-              Provider.of<UploadVivadProvider>(context, listen: false).getToken().then((_){
-                Provider.of<UploadVivadProvider>(context, listen: false).uploadVivadData().then((value){
-                  var message = "Total: "+value.toString()+" Vivad uploaded successfully. !!!";
-                 _showResultDialog(context, 'Success',  message);
-                }).catchError((handleError){
-                  _showResultDialog(context, 'Error', handleError.toString());
-                });
+            Provider.of<UploadVivadProvider>(context, listen: false)
+                .getToken()
+                .then((_) {
+              Provider.of<UploadVivadProvider>(context, listen: false)
+                  .uploadVivadData()
+                  .then((value) {
+                var message = "Total: " +
+                    value.toString() +
+                    " Vivad uploaded successfully. !!!";
+                _showResultDialog(context, 'Success', message);
+              }).catchError((handleError) {
+                _showResultDialog(context, 'Error', handleError.toString());
               });
+            });
           },
           child: Text(
             'Yes',
@@ -149,8 +155,8 @@ class _UploadVivadScreenState extends State<UploadVivadScreen> {
         )
       ],
     );
-    showDialog(context: context, builder: (_) => alertDialog).then((value){
-      if(value == "Success"){
+    showDialog(context: context, builder: (_) => alertDialog).then((value) {
+      if (value == "Success") {
         Navigator.of(context).popAndPushNamed('/upload_vivad_screen');
       }
     });

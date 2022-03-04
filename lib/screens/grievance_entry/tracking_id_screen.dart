@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 
 class TrackingIdScreen extends StatelessWidget {
   static const routeName = '/tracking_id';
-  String tracking_id='';
+  String tracking_id = '';
 
   @override
   Widget build(BuildContext context) {
     final routeArgs =
-    ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
     if (routeArgs != null) {
       tracking_id = routeArgs['tracking_id'];
     }
@@ -132,7 +132,8 @@ class TrackingIdScreen extends StatelessWidget {
                             ),
                           ),
                           onPressed: () {
-                            _showResultDialog(context, 'Exit', 'Have you noted Tracking id?');
+                            _showResultDialog(
+                                context, 'Exit', 'Have you noted Tracking id?');
                           },
                         ),
                       ),
@@ -163,8 +164,7 @@ class TrackingIdScreen extends StatelessWidget {
         ),
         TextButton(
           onPressed: () {
-            Navigator.popUntil(
-                context, ModalRoute.withName('/'));
+            Navigator.popUntil(context, ModalRoute.withName('/'));
           },
           child: Text(
             'Yes',

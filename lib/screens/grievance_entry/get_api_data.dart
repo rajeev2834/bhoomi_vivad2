@@ -41,10 +41,10 @@ class GetApiData with ChangeNotifier {
     return [..._vivadTypes];
   }
 
-  CaseStatus? _caseStatus;
+  late CaseStatus _caseStatus;
 
-  CaseStatus? get caseStatus{
-    return  _caseStatus;
+  CaseStatus get caseStatus {
+    return _caseStatus;
   }
 
   Future<void> getToken() async {
@@ -115,17 +115,19 @@ class GetApiData with ChangeNotifier {
   Future<void> getGrievanceStatus(String trackingId) async {
     if (trackingId.startsWith('GR')) {
       var url = Uri.parse(base_url).authority;
-      final uri = Uri.http(url, '/api/grievance/', {"grievance_id": trackingId});
+      final uri =
+          Uri.http(url, '/api/grievance/', {"grievance_id": trackingId});
       try {
         final response = await http.get(uri, headers: {
-          HttpHeaders.contentTypeHeader : 'application/json',
+          HttpHeaders.contentTypeHeader: 'application/json',
         });
         if (response.statusCode == 200) {
+
           final extractedGrievanceData =
               jsonDecode(utf8.decode(response.bodyBytes));
 
-         _caseStatus = CaseStatus.fromJson(extractedGrievanceData[0]);
-         notifyListeners();
+          _caseStatus = CaseStatus.fromJson(extractedGrievanceData[0]);
+          notifyListeners();
         } else {
           throw HttpException("Unable to load Grievance status!!!");
         }

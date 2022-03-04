@@ -19,7 +19,7 @@ class VerifyOTPProvider with ChangeNotifier{
       },
           body: jsonEncode(mobileDevice)
       );
-      //print(response.body);
+      print(response.body);
       final message = jsonDecode(response.body)['message'];
       notifyListeners();
       if(response.statusCode == 200){

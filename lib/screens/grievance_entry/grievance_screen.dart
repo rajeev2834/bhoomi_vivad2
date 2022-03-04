@@ -725,20 +725,16 @@ class _GrievanceEntryScreen extends State<GrievanceEntryScreen> {
   }
 
   String? validatePhone(String? value) {
-    String pattern = r'(^[0-9]*$)';
+    String pattern = r'(^[6-9][\d]*$)';
     RegExp regExp = new RegExp(pattern);
-    if (value!.length == 0) {
-      return 'Please enter contact no.';
-    } else if (value.length != 10) {
-      return 'Contact no. must be of 10 digits';
-    } else if (!regExp.hasMatch(value)) {
-      return 'Contact no. must be in digits';
+    if (!regExp.hasMatch(value!) || value.length < 10) {
+      return 'Please enter valid mobile no.';
     }
     return null;
   }
 
   String? validatePhoneCharacter(String? value) {
-    String pattern = r'(^[0-9]*$)';
+    String pattern = r'(^[6-9][\d]*$)';
     RegExp regExp = new RegExp(pattern);
     if (value?.length == 0)
       return null;

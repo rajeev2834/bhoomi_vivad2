@@ -17,6 +17,7 @@ CaseStatus _$CaseStatusFromJson(Map<String, dynamic> json) {
     vivad_reason: json['vivad_reason'] as String,
     vivad_type: json['vivad_type_name'] as String,
     case_status: json['case_status'] as String,
+    created_at: json['created_at'] as String,
   );
 }
 
@@ -31,4 +32,5 @@ Map<String, dynamic> _$CaseStatusToJson(CaseStatus instance) => <String, dynamic
   'vivad_reason': instance.vivad_reason,
   'vivad_type': instance.vivad_type,
   'case_status' : instance.case_status,
+  'created_at' : instance.created_at,
 };

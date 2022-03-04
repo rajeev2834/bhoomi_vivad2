@@ -215,9 +215,9 @@ class _SendOTPScreen extends State<SendOTPScreen> {
   }
 
   String? validatePhone(String? value) {
-    String pattern = r'(^[^0-5][\d]{10}$)';
+    String pattern = r'(^[^0-5][\d]*$)';
     RegExp regExp = new RegExp(pattern);
-    if (!regExp.hasMatch(value!)) {
+    if (!regExp.hasMatch(value!) || value.length < 10) {
       return 'Please enter valid mobile no.';
     }
     return null;

@@ -15,6 +15,7 @@ class CaseStatus {
   String mauza;
   String vivad_reason;
   String case_status;
+  String created_at;
 
   CaseStatus(
       {required this.circle,
@@ -26,7 +27,8 @@ class CaseStatus {
         required this.mauza,
         required this.vivad_type,
         required this.vivad_reason,
-      required this.case_status});
+      required this.case_status,
+      required this.created_at});
 
   factory CaseStatus.fromJson(Map<String, dynamic> json) =>
       _$CaseStatusFromJson(json);

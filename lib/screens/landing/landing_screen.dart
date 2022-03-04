@@ -42,7 +42,7 @@ class Landing extends StatelessWidget {
                     Text(
                       'Bhoomi Vivad Tracker',
                       style:
-                      TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+                          TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
                     ),
                     Text(
                       'Register Bhoomi Vivad Case',
@@ -89,14 +89,11 @@ class Landing extends StatelessWidget {
     );
   }
 
-  Widget CardItemView(BuildContext context, ListViewItem loadedItem,
-      int index) {
+  Widget CardItemView(
+      BuildContext context, ListViewItem loadedItem, int index) {
     return Container(
       child: SizedBox(
-        width: MediaQuery
-            .of(context)
-            .size
-            .width,
+        width: MediaQuery.of(context).size.width,
         height: 80,
         child: Card(
           margin: EdgeInsets.symmetric(horizontal: 5.0, vertical: 6),
@@ -163,9 +160,7 @@ class Landing extends StatelessWidget {
                 topRight: Radius.circular(20.0))),
         builder: (BuildContext context) {
           return Padding(
-            padding: MediaQuery
-                .of(context)
-                .viewInsets,
+            padding: MediaQuery.of(context).viewInsets,
             child: Container(
               height: 250,
               child: Column(
@@ -179,15 +174,13 @@ class Landing extends StatelessWidget {
                       'Please enter tracking id to see status',
                       style: TextStyle(
                           fontSize: 17.0,
-                          color: Theme
-                              .of(context)
-                              .primaryColor,
+                          color: Theme.of(context).primaryColor,
                           fontWeight: FontWeight.w600),
                     ),
                   ),
                   Container(
-                    margin:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+                    margin: const EdgeInsets.symmetric(
+                        horizontal: 10, vertical: 20),
                     child: TextField(
                       maxLength: 16,
                       maxLines: 1,
@@ -196,28 +189,28 @@ class Landing extends StatelessWidget {
                       decoration: InputDecoration(
                           border: OutlineInputBorder(
                             borderSide: new BorderSide(
-                              color: Theme
-                                  .of(context)
-                                  .primaryColorDark,
+                              color: Theme.of(context).primaryColorDark,
                             ),
                             borderRadius: BorderRadius.circular(10.0),
                           ),
                           hintText: 'Tracker Id',
-                          prefixIcon: Icon(Icons.sticky_note_2_rounded,
-                            color: Colors.indigo,)),
+                          prefixIcon: Icon(
+                            Icons.sticky_note_2_rounded,
+                            color: Colors.indigo,
+                          )),
                     ),
                   ),
                   Container(
                     alignment: Alignment.bottomRight,
-                    margin:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                    margin: const EdgeInsets.symmetric(
+                        horizontal: 10, vertical: 10),
                     constraints: const BoxConstraints(maxWidth: 500),
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         primary: Colors.indigo,
                         shape: const RoundedRectangleBorder(
                             borderRadius:
-                            BorderRadius.all(Radius.circular(14.0))),
+                                BorderRadius.all(Radius.circular(14.0))),
                       ),
                       child: Container(
                         padding: const EdgeInsets.symmetric(
@@ -237,18 +230,19 @@ class Landing extends StatelessWidget {
                         } else if (!value.startsWith('GR')) {
                           _showResultDialog(
                               context, '', 'Tracking Id must starts with GR');
-                        }
-                        else {
-                          Navigator.of(context)
-                              .push(new MaterialPageRoute(builder: (context) =>
-                              GrievanceStatus(trackingId: value,)));
+                        } else {
+                          Navigator.of(context).push(new MaterialPageRoute(
+                              builder: (context) => GrievanceStatus(
+                                    trackingId: value,
+                                  )));
                         }
                       },
                     ),
                   ),
                 ],
               ),
-            ),);
+            ),
+          );
         });
   }
 
@@ -284,16 +278,15 @@ class LoginToHome extends StatelessWidget {
   Widget build(BuildContext context) {
     // TODO: implement build
     return Consumer<Auth>(
-      builder: (ctx, auth, _) =>
-      auth.isAuth
+      builder: (ctx, auth, _) => auth.isAuth
           ? HomeScreen()
           : FutureBuilder(
-        future: auth.autoLogin(),
-        builder: (ctx, authResultSnapshot) =>
-        authResultSnapshot.connectionState == ConnectionState.waiting
-            ? MySplashScreen()
-            : Login(),
-      ),
+              future: auth.autoLogin(),
+              builder: (ctx, authResultSnapshot) =>
+                  authResultSnapshot.connectionState == ConnectionState.waiting
+                      ? MySplashScreen()
+                      : Login(),
+            ),
     );
   }
 }
