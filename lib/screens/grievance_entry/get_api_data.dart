@@ -122,7 +122,6 @@ class GetApiData with ChangeNotifier {
           HttpHeaders.contentTypeHeader: 'application/json',
         });
         if (response.statusCode == 200) {
-
           final extractedGrievanceData =
               jsonDecode(utf8.decode(response.bodyBytes));
 
