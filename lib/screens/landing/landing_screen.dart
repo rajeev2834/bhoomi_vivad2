@@ -4,16 +4,16 @@ import 'package:bhoomi_vivad/screens/login.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:path/path.dart';
 import 'package:provider/provider.dart';
 
+import '../../utils/size_config.dart';
 import '../home_screen.dart';
 import '../splash_screen.dart';
 import 'header_widget.dart';
 
 class Landing extends StatelessWidget {
   static const routeName = '/landing';
-  double _headerHeight = 250;
+  double _headerHeight = 31 * SizeConfig.heightMultiplier;
 
   @override
   Widget build(BuildContext context) {
@@ -23,11 +23,12 @@ class Landing extends StatelessWidget {
       bottomNavigationBar: BottomAppBar(
         child: Image.asset(
           'assets/images/Nic_logo2-01.png',
-          height: 40,
+          height: 5 * SizeConfig.heightMultiplier,
         ),
       ),
       body: SingleChildScrollView(
         child: Column(
+          mainAxisSize: MainAxisSize.max,
           children: <Widget>[
             Container(
               height: _headerHeight,
@@ -39,17 +40,24 @@ class Landing extends StatelessWidget {
                 margin: EdgeInsets.fromLTRB(20, 10, 20, 10),
                 child: Column(
                   children: <Widget>[
-                    Text(
-                      'Bhoomi Vivad Tracker',
-                      style:
-                          TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+                    FittedBox(
+                      child: Text(
+                        'Bhoomi Vivad Tracker',
+                        style: TextStyle(
+                            fontSize: 3.75 * SizeConfig.heightMultiplier,
+                            fontWeight: FontWeight.bold),
+                      ),
                     ),
-                    Text(
-                      'Register Bhoomi Vivad Case',
-                      style: TextStyle(color: Colors.grey),
+                    FittedBox(
+                      child: Text(
+                        'Register Bhoomi Vivad Case',
+                        style: TextStyle(
+                            color: Colors.grey,
+                            fontSize: 2 * SizeConfig.heightMultiplier),
+                      ),
                     ),
                     SizedBox(
-                      height: 40.0,
+                      height: 5 * SizeConfig.heightMultiplier,
                     ),
                     LandingScreenListView(context),
                   ],
@@ -76,11 +84,11 @@ class Landing extends StatelessWidget {
           children: [
             CardItemView(context, loadedItem[0], 0),
             SizedBox(
-              height: 30.0,
+              height: 3.75 * SizeConfig.heightMultiplier,
             ),
             CardItemView(context, loadedItem[1], 1),
             SizedBox(
-              height: 30.0,
+              height: 3.75 * SizeConfig.heightMultiplier,
             ),
             CardItemView(context, loadedItem[2], 2),
           ],
@@ -94,35 +102,38 @@ class Landing extends StatelessWidget {
     return Container(
       child: SizedBox(
         width: MediaQuery.of(context).size.width,
-        height: 80,
+        height: 10 * SizeConfig.heightMultiplier,
         child: Card(
           margin: EdgeInsets.symmetric(horizontal: 5.0, vertical: 6),
-          elevation: 8.0,
+          elevation: 1 * SizeConfig.heightMultiplier,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.0),
+            borderRadius:
+                BorderRadius.circular(1.25 * SizeConfig.heightMultiplier),
           ),
           child: InkWell(
             child: Padding(
-              padding: EdgeInsets.all(8.0),
+              padding: EdgeInsets.all(1 * SizeConfig.heightMultiplier),
               child: Row(
                 children: [
                   Icon(
                     loadedItem.icon,
-                    size: 40.0,
+                    size: 10 * SizeConfig.imageSizeMultiplier,
                     color: Colors.indigo,
                   ),
-                  Text(
-                    loadedItem.title,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 16.0,
-                      fontWeight: FontWeight.w500,
+                  FittedBox(
+                    child: Text(
+                      loadedItem.title,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 2 * SizeConfig.heightMultiplier,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
                   ),
                   Spacer(),
                   Icon(
                     Icons.arrow_forward_sharp,
-                    size: 20.0,
+                    size: 5 * SizeConfig.imageSizeMultiplier,
                     color: Colors.indigo,
                   ),
                 ],
@@ -168,19 +179,21 @@ class Landing extends StatelessWidget {
                 children: <Widget>[
                   Container(
                     alignment: Alignment.center,
-                    margin: const EdgeInsets.symmetric(
-                        horizontal: 10, vertical: 20.0),
+                    margin: EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 20),
                     child: Text(
                       'Please enter tracking id to see status',
                       style: TextStyle(
-                          fontSize: 17.0,
+                          fontSize: 17,
                           color: Theme.of(context).primaryColor,
                           fontWeight: FontWeight.w600),
                     ),
                   ),
                   Container(
-                    margin: const EdgeInsets.symmetric(
-                        horizontal: 10, vertical: 20),
+                    margin: EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 20),
                     child: TextField(
                       maxLength: 16,
                       maxLines: 1,
@@ -191,7 +204,8 @@ class Landing extends StatelessWidget {
                             borderSide: new BorderSide(
                               color: Theme.of(context).primaryColorDark,
                             ),
-                            borderRadius: BorderRadius.circular(10.0),
+                            borderRadius: BorderRadius.circular(
+                                10.0),
                           ),
                           hintText: 'Tracker Id',
                           prefixIcon: Icon(
@@ -202,23 +216,26 @@ class Landing extends StatelessWidget {
                   ),
                   Container(
                     alignment: Alignment.bottomRight,
-                    margin: const EdgeInsets.symmetric(
-                        horizontal: 10, vertical: 10),
-                    constraints: const BoxConstraints(maxWidth: 500),
+                    margin: EdgeInsets.symmetric(
+                        horizontal: 10.0,
+                        vertical: 10.0),
+                    constraints: BoxConstraints(
+                        maxWidth: 500),
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         primary: Colors.indigo,
-                        shape: const RoundedRectangleBorder(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(14.0))),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(
+                                14.0,))),
                       ),
                       child: Container(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 8, horizontal: 8),
+                        padding: EdgeInsets.symmetric(
+                            vertical: 8.0,
+                            horizontal: 8.0,),
                         child: Text(
                           'Search',
                           style: TextStyle(
-                            fontSize: 16,
+                            fontSize: 16.0,
                           ),
                         ),
                       ),

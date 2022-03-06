@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 
+import '../../utils/size_config.dart';
+
 class HeaderWidget extends StatelessWidget {
-  double _height = 250;
+  double _height = 31 * SizeConfig.heightMultiplier;
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
+    double width = SizeConfig.widthMultiplier*100;
     return Container(
       child: Stack(
         children: <Widget>[
@@ -25,9 +27,9 @@ class HeaderWidget extends StatelessWidget {
             ),
             clipper: new ShapeClipper([
               Offset(width / 5, _height),
-              Offset(width / 10 * 5, _height - 60),
-              Offset(width / 5 * 4, _height + 20),
-              Offset(width, _height - 18)
+              Offset(width / 10 * 5, _height - (7.5*SizeConfig.heightMultiplier)),
+              Offset(width / 5 * 4, _height + (2.5*SizeConfig.heightMultiplier)),
+              Offset(width, _height - (2.25*SizeConfig.heightMultiplier))
             ]),
           ),
           ClipPath(
@@ -45,10 +47,10 @@ class HeaderWidget extends StatelessWidget {
               ),
             ),
             clipper: new ShapeClipper([
-              Offset(width / 3, _height + 20),
-              Offset(width / 10 * 8, _height - 60),
-              Offset(width / 5 * 4, _height - 60),
-              Offset(width, _height - 20)
+              Offset(width / 3, _height + (2.5*SizeConfig.heightMultiplier)),
+              Offset(width / 10 * 8, _height - (7.5*SizeConfig.heightMultiplier)),
+              Offset(width / 5 * 4, _height - (7.5*SizeConfig.heightMultiplier)),
+              Offset(width, _height - (2.5*SizeConfig.heightMultiplier))
             ]),
           ),
           ClipPath(
@@ -67,30 +69,30 @@ class HeaderWidget extends StatelessWidget {
             ),
             clipper: new ShapeClipper([
               Offset(width / 5, _height),
-              Offset(width / 2, _height - 40),
-              Offset(width / 5 * 4, _height - 80),
-              Offset(width, _height - 20)
+              Offset(width / 2, _height - (5*SizeConfig.heightMultiplier)),
+              Offset(width / 5 * 4, _height - (10*SizeConfig.heightMultiplier)),
+              Offset(width, _height - (2.5*SizeConfig.heightMultiplier))
             ]),
           ),
           Visibility(
             visible: true,
             child: Container(
-              height: _height - 40,
+              height: _height - (5*SizeConfig.heightMultiplier),
               child: Center(
                 child: Container(
                   margin: EdgeInsets.only(
-                    top: 20.0,
+                    top: 2.5*SizeConfig.heightMultiplier,
                   ),
                   padding: EdgeInsets.only(
                     left: 5.0,
-                    top: 20.0,
+                    top: 2.5*SizeConfig.heightMultiplier,
                     right: 5.0,
-                    bottom: 20.0,
+                    bottom:2.5*SizeConfig.heightMultiplier,
                   ),
                   child: Image.asset(
                     'assets/images/BhoomiBank.png',
-                    width: 120,
-                    height: 120,
+                    width: 15*SizeConfig.heightMultiplier,
+                    height: 15*SizeConfig.heightMultiplier,
                   ),
                 ),
               ),
@@ -111,7 +113,7 @@ class ShapeClipper extends CustomClipper<Path> {
   Path getClip(Size size) {
     var path = new Path();
 
-    path.lineTo(0.0, size.height - 20);
+    path.lineTo(0.0, size.height - (2.5*SizeConfig.heightMultiplier));
 
     // path.quadraticBezierTo(size.width/5, size.height, size.width/2, size.height-40);
     // path.quadraticBezierTo(size.width/5*4, size.height-80, size.width, size.height-20);

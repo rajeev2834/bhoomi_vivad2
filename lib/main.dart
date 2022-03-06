@@ -15,6 +15,7 @@ import 'package:bhoomi_vivad/screens/verify_otp/verify_otp_provider.dart';
 import 'package:bhoomi_vivad/screens/verify_otp/verify_otp_screen.dart';
 import 'package:bhoomi_vivad/screens/vivad_entry/vivad_entry_screen.dart';
 import 'package:bhoomi_vivad/screens/upload_vivad/upload_vivad_screen.dart';
+import 'package:bhoomi_vivad/utils/size_config.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -48,26 +49,36 @@ class BhoomiVivad extends StatelessWidget {
           value: VerifyOTPProvider(),
         ),
       ],
-      child: MaterialApp(
-          debugShowCheckedModeBanner: false,
-          title: "Bhoomi Vivad",
-          theme: ThemeData(
-            primarySwatch: Colors.indigo,
-            visualDensity: VisualDensity.adaptivePlatformDensity,
-          ),
-          home: Landing(),
-          routes: {
-            GrievanceEntryScreen.routeName: (context) => GrievanceEntryScreen(),
-            SendOTPScreen.routeName: (context) => SendOTPScreen(),
-            VerifyOTPScreen.routeName: (context) => VerifyOTPScreen(),
-            TrackingIdScreen.routeName: (context) => TrackingIdScreen(),
-            Login.routeName: (context) => Login(),
-            HomeScreen.routeName: (context) => HomeScreen(),
-            UploadVivadScreen.routeName: (context) => UploadVivadScreen(),
-            VivadEntryScreen.routeName: (context) => VivadEntryScreen(),
-            VivadReportScreen.routeName: (context) => VivadReportScreen(),
-          },
-        ),
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          return OrientationBuilder(
+            builder: (context, orientation) {
+              SizeConfig().init(constraints, orientation);
+              return MaterialApp(
+                debugShowCheckedModeBanner: false,
+                title: "Bhoomi Vivad",
+                theme: ThemeData(
+                  primarySwatch: Colors.indigo,
+                  visualDensity: VisualDensity.adaptivePlatformDensity,
+                ),
+                home: Landing(),
+                routes: {
+                  GrievanceEntryScreen.routeName: (context) =>
+                      GrievanceEntryScreen(),
+                  SendOTPScreen.routeName: (context) => SendOTPScreen(),
+                  VerifyOTPScreen.routeName: (context) => VerifyOTPScreen(),
+                  TrackingIdScreen.routeName: (context) => TrackingIdScreen(),
+                  Login.routeName: (context) => Login(),
+                  HomeScreen.routeName: (context) => HomeScreen(),
+                  UploadVivadScreen.routeName: (context) => UploadVivadScreen(),
+                  VivadEntryScreen.routeName: (context) => VivadEntryScreen(),
+                  VivadReportScreen.routeName: (context) => VivadReportScreen(),
+                },
+              );
+            },
+          );
+        },
+      ),
     );
   }
 }

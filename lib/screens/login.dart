@@ -1,4 +1,5 @@
 import 'package:bhoomi_vivad/models/http_exception.dart';
+import 'package:bhoomi_vivad/utils/size_config.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/auth.dart';
@@ -41,7 +42,8 @@ class _LoginState extends State<Login> {
             height: height,
             width: width,
             child: Padding(
-                padding: EdgeInsets.only(top: 30.0),
+                padding:
+                    EdgeInsets.only(top: 3.75 * SizeConfig.heightMultiplier),
                 child: SingleChildScrollView(
                   child: Form(
                     key: _formKey,
@@ -51,57 +53,59 @@ class _LoginState extends State<Login> {
                         Row(
                           children: <Widget>[
                             SizedBox(
-                              height: 10,
+                              height: 1.25 * SizeConfig.heightMultiplier,
                             ),
                             Image.asset(
                               'assets/images/cm-image.png',
-                              width: 100,
-                              height: 100,
+                              width: 12.5 * SizeConfig.heightMultiplier,
+                              height: 12.5 * SizeConfig.heightMultiplier,
                             ),
                             Spacer(),
                             Image.asset(
                               'assets/images/bihar-govt.png',
-                              width: 100,
-                              height: 100,
+                              width: 12.5 * SizeConfig.heightMultiplier,
+                              height: 12.5 * SizeConfig.heightMultiplier,
                             ),
                           ],
                         ),
                         SizedBox(
-                          height: 20.0,
+                          height: 2.5 * SizeConfig.heightMultiplier,
                         ),
                         Image.asset(
                           'assets/images/BhoomiBank.png',
-                          width: 150,
-                          height: 150,
+                          width: 18.75 * SizeConfig.heightMultiplier,
+                          height: 18.75 * SizeConfig.heightMultiplier,
                         ),
                         SizedBox(
-                          height: 20.0,
+                          height: 2.5 * SizeConfig.heightMultiplier,
                         ),
                         Text(
                           'Bhoomi Vivad Tracker',
                           style: TextStyle(
-                              fontSize: 24,
+                              fontSize: 3 * SizeConfig.heightMultiplier,
                               fontWeight: FontWeight.bold,
                               color: Theme.of(context).primaryColorDark),
                         ),
                         SizedBox(
-                          height: 15.0,
+                          height: 2 * SizeConfig.heightMultiplier,
                         ),
                         Text(
                           'District Revenue Department, Nawada',
                           style: TextStyle(
-                              fontSize: 16,
+                              fontSize: 2 * SizeConfig.heightMultiplier,
                               fontWeight: FontWeight.bold,
                               color: Theme.of(context).hintColor),
                         ),
                         SizedBox(
-                          height: 20.0,
+                          height: 2.5 * SizeConfig.heightMultiplier,
                         ),
                         SizedBox(
-                          height: 20.0,
+                          height: 2.5 * SizeConfig.heightMultiplier,
                         ),
                         Padding(
-                            padding: EdgeInsets.only(left: 20.0, right: 20.0),
+                            padding: EdgeInsets.only(
+                                left: 5 * SizeConfig.widthMultiplier,
+                                right: 5 * SizeConfig.widthMultiplier),
                             child: TextFormField(
                               controller: userController,
                               keyboardType: TextInputType.emailAddress,
@@ -118,24 +122,27 @@ class _LoginState extends State<Login> {
                                 labelText: 'User Name',
                                 labelStyle: TextStyle(
                                   color: Colors.indigo,
-                                  fontSize: 15.0,
+                                  fontSize: 2 * SizeConfig.heightMultiplier,
                                 ),
                                 prefixIcon: Icon(Icons.account_circle_rounded),
                                 border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(20.0),
+                                  borderRadius: BorderRadius.circular(
+                                      2.5 * SizeConfig.heightMultiplier),
                                 ),
                                 errorStyle: TextStyle(
                                   color: Colors.red,
-                                  fontSize: 15.0,
+                                  fontSize: 1.9 * SizeConfig.heightMultiplier,
                                 ),
                               ),
                             )),
                         SizedBox(
-                          height: 20.0,
+                          height: 2.5 * SizeConfig.heightMultiplier,
                         ),
                         Padding(
                             padding: EdgeInsets.only(
-                                left: 20.0, right: 20.0, top: 10.0),
+                                left: 5 * SizeConfig.widthMultiplier,
+                                right: 5 * SizeConfig.widthMultiplier,
+                                top: 1.25 * SizeConfig.heightMultiplier),
                             child: TextFormField(
                               controller: passwordController,
                               obscureText: !_showPassword,
@@ -153,7 +160,7 @@ class _LoginState extends State<Login> {
                                 labelText: 'Password',
                                 labelStyle: TextStyle(
                                     color: Theme.of(context).primaryColor,
-                                    fontSize: 15.0),
+                                    fontSize: 1.9 * SizeConfig.heightMultiplier),
                                 prefixIcon: Icon(Icons.lock_sharp),
                                 suffixIcon: IconButton(
                                   icon: Icon(_showPassword
@@ -165,23 +172,25 @@ class _LoginState extends State<Login> {
                                   },
                                 ),
                                 border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(20.0),
+                                  borderRadius: BorderRadius.circular(
+                                      2.5 * SizeConfig.heightMultiplier),
                                 ),
                                 errorStyle: TextStyle(
                                   color: Colors.red,
-                                  fontSize: 15.0,
+                                  fontSize: 1.9 * SizeConfig.heightMultiplier,
                                 ),
                               ),
                             )),
                         SizedBox(
-                          height: 20.0,
+                          height: 2.5 * SizeConfig.heightMultiplier,
                         ),
                         _isLoading
                             ? Center(
                                 child: CircularProgressIndicator(),
                               )
                             : Padding(
-                                padding: const EdgeInsets.all(10.0),
+                                padding: EdgeInsets.all(
+                                    1.25 * SizeConfig.heightMultiplier),
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: <Widget>[
@@ -189,13 +198,20 @@ class _LoginState extends State<Login> {
                                         builder: (context) => ElevatedButton(
                                               child: Padding(
                                                 padding: EdgeInsets.only(
-                                                    left: 20.0, right: 20.0),
+                                                    left: 5 *
+                                                        SizeConfig
+                                                            .widthMultiplier,
+                                                    right: 5 *
+                                                        SizeConfig
+                                                            .widthMultiplier),
                                                 child: Text(
                                                   'Login',
                                                   style: TextStyle(
                                                       fontWeight:
                                                           FontWeight.w500,
-                                                      fontSize: 20,
+                                                      fontSize: 2.5 *
+                                                          SizeConfig
+                                                              .heightMultiplier,
                                                       color: Colors.white),
                                                 ),
                                               ),
@@ -244,15 +260,14 @@ class _LoginState extends State<Login> {
       _isLoading = true;
     });
     try {
-      await 
-         Provider.of<Auth>(context, listen: false)
-            .signin(
-          _authData['username'],
-          _authData['password'],
-        )
-            .then((value) {
-          Provider.of<Auth>(context, listen: false).fetchAndSetUser();
-        });
+      await Provider.of<Auth>(context, listen: false)
+          .signin(
+        _authData['username'],
+        _authData['password'],
+      )
+          .then((value) {
+        Provider.of<Auth>(context, listen: false).fetchAndSetUser();
+      });
     } on HttpException catch (error) {
       var errorMessage = error.toString();
       _showAlertDialog('Error: ', errorMessage);

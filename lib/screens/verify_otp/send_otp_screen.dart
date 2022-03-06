@@ -7,6 +7,8 @@ import 'package:flutter/services.dart';
 import 'package:bhoomi_vivad/models/http_exception.dart';
 import 'package:provider/provider.dart';
 
+import '../../utils/size_config.dart';
+
 class SendOTPScreen extends StatefulWidget {
   static const routeName = '/otp_screen';
 
@@ -59,7 +61,7 @@ class _SendOTPScreen extends State<SendOTPScreen> {
         child: SafeArea(
           child: SingleChildScrollView(
             child: Container(
-              padding: const EdgeInsets.all(16.0),
+              padding: EdgeInsets.all(2 * SizeConfig.heightMultiplier),
               height: screenHeight,
               width: double.infinity,
               child: Form(
@@ -72,8 +74,9 @@ class _SendOTPScreen extends State<SendOTPScreen> {
                       child: Column(
                         children: <Widget>[
                           Container(
-                            margin: const EdgeInsets.symmetric(
-                                horizontal: 20, vertical: 40),
+                            margin:  EdgeInsets.symmetric(
+                                horizontal: 5 * SizeConfig.widthMultiplier,
+                                vertical: 5 * SizeConfig.heightMultiplier),
                             child: Image.asset(
                               'assets/images/BhoomiBank.png',
                               width: screenWidth * 0.3,
@@ -81,15 +84,16 @@ class _SendOTPScreen extends State<SendOTPScreen> {
                             ),
                           ),
                           Container(
-                            margin: const EdgeInsets.symmetric(horizontal: 10),
-                            child: const Text(
+                            margin: EdgeInsets.symmetric(horizontal:2.5 * SizeConfig.widthMultiplier),
+                            child: FittedBox(
+                            child: Text(
                               'Phone Number Verification',
                               style: TextStyle(
-                                fontSize: 27,
+                                fontSize: 3.5 * SizeConfig.heightMultiplier,
                                 color: Colors.black,
                                 fontWeight: FontWeight.w800,
                               ),
-                            ),
+                            ),),
                           ),
                         ],
                       ),
@@ -99,10 +103,10 @@ class _SendOTPScreen extends State<SendOTPScreen> {
                       child: Column(
                         children: <Widget>[
                           Container(
-                            constraints: const BoxConstraints(
-                              maxWidth: 500,
+                            constraints: BoxConstraints(
+                              maxWidth: 125 * SizeConfig.widthMultiplier,
                             ),
-                            margin: const EdgeInsets.symmetric(horizontal: 10),
+                            margin: EdgeInsets.symmetric(horizontal: 2.5 * SizeConfig.widthMultiplier),
                             child: RichText(
                               textAlign: TextAlign.center,
                               text: TextSpan(children: <TextSpan>[
@@ -121,10 +125,11 @@ class _SendOTPScreen extends State<SendOTPScreen> {
                             ),
                           ),
                           Container(
-                            height: 100,
-                            constraints: const BoxConstraints(maxWidth: 500),
-                            margin: const EdgeInsets.symmetric(
-                                horizontal: 20, vertical: 50),
+                            height: 12.5 * SizeConfig.heightMultiplier,
+                            constraints: BoxConstraints(maxWidth: 125 * SizeConfig.widthMultiplier),
+                            margin: EdgeInsets.symmetric(
+                                horizontal: 5 * SizeConfig.widthMultiplier,
+                                vertical: 6.25 * SizeConfig.heightMultiplier),
                             child: TextFormField(
                               controller: contactController,
                               keyboardType: TextInputType.phone,
@@ -136,13 +141,14 @@ class _SendOTPScreen extends State<SendOTPScreen> {
                                 labelText: 'Enter Mobile No',
                                 labelStyle: TextStyle(
                                     color: Theme.of(context).primaryColor,
-                                    fontSize: 15.0),
+                                    fontSize: 2 * SizeConfig.heightMultiplier),
                                 suffixIcon: Icon(Icons.phone_android_rounded,
                                     color: Colors.indigo),
                                 contentPadding: new EdgeInsets.symmetric(
-                                    vertical: 5.0, horizontal: 10.0),
+                                    vertical: 5.0,
+                                    horizontal: 2.5 * SizeConfig.widthMultiplier),
                                 border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10.0),
+                                  borderRadius: BorderRadius.circular(1.25 * SizeConfig.heightMultiplier),
                                 ),
                               ),
                               validator: validatePhone,
@@ -152,8 +158,9 @@ class _SendOTPScreen extends State<SendOTPScreen> {
                             ),
                           ),
                           Container(
-                            margin: const EdgeInsets.symmetric(
-                                horizontal: 20, vertical: 10),
+                            margin: EdgeInsets.symmetric(
+                                horizontal: 5 * SizeConfig.widthMultiplier,
+                                vertical: 1.25 * SizeConfig.heightMultiplier),
                             constraints: const BoxConstraints(maxWidth: 500),
                             child: ElevatedButton(
                               style: ElevatedButton.styleFrom(
@@ -163,8 +170,9 @@ class _SendOTPScreen extends State<SendOTPScreen> {
                                         Radius.circular(14.0))),
                               ),
                               child: Container(
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 8, horizontal: 8),
+                                padding: EdgeInsets.symmetric(
+                                    vertical: 1 * SizeConfig.heightMultiplier,
+                                    horizontal: 2 * SizeConfig.widthMultiplier),
                                 child: Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
@@ -173,20 +181,20 @@ class _SendOTPScreen extends State<SendOTPScreen> {
                                       'Send OTP',
                                       style: TextStyle(
                                         color: Colors.white,
-                                        fontSize: 16.0,
+                                        fontSize: 2 * SizeConfig.heightMultiplier,
                                       ),
                                     ),
                                     Container(
-                                      padding: const EdgeInsets.all(8),
+                                      padding: EdgeInsets.all(1 * SizeConfig.heightMultiplier),
                                       decoration: BoxDecoration(
-                                        borderRadius: const BorderRadius.all(
-                                            Radius.circular(20)),
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(2.25 * SizeConfig.heightMultiplier)),
                                         color: Colors.indigo,
                                       ),
                                       child: Icon(
                                         Icons.arrow_forward_ios,
                                         color: Colors.white,
-                                        size: 16,
+                                        size: 4 * SizeConfig.imageSizeMultiplier,
                                       ),
                                     )
                                   ],
