@@ -7,6 +7,7 @@ import 'package:bhoomi_vivad/providers/get_base_data.dart';
 import 'package:bhoomi_vivad/screens/grievance_entry/get_api_data.dart';
 import 'package:bhoomi_vivad/screens/splash_screen.dart';
 import 'package:bhoomi_vivad/utils/loading_dialog.dart';
+import 'package:bhoomi_vivad/utils/size_config.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -245,8 +246,8 @@ class _GrievanceEntryScreen extends State<GrievanceEntryScreen> {
                 titleSpacing: 0.0,
                 title: Text(
                   "Post Your Grievnace here",
+                  ),
                 ),
-              ),
               body: Form(
                 key: _formKey,
                 child: Stepper(
@@ -281,7 +282,7 @@ class _GrievanceEntryScreen extends State<GrievanceEntryScreen> {
                                           ),
                                         ),
                                         SizedBox(
-                                          width: 20.0,
+                                          width: 5 * SizeConfig.widthMultiplier,
                                         ),
                                         TextButton(
                                           onPressed: details.onStepContinue,
@@ -309,7 +310,7 @@ class _GrievanceEntryScreen extends State<GrievanceEntryScreen> {
                                               ),
                                             ),
                                             SizedBox(
-                                              width: 20.0,
+                                              width: 5 * SizeConfig.widthMultiplier,
                                             ),
                                             TextButton(
                                               onPressed: details.onStepContinue,
@@ -387,27 +388,28 @@ class _GrievanceEntryScreen extends State<GrievanceEntryScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Padding(
-            padding: EdgeInsets.all(10.0),
+            padding: EdgeInsets.all(1.25 * SizeConfig.heightMultiplier),
             child: CircleDropDown(context),
           ),
           Padding(
-            padding: EdgeInsets.all(10.0),
+            padding: EdgeInsets.all(1.25 * SizeConfig.heightMultiplier),
             child: PanchayatDropDown(context),
           ),
           Padding(
-            padding: EdgeInsets.all(10.0),
+            padding: EdgeInsets.all(1.25 * SizeConfig.heightMultiplier),
             child: TextFormField(
               controller: nameController,
               maxLength: 50,
               decoration: InputDecoration(
                 labelText: 'Parivadi Name',
                 labelStyle: TextStyle(
-                    color: Theme.of(context).primaryColor, fontSize: 15.0),
+                    color: Theme.of(context).primaryColor, fontSize: 1.9 * SizeConfig.heightMultiplier),
                 suffixIcon: Icon(Icons.person_add_alt, color: Colors.indigo),
                 contentPadding:
-                    new EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
+                    new EdgeInsets.symmetric(vertical: 0.6 * SizeConfig.heightMultiplier,
+                        horizontal: 2.5 * SizeConfig.widthMultiplier),
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
+                  borderRadius: BorderRadius.circular(1.25 * SizeConfig.heightMultiplier),
                 ),
               ),
               validator: (value) => value!.isEmpty ? 'Please enter Name' : null,
@@ -417,19 +419,20 @@ class _GrievanceEntryScreen extends State<GrievanceEntryScreen> {
             ),
           ),
           Padding(
-            padding: EdgeInsets.all(10.0),
+            padding: EdgeInsets.all(1.25 * SizeConfig.heightMultiplier),
             child: TextFormField(
               controller: fatherNameController,
               maxLength: 50,
               decoration: InputDecoration(
                 labelText: 'Parivadi Father Name',
                 labelStyle: TextStyle(
-                    color: Theme.of(context).primaryColor, fontSize: 15.0),
+                    color: Theme.of(context).primaryColor, fontSize: 1.9 * SizeConfig.heightMultiplier),
                 suffixIcon: Icon(Icons.person_add_alt, color: Colors.indigo),
                 contentPadding:
-                    new EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
+                    new EdgeInsets.symmetric(vertical: 0.6 * SizeConfig.heightMultiplier,
+                        horizontal: 2.5 * SizeConfig.widthMultiplier),
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
+                  borderRadius: BorderRadius.circular(1.25 * SizeConfig.heightMultiplier),
                 ),
               ),
               onSaved: (value) {
@@ -438,7 +441,7 @@ class _GrievanceEntryScreen extends State<GrievanceEntryScreen> {
             ),
           ),
           Padding(
-            padding: EdgeInsets.all(10.0),
+            padding: EdgeInsets.all(1.25 * SizeConfig.heightMultiplier),
             child: TextFormField(
               controller: contactController,
               keyboardType: TextInputType.phone,
@@ -447,12 +450,13 @@ class _GrievanceEntryScreen extends State<GrievanceEntryScreen> {
               decoration: InputDecoration(
                 labelText: 'Parivadi Contact No.',
                 labelStyle: TextStyle(
-                    color: Theme.of(context).primaryColor, fontSize: 15.0),
+                    color: Theme.of(context).primaryColor, fontSize: 1.9 * SizeConfig.heightMultiplier),
                 suffixIcon: Icon(Icons.phone, color: Colors.indigo),
                 contentPadding:
-                    new EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
+                    new EdgeInsets.symmetric(vertical: 0.6 * SizeConfig.heightMultiplier,
+                        horizontal: 2.25 * SizeConfig.widthMultiplier),
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
+                  borderRadius: BorderRadius.circular(1.25 * SizeConfig.heightMultiplier),
                 ),
               ),
               validator: validatePhone,
@@ -462,7 +466,7 @@ class _GrievanceEntryScreen extends State<GrievanceEntryScreen> {
             ),
           ),
           Padding(
-            padding: EdgeInsets.all(10.0),
+            padding: EdgeInsets.all(1.25 * SizeConfig.heightMultiplier),
             child: TextFormField(
               controller: addressController,
               maxLines: 5,
@@ -470,11 +474,12 @@ class _GrievanceEntryScreen extends State<GrievanceEntryScreen> {
               decoration: InputDecoration(
                 labelText: 'Parivadi Address',
                 labelStyle: TextStyle(
-                    color: Theme.of(context).primaryColor, fontSize: 15.0),
+                    color: Theme.of(context).primaryColor, fontSize: 1.9 * SizeConfig.heightMultiplier),
                 contentPadding:
-                    new EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
+                    new EdgeInsets.symmetric(vertical: 0.6 * SizeConfig.heightMultiplier,
+                        horizontal: 2.25 * SizeConfig.widthMultiplier),
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
+                  borderRadius: BorderRadius.circular(1.25 * SizeConfig.heightMultiplier),
                 ),
               ),
               onSaved: (value) {
@@ -495,19 +500,20 @@ class _GrievanceEntryScreen extends State<GrievanceEntryScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Padding(
-            padding: EdgeInsets.all(10.0),
+            padding: EdgeInsets.all(1.25 * SizeConfig.heightMultiplier),
             child: TextFormField(
               controller: vadiController,
               maxLength: 50,
               decoration: InputDecoration(
                 labelText: 'Vadi Name',
                 labelStyle: TextStyle(
-                    color: Theme.of(context).primaryColor, fontSize: 15.0),
+                    color: Theme.of(context).primaryColor, fontSize: 1.9 * SizeConfig.heightMultiplier),
                 suffixIcon: Icon(Icons.person_add_alt, color: Colors.indigo),
                 contentPadding:
-                    new EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
+                    new EdgeInsets.symmetric(vertical: 0.6 * SizeConfig.heightMultiplier,
+                        horizontal: 2.25 * SizeConfig.widthMultiplier),
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
+                  borderRadius: BorderRadius.circular(1.25 * SizeConfig.heightMultiplier),
                 ),
               ),
               validator: (value) => value!.isEmpty ? 'Please enter Name' : null,
@@ -517,19 +523,20 @@ class _GrievanceEntryScreen extends State<GrievanceEntryScreen> {
             ),
           ),
           Padding(
-            padding: EdgeInsets.all(10.0),
+            padding: EdgeInsets.all(1.25 * SizeConfig.heightMultiplier),
             child: TextFormField(
               controller: vadiFatherController,
               maxLength: 50,
               decoration: InputDecoration(
                 labelText: 'Vadi Father Name',
                 labelStyle: TextStyle(
-                    color: Theme.of(context).primaryColor, fontSize: 15.0),
+                    color: Theme.of(context).primaryColor, fontSize: 1.9 * SizeConfig.heightMultiplier),
                 suffixIcon: Icon(Icons.person_add_alt, color: Colors.indigo),
                 contentPadding:
-                    new EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
+                    new EdgeInsets.symmetric(vertical: 0.6 * SizeConfig.heightMultiplier,
+                        horizontal: 2.25 * SizeConfig.widthMultiplier),
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
+                  borderRadius: BorderRadius.circular(1.25 * SizeConfig.heightMultiplier),
                 ),
               ),
               onSaved: (value) {
@@ -538,7 +545,7 @@ class _GrievanceEntryScreen extends State<GrievanceEntryScreen> {
             ),
           ),
           Padding(
-            padding: EdgeInsets.all(10.0),
+            padding: EdgeInsets.all(1.25 * SizeConfig.heightMultiplier),
             child: TextFormField(
               controller: vadiContactController,
               keyboardType: TextInputType.phone,
@@ -547,12 +554,13 @@ class _GrievanceEntryScreen extends State<GrievanceEntryScreen> {
               decoration: InputDecoration(
                 labelText: 'Vadi Contact No.',
                 labelStyle: TextStyle(
-                    color: Theme.of(context).primaryColor, fontSize: 15.0),
+                    color: Theme.of(context).primaryColor, fontSize: 1.9 * SizeConfig.heightMultiplier),
                 suffixIcon: Icon(Icons.phone, color: Colors.indigo),
                 contentPadding:
-                    new EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
+                    new EdgeInsets.symmetric(vertical: 0.6 * SizeConfig.heightMultiplier,
+                        horizontal: 2.25 * SizeConfig.widthMultiplier),
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
+                  borderRadius: BorderRadius.circular(1.25 * SizeConfig.heightMultiplier),
                 ),
               ),
               validator: validatePhoneCharacter,
@@ -562,7 +570,7 @@ class _GrievanceEntryScreen extends State<GrievanceEntryScreen> {
             ),
           ),
           Padding(
-            padding: EdgeInsets.all(10.0),
+            padding: EdgeInsets.all(1.25 * SizeConfig.heightMultiplier),
             child: TextFormField(
               controller: vadiAddressController,
               maxLength: 100,
@@ -570,11 +578,12 @@ class _GrievanceEntryScreen extends State<GrievanceEntryScreen> {
               decoration: InputDecoration(
                 labelText: 'Vadi Address',
                 labelStyle: TextStyle(
-                    color: Theme.of(context).primaryColor, fontSize: 15.0),
+                    color: Theme.of(context).primaryColor, fontSize: 1.9 * SizeConfig.heightMultiplier),
                 contentPadding:
-                    new EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
+                    new EdgeInsets.symmetric(vertical: 0.6 * SizeConfig.heightMultiplier,
+                        horizontal: 2.25 * SizeConfig.widthMultiplier),
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
+                  borderRadius: BorderRadius.circular(1.25 * SizeConfig.heightMultiplier),
                 ),
               ),
               validator: (value) =>
@@ -585,7 +594,7 @@ class _GrievanceEntryScreen extends State<GrievanceEntryScreen> {
             ),
           ),
           Padding(
-            padding: EdgeInsets.all(10.0),
+            padding: EdgeInsets.all(1.25 * SizeConfig.heightMultiplier),
             child: VivadTypeDropDown(context),
           ),
         ],
@@ -601,19 +610,20 @@ class _GrievanceEntryScreen extends State<GrievanceEntryScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Padding(
-            padding: EdgeInsets.all(10.0),
+            padding: EdgeInsets.all(1.25 * SizeConfig.heightMultiplier),
             child: TextFormField(
               controller: mauzaController,
               maxLength: 50,
               decoration: InputDecoration(
                 labelText: 'Mauza',
                 labelStyle: TextStyle(
-                    color: Theme.of(context).primaryColor, fontSize: 15.0),
+                    color: Theme.of(context).primaryColor, fontSize: 1.9 * SizeConfig.heightMultiplier),
                 suffixIcon: Icon(Icons.layers, color: Colors.indigo),
                 contentPadding:
-                    new EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
+                    new EdgeInsets.symmetric(vertical: 0.6 * SizeConfig.heightMultiplier,
+                        horizontal: 2.25 * SizeConfig.widthMultiplier),
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
+                  borderRadius: BorderRadius.circular(1.25 * SizeConfig.heightMultiplier),
                 ),
               ),
               validator: (value) =>
@@ -624,7 +634,7 @@ class _GrievanceEntryScreen extends State<GrievanceEntryScreen> {
             ),
           ),
           Padding(
-            padding: EdgeInsets.all(10.0),
+            padding: EdgeInsets.all(1.25 * SizeConfig.heightMultiplier),
             child: TextFormField(
               controller: khataController,
               maxLength: 10,
@@ -632,12 +642,13 @@ class _GrievanceEntryScreen extends State<GrievanceEntryScreen> {
               decoration: InputDecoration(
                 labelText: 'Khata No',
                 labelStyle: TextStyle(
-                    color: Theme.of(context).primaryColor, fontSize: 15.0),
+                    color: Theme.of(context).primaryColor, fontSize: 1.9 * SizeConfig.heightMultiplier),
                 suffixIcon: Icon(Icons.menu_book, color: Colors.indigo),
                 contentPadding:
-                    new EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
+                    new EdgeInsets.symmetric(vertical: 0.6 * SizeConfig.heightMultiplier,
+                        horizontal: 2.25 * SizeConfig.widthMultiplier),
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
+                  borderRadius: BorderRadius.circular(1.25 * SizeConfig.heightMultiplier),
                 ),
               ),
               validator: (value) =>
@@ -648,7 +659,7 @@ class _GrievanceEntryScreen extends State<GrievanceEntryScreen> {
             ),
           ),
           Padding(
-            padding: EdgeInsets.all(10.0),
+            padding: EdgeInsets.all(1.25 * SizeConfig.heightMultiplier),
             child: TextFormField(
               controller: khesraController,
               keyboardType: TextInputType.number,
@@ -656,13 +667,14 @@ class _GrievanceEntryScreen extends State<GrievanceEntryScreen> {
               decoration: InputDecoration(
                 labelText: 'Khesra No.',
                 labelStyle: TextStyle(
-                    color: Theme.of(context).primaryColor, fontSize: 15.0),
+                    color: Theme.of(context).primaryColor, fontSize: 1.9 * SizeConfig.heightMultiplier),
                 suffixIcon:
                     Icon(Icons.library_books_rounded, color: Colors.indigo),
                 contentPadding:
-                    new EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
+                    new EdgeInsets.symmetric(vertical: 0.6 * SizeConfig.heightMultiplier,
+                        horizontal: 2.25 * SizeConfig.widthMultiplier),
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
+                  borderRadius: BorderRadius.circular(1.25 * SizeConfig.heightMultiplier),
                 ),
               ),
               validator: (value) =>
@@ -673,7 +685,7 @@ class _GrievanceEntryScreen extends State<GrievanceEntryScreen> {
             ),
           ),
           Padding(
-            padding: EdgeInsets.all(10.0),
+            padding: EdgeInsets.all(1.25 * SizeConfig.heightMultiplier),
             child: TextFormField(
               controller: demandController,
               keyboardType: TextInputType.phone,
@@ -681,13 +693,14 @@ class _GrievanceEntryScreen extends State<GrievanceEntryScreen> {
               decoration: InputDecoration(
                 labelText: 'Demand No.',
                 labelStyle: TextStyle(
-                    color: Theme.of(context).primaryColor, fontSize: 15.0),
+                    color: Theme.of(context).primaryColor, fontSize: 1.9 * SizeConfig.heightMultiplier),
                 suffixIcon:
                     Icon(Icons.wallet_membership_sharp, color: Colors.indigo),
                 contentPadding:
-                    new EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
+                    new EdgeInsets.symmetric(vertical: 0.6 * SizeConfig.heightMultiplier,
+                        horizontal: 2.25 * SizeConfig.widthMultiplier),
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
+                  borderRadius: BorderRadius.circular(1.25 * SizeConfig.heightMultiplier),
                 ),
               ),
               onSaved: (value) {
@@ -696,7 +709,7 @@ class _GrievanceEntryScreen extends State<GrievanceEntryScreen> {
             ),
           ),
           Padding(
-            padding: EdgeInsets.all(10.0),
+            padding: EdgeInsets.all(1.25 * SizeConfig.heightMultiplier),
             child: TextFormField(
               controller: grievanceController,
               maxLength: 500,
@@ -704,11 +717,12 @@ class _GrievanceEntryScreen extends State<GrievanceEntryScreen> {
               decoration: InputDecoration(
                 labelText: 'Grievance Detail',
                 labelStyle: TextStyle(
-                    color: Theme.of(context).primaryColor, fontSize: 15.0),
+                    color: Theme.of(context).primaryColor, fontSize: 1.9 * SizeConfig.heightMultiplier),
                 contentPadding:
-                    new EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
+                    new EdgeInsets.symmetric(vertical: 0.6 * SizeConfig.heightMultiplier,
+                        horizontal: 2.25 * SizeConfig.widthMultiplier),
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
+                  borderRadius: BorderRadius.circular(1.25 * SizeConfig.heightMultiplier),
                 ),
               ),
               validator: (value) =>

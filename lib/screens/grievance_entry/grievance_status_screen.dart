@@ -1,5 +1,6 @@
 import 'package:bhoomi_vivad/screens/grievance_entry/get_api_data.dart';
 import 'package:bhoomi_vivad/screens/splash_screen.dart';
+import 'package:bhoomi_vivad/utils/size_config.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -131,7 +132,7 @@ class _GrievanceStatus extends State<GrievanceStatus> {
                         child: Container(
                           height: screenHeight,
                           width: screenWidth,
-                          padding: EdgeInsets.all(16.0),
+                          padding: EdgeInsets.all(2 * SizeConfig.heightMultiplier),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisAlignment: MainAxisAlignment.start,
@@ -143,7 +144,7 @@ class _GrievanceStatus extends State<GrievanceStatus> {
                                       child: Text(
                                         'Tracking Id: ',
                                         style: TextStyle(
-                                          fontSize: 16.0,
+                                          fontSize: 2 * SizeConfig.heightMultiplier,
                                           fontWeight: FontWeight.w600,
                                         ),
                                       )),
@@ -151,14 +152,14 @@ class _GrievanceStatus extends State<GrievanceStatus> {
                                       child: Text(
                                         _trackingIdController.text,
                                         style: TextStyle(
-                                          fontSize: 15.0,
+                                          fontSize: 1.9 * SizeConfig.heightMultiplier,
                                           fontWeight: FontWeight.w600,
                                         ),
                                       )),
                                 ],
                               ),
                               SizedBox(
-                                height: 20.0,
+                                height: 2.5 * SizeConfig.heightMultiplier,
                               ),
                               Row(
                                 children: <Widget>[
@@ -166,7 +167,7 @@ class _GrievanceStatus extends State<GrievanceStatus> {
                                       child: Text(
                                         'Circle:',
                                         style: TextStyle(
-                                          fontSize: 16.0,
+                                          fontSize: 2 * SizeConfig.heightMultiplier,
                                           fontWeight: FontWeight.w600,
                                         ),
                                       )),
@@ -174,14 +175,14 @@ class _GrievanceStatus extends State<GrievanceStatus> {
                                       child: Text(
                                         getApiData.caseStatus.circle,
                                         style: TextStyle(
-                                          fontSize: 16.0,
+                                          fontSize: 2 * SizeConfig.heightMultiplier,
                                         ),
                                       )),
                                   Expanded(
                                       child: Text(
                                         'Panchayat:',
                                         style: TextStyle(
-                                          fontSize: 16.0,
+                                          fontSize: 2 * SizeConfig.heightMultiplier,
                                           fontWeight: FontWeight.w600,
                                         ),
                                       )),
@@ -189,55 +190,55 @@ class _GrievanceStatus extends State<GrievanceStatus> {
                                       child: Text(
                                         getApiData.caseStatus.panchayat,
                                         style: TextStyle(
-                                          fontSize: 16.0,
+                                          fontSize: 2 * SizeConfig.heightMultiplier,
                                         ),
                                       )),
                                 ],
                               ),
                               SizedBox(
-                                height: 10.0,
+                                height: 2.5 * SizeConfig.heightMultiplier,
                               ),
                               Text(
                                 'Parivadi Details:',
                                 style: TextStyle(
                                   fontWeight: FontWeight.w600,
-                                  fontSize: 16.0,
+                                  fontSize: 2 * SizeConfig.heightMultiplier,
                                 ),
                               ),
                               SizedBox(
-                                height: 5.0,
+                                height: 0.625 * SizeConfig.heightMultiplier,
                               ),
                               Wrap(
                                 children: [
                                   Text(
                                     getApiData.caseStatus.name + ',  Mo:',
                                     style: TextStyle(
-                                      fontSize: 16.0,
+                                      fontSize: 2 * SizeConfig.heightMultiplier,
                                       fontWeight: FontWeight.w600
                                     ),
                                   ),
                                   SizedBox(
-                                    width: 2.0,
+                                    width: 0.5 * SizeConfig.widthMultiplier,
                                   ),
                                   Text(
                                     getApiData.caseStatus.contact.replaceAll(
                                         "-", "").replaceAll(")", "").replaceAll(
                                         "(", "").replaceAll(" ", ""),
                                     style: TextStyle(
-                                      fontSize: 16.0,
+                                      fontSize: 2 * SizeConfig.heightMultiplier,
                                     ),
                                   ),
                                 ],
                               ),
                               SizedBox(
-                                height: 5.0,
+                                height: 0.625 * SizeConfig.heightMultiplier,
                               ),
                               Wrap(
                                 children: [
                                   Text(
                                     getApiData.caseStatus.mauza + ', ',
                                     style: TextStyle(
-                                      fontSize: 16.0,
+                                      fontSize: 2 * SizeConfig.heightMultiplier,
                                     ),
                                   ),
                                   SizedBox(
@@ -246,13 +247,13 @@ class _GrievanceStatus extends State<GrievanceStatus> {
                                   Text(
                                     getApiData.caseStatus.address,
                                     style: TextStyle(
-                                      fontSize: 16.0,
+                                      fontSize: 2 * SizeConfig.heightMultiplier,
                                     ),
                                   ),
                                 ],
                               ),
                               SizedBox(
-                                height: 10.0,
+                                height: 1.25 * SizeConfig.heightMultiplier,
                               ),
                               Row(
                                 children: <Widget>[
@@ -260,7 +261,7 @@ class _GrievanceStatus extends State<GrievanceStatus> {
                                       child: Text(
                                         'Vivad Type: ',
                                         style: TextStyle(
-                                          fontSize: 16.0,
+                                          fontSize: 2 * SizeConfig.heightMultiplier,
                                           fontWeight: FontWeight.w600,
                                         ),
                                       )),
@@ -268,13 +269,13 @@ class _GrievanceStatus extends State<GrievanceStatus> {
                                       child: Text(
                                         getApiData.caseStatus.vivad_type,
                                         style: TextStyle(
-                                          fontSize: 14.0,
+                                          fontSize: 1.9 * SizeConfig.heightMultiplier,
                                         ),
                                       )),
                                 ],
                               ),
                               SizedBox(
-                                height: 10.0,
+                                height: 1.25 * SizeConfig.heightMultiplier,
                               ),
                               Row(
                                 children: <Widget>[
@@ -282,7 +283,7 @@ class _GrievanceStatus extends State<GrievanceStatus> {
                                       child: Text(
                                         'Description: ',
                                         style: TextStyle(
-                                          fontSize: 16.0,
+                                          fontSize: 2 * SizeConfig.heightMultiplier,
                                           fontWeight: FontWeight.w600,
                                         ),
                                       )),
@@ -290,13 +291,13 @@ class _GrievanceStatus extends State<GrievanceStatus> {
                                       child: Text(
                                         getApiData.caseStatus.vivad_reason,
                                         style: TextStyle(
-                                          fontSize: 15.0,
+                                          fontSize: 1.9 * SizeConfig.heightMultiplier,
                                         ),
                                       )),
                                 ],
                               ),
                               SizedBox(
-                                height: 10.0,
+                                height: 1.25 * SizeConfig.heightMultiplier,
                               ),
                               Row(
                                 children: <Widget>[
@@ -304,7 +305,7 @@ class _GrievanceStatus extends State<GrievanceStatus> {
                                       child: Text(
                                         'Registered Date: ',
                                         style: TextStyle(
-                                          fontSize: 16.0,
+                                          fontSize: 2 * SizeConfig.heightMultiplier,
                                           fontWeight: FontWeight.w600,
                                         ),
                                       )),
@@ -315,13 +316,13 @@ class _GrievanceStatus extends State<GrievanceStatus> {
                                             .caseStatus.created_at))
                                             .toString(),
                                         style: TextStyle(
-                                          fontSize: 14.0,
+                                          fontSize: 1.75 * SizeConfig.heightMultiplier,
                                         ),
                                       )),
                                 ],
                               ),
                               SizedBox(
-                                height: 10.0,
+                                height: 1.25 * SizeConfig.heightMultiplier,
                               ),
                               Row(
                                 children: <Widget>[
@@ -329,7 +330,7 @@ class _GrievanceStatus extends State<GrievanceStatus> {
                                       child: Text(
                                         'Case Status: ',
                                         style: TextStyle(
-                                          fontSize: 16.0,
+                                          fontSize: 2 * SizeConfig.heightMultiplier,
                                           fontWeight: FontWeight.w600,
                                         ),
                                       )),
@@ -337,7 +338,7 @@ class _GrievanceStatus extends State<GrievanceStatus> {
                                       child: Text(
                                         getApiData.caseStatus.case_status,
                                         style: TextStyle(
-                                          fontSize: 16.0,
+                                          fontSize: 2 * SizeConfig.heightMultiplier,
                                           fontWeight: FontWeight.w600,
                                         ),
                                       )),

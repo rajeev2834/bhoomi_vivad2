@@ -1,3 +1,4 @@
+import 'package:bhoomi_vivad/utils/size_config.dart';
 import 'package:flutter/material.dart';
 
 class TrackingIdScreen extends StatelessWidget {
@@ -18,7 +19,7 @@ class TrackingIdScreen extends StatelessWidget {
       body: SafeArea(
         child: SingleChildScrollView(
           child: Container(
-            padding: const EdgeInsets.all(16.0),
+            padding: EdgeInsets.all(2 * SizeConfig.heightMultiplier),
             height: screenHeight,
             width: double.infinity,
             child: Column(
@@ -30,8 +31,9 @@ class TrackingIdScreen extends StatelessWidget {
                   child: Column(
                     children: <Widget>[
                       Container(
-                        margin: const EdgeInsets.symmetric(
-                            horizontal: 20, vertical: 60),
+                        margin: EdgeInsets.symmetric(
+                            horizontal: 5 * SizeConfig.widthMultiplier,
+                            vertical: 7.5 * SizeConfig.heightMultiplier),
                         decoration: BoxDecoration(
                           color: Theme.of(context).primaryColorLight,
                         ),
@@ -42,11 +44,11 @@ class TrackingIdScreen extends StatelessWidget {
                         ),
                       ),
                       Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 10),
-                        child: const Text(
+                        margin: EdgeInsets.symmetric(horizontal: 2.5 * SizeConfig.widthMultiplier),
+                        child: Text(
                           'Thank You !!!',
                           style: TextStyle(
-                            fontSize: 36,
+                            fontSize: 4.5 * SizeConfig.heightMultiplier,
                             color: Colors.indigo,
                             fontWeight: FontWeight.w800,
                           ),
@@ -60,10 +62,10 @@ class TrackingIdScreen extends StatelessWidget {
                   child: Column(
                     children: <Widget>[
                       Container(
-                        constraints: const BoxConstraints(
-                          maxWidth: 500,
+                        constraints: BoxConstraints(
+                          maxWidth: 125 * SizeConfig.widthMultiplier,
                         ),
-                        margin: const EdgeInsets.symmetric(horizontal: 10),
+                        margin: EdgeInsets.symmetric(horizontal: 2.5 * SizeConfig.widthMultiplier),
                         child: RichText(
                             textAlign: TextAlign.center,
                             text: TextSpan(
@@ -72,23 +74,23 @@ class TrackingIdScreen extends StatelessWidget {
                                     text: 'Grievance has been successfully ',
                                     style: TextStyle(
                                       color: Colors.indigo,
-                                      fontSize: 16.0,
+                                      fontSize: 2 * SizeConfig.heightMultiplier,
                                     )),
                                 TextSpan(
                                   text:
                                       'registered through Bhoomi Vivad Tracker app',
                                   style: TextStyle(
                                     color: Colors.indigo,
-                                    fontSize: 16.0,
+                                    fontSize: 2 * SizeConfig.heightMultiplier,
                                   ),
                                 ),
                               ],
                             )),
                       ),
                       Container(
-                        margin: const EdgeInsets.symmetric(
-                          horizontal: 10,
-                          vertical: 30,
+                        margin: EdgeInsets.symmetric(
+                          horizontal: 2.5 * SizeConfig.widthMultiplier,
+                          vertical: 3.75 * SizeConfig.heightMultiplier,
                         ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -97,37 +99,39 @@ class TrackingIdScreen extends StatelessWidget {
                               'Your Tracking id is: ',
                               style: TextStyle(
                                 color: Colors.indigo,
-                                fontSize: 17,
+                                fontSize: 2.1 * SizeConfig.heightMultiplier,
                               ),
                             ),
                             Text(
                               tracking_id,
                               style: TextStyle(
                                 color: Colors.red,
-                                fontSize: 17,
+                                fontSize: 2.1 * SizeConfig.heightMultiplier,
                               ),
                             ),
                           ],
                         ),
                       ),
                       Container(
-                        margin: const EdgeInsets.symmetric(
-                            horizontal: 20, vertical: 30),
-                        constraints: const BoxConstraints(maxWidth: 500),
+                        margin: EdgeInsets.symmetric(
+                            horizontal: 5 * SizeConfig.widthMultiplier,
+                            vertical: 3.75 * SizeConfig.heightMultiplier),
+                        constraints: BoxConstraints(maxWidth: 125 * SizeConfig.widthMultiplier),
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
                             primary: Colors.indigo,
-                            shape: const RoundedRectangleBorder(
+                            shape: RoundedRectangleBorder(
                                 borderRadius:
-                                    BorderRadius.all(Radius.circular(14.0))),
+                                    BorderRadius.all(Radius.circular(1.75 * SizeConfig.heightMultiplier))),
                           ),
                           child: Container(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 8, horizontal: 8),
+                            padding: EdgeInsets.symmetric(
+                                vertical: 1 * SizeConfig.heightMultiplier,
+                                horizontal: 2 * SizeConfig.widthMultiplier),
                             child: Text(
                               'Home',
                               style: TextStyle(
-                                fontSize: 20,
+                                fontSize: 2.5 * SizeConfig.heightMultiplier,
                               ),
                             ),
                           ),
