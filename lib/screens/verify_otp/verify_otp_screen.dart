@@ -1,11 +1,10 @@
 import 'package:bhoomi_vivad/models/mobile_otp.dart';
 import 'package:bhoomi_vivad/screens/verify_otp/verify_otp_provider.dart';
 import 'package:bhoomi_vivad/utils/loading_dialog.dart';
+import 'package:bhoomi_vivad/utils/size_config.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:numeric_keyboard/numeric_keyboard.dart';
-import 'package:bhoomi_vivad/models/http_exception.dart';
 import 'package:provider/provider.dart';
 
 class VerifyOTPScreen extends StatefulWidget {
@@ -33,11 +32,11 @@ class _VerifyOTPScreen extends State<VerifyOTPScreen> {
   Widget otpNumberWidget(int position) {
     try {
       return Container(
-        height: 40,
-        width: 40,
+        height: 5 * SizeConfig.heightMultiplier,
+        width: 5 * SizeConfig.heightMultiplier,
         decoration: BoxDecoration(
             border: Border.all(color: Colors.black, width: 0),
-            borderRadius: const BorderRadius.all(Radius.circular(8))),
+            borderRadius: BorderRadius.all(Radius.circular(1 * SizeConfig.heightMultiplier))),
         child: Center(
             child: Text(
           text[position],
@@ -46,11 +45,11 @@ class _VerifyOTPScreen extends State<VerifyOTPScreen> {
       );
     } catch (e) {
       return Container(
-        height: 40,
-        width: 40,
+        height: 5 * SizeConfig.heightMultiplier,
+        width: 5 * SizeConfig.heightMultiplier,
         decoration: BoxDecoration(
             border: Border.all(color: Colors.black, width: 0),
-            borderRadius: const BorderRadius.all(Radius.circular(8))),
+            borderRadius: BorderRadius.all(Radius.circular(1 * SizeConfig.heightMultiplier))),
       );
     }
   }
@@ -106,7 +105,7 @@ class _VerifyOTPScreen extends State<VerifyOTPScreen> {
                           children: <Widget>[
                             Container(
                               margin:
-                                  const EdgeInsets.symmetric(horizontal: 20),
+                                   EdgeInsets.symmetric(horizontal: 5 * SizeConfig.widthMultiplier),
                               child: RichText(
                                 text: TextSpan(
                                   children: <TextSpan>[
@@ -115,13 +114,13 @@ class _VerifyOTPScreen extends State<VerifyOTPScreen> {
                                             'Enter 6 digits OTP sent as SMS on ',
                                         style: TextStyle(
                                             color: Colors.black,
-                                            fontSize: 26,
+                                            fontSize: 3.25 * SizeConfig.heightMultiplier,
                                             fontWeight: FontWeight.w500)),
                                     TextSpan(
                                       text: phoneNumber,
                                       style: TextStyle(
                                         color: Colors.black,
-                                        fontSize: 16,
+                                        fontSize: 2 * SizeConfig.heightMultiplier,
                                       ),
                                     ),
                                   ],
@@ -129,7 +128,7 @@ class _VerifyOTPScreen extends State<VerifyOTPScreen> {
                               ),
                             ),
                             Container(
-                              constraints: const BoxConstraints(maxWidth: 500),
+                              constraints: BoxConstraints(maxWidth: 125 * SizeConfig.widthMultiplier),
                               child: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceEvenly,
@@ -148,9 +147,10 @@ class _VerifyOTPScreen extends State<VerifyOTPScreen> {
                         ),
                       ),
                       Container(
-                        margin: const EdgeInsets.symmetric(
-                            horizontal: 20, vertical: 10),
-                        constraints: const BoxConstraints(maxWidth: 500),
+                        margin:  EdgeInsets.symmetric(
+                            horizontal: 5 * SizeConfig.widthMultiplier,
+                            vertical: 1.25 * SizeConfig.heightMultiplier),
+                        constraints: BoxConstraints(maxWidth: 125 * SizeConfig.widthMultiplier),
                         child: ElevatedButton(
                           onPressed: () {
                             text.length == 6
@@ -159,32 +159,33 @@ class _VerifyOTPScreen extends State<VerifyOTPScreen> {
                           },
                           style: ElevatedButton.styleFrom(
                             primary: Colors.indigo,
-                            shape: const RoundedRectangleBorder(
+                            shape: RoundedRectangleBorder(
                                 borderRadius:
-                                    BorderRadius.all(Radius.circular(14))),
+                                    BorderRadius.all(Radius.circular(1.75 * SizeConfig.heightMultiplier))),
                           ),
                           child: Container(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 8, horizontal: 8),
+                            padding: EdgeInsets.symmetric(
+                                vertical: 1 * SizeConfig.heightMultiplier,
+                                horizontal: 2 * SizeConfig.widthMultiplier),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
                                 Text(
                                   'Verify OTP',
                                   style: TextStyle(
-                                      color: Colors.white, fontSize: 16),
+                                      color: Colors.white, fontSize: 2 * SizeConfig.heightMultiplier),
                                 ),
                                 Container(
-                                  padding: const EdgeInsets.all(8),
+                                  padding: EdgeInsets.all(1 * SizeConfig.heightMultiplier),
                                   decoration: BoxDecoration(
-                                    borderRadius: const BorderRadius.all(
-                                        Radius.circular(20)),
+                                    borderRadius: BorderRadius.all(
+                                        Radius.circular(2.5 * SizeConfig.heightMultiplier)),
                                     color: Colors.indigo,
                                   ),
                                   child: Icon(
                                     Icons.arrow_forward_ios,
                                     color: Colors.white,
-                                    size: 16,
+                                    size: 2 * SizeConfig.heightMultiplier,
                                   ),
                                 ),
                               ],
