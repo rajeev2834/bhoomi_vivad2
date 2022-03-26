@@ -3,22 +3,28 @@ import 'dart:io';
 
 import 'package:bhoomi_vivad/models/circle.dart';
 import 'package:bhoomi_vivad/models/panchayat.dart';
-
 import 'package:bhoomi_vivad/models/user.dart';
 import 'package:bhoomi_vivad/models/vivad.dart';
 import 'package:bhoomi_vivad/models/vivad_type.dart';
 import 'package:bhoomi_vivad/utils/database_helper.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../constants.dart';
+import '../models/vivad_status.dart';
 import 'auth.dart';
 
 class AddBaseData with ChangeNotifier {
   final dbHelper = DatabaseHelper.instance;
 
   String? _token;
+
+  late VivadStatusList _vivadStatusList;
+
+  VivadStatusList get vivadStatusList {
+    return _vivadStatusList;
+  }
 
   List<User> _users = [];
 
@@ -59,6 +65,7 @@ class AddBaseData with ChangeNotifier {
     }
     notifyListeners();
   }
+
   Future<void> fetchAndSetCircle() async {
     final url = base_url + 'circle/';
     try {
@@ -113,10 +120,10 @@ class AddBaseData with ChangeNotifier {
       });
       if (response.statusCode == 200) {
         final extractedVivadTypeData =
-        jsonDecode(utf8.decode(response.bodyBytes));
+            jsonDecode(utf8.decode(response.bodyBytes));
         notifyListeners();
         VivadTypeList vivadTypeList =
-        VivadTypeList.fromJson(extractedVivadTypeData);
+            VivadTypeList.fromJson(extractedVivadTypeData);
         await dbHelper.deleteTableData('vivad_type');
         vivadTypeList.vivadTypes.forEach((VivadType) async {
           await dbHelper.insertTableData('vivad_type', VivadType.toJson());
@@ -137,6 +144,43 @@ class AddBaseData with ChangeNotifier {
       return result;
     } catch (error) {
       throw (error);
+    }
+  }
+
+  Future<void> getVivadData(String status, String level, String circle) async {
+    String table = level == 'Citizen' ? 'grievance' : 'vivad';
+    var url = Uri.parse(base_url).authority;
+    var status_code = status == 'pending'
+        ? 0
+        : status == 'hearing'
+            ? 1
+            : status == 'rejected'
+                ? 2
+                : status == 'disposed'
+                    ? 3
+                    : null;
+
+    try {
+      final uri = Uri.http(
+        url,
+        '/api/$table',
+        {"circle": circle, "status": status_code}
+            .map((key, value) => MapEntry(key, value.toString())),
+      );
+      final response = await http.get(uri, headers: {
+        HttpHeaders.authorizationHeader: "Token " + _token.toString(),
+        HttpHeaders.contentTypeHeader: 'application/json',
+      });
+      if (response.statusCode == 200) {
+        final extractedVivadData = jsonDecode(utf8.decode(response.bodyBytes));
+
+        _vivadStatusList = VivadStatusList.fromJson(extractedVivadData);
+        notifyListeners();
+      } else {
+        throw HttpException("Unable to load Grievance status!!!");
+      }
+    } catch (error) {
+      throw error;
     }
   }
 

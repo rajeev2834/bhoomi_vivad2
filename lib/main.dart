@@ -19,6 +19,8 @@ import 'package:bhoomi_vivad/utils/size_config.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'package:bhoomi_vivad/screens/all_vivad/vivad_pending_screen.dart';
+
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(BhoomiVivad());
@@ -72,6 +74,7 @@ class BhoomiVivad extends StatelessWidget {
                   HomeScreen.routeName: (context) => HomeScreen(),
                   UploadVivadScreen.routeName: (context) => UploadVivadScreen(),
                   VivadEntryScreen.routeName: (context) => VivadEntryScreen(),
+                  VivadPendingScreen.routeName: (context) => const VivadPendingScreen(),
                   VivadReportScreen.routeName: (context) => VivadReportScreen(),
                 },
               );

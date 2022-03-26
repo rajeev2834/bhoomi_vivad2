@@ -1,4 +1,5 @@
 import 'package:bhoomi_vivad/providers/addBaseData.dart';
+import 'package:bhoomi_vivad/screens/all_vivad/vivad_pending_screen.dart';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -192,7 +193,11 @@ class Body extends StatelessWidget {
 
   Widget VivadRelatedGrid(BuildContext context) {
     List<GridViewItem> loadedItem = [
-      GridViewItem(title: 'Register New Case', icon: Icons.app_registration),
+      GridViewItem(title: 'Register New Case', icon: Icons.app_registration, color: Colors.indigo),
+      GridViewItem(title: 'Pending Case', icon: Icons.pending_actions_rounded, color: Colors.orangeAccent),
+      GridViewItem(title: 'In Process', icon: Icons.schedule_outlined, color: Colors.lightGreen),
+      GridViewItem(title: 'Rejected', icon: Icons.close_sharp, color: Colors.redAccent),
+      GridViewItem(title: 'Disposed', icon: Icons.restore_from_trash_rounded, color: Colors.blueGrey),
     ];
     return Container(
       child: Padding(
@@ -220,7 +225,7 @@ class Body extends StatelessWidget {
                         children: <Widget>[
                           Icon(
                             loadedItem[index].icon,
-                            color: Colors.indigo,
+                            color: loadedItem[index].color,
                             size: 50.0,
                           ),
                           Text(
@@ -245,8 +250,14 @@ class Body extends StatelessWidget {
   void _moveNextScreen(BuildContext context, int index) async {
     if (index == 0) {
       await Navigator.of(context).pushNamed('/upload_vivad_screen');
-    } else if (index == 2) {
-      await Navigator.of(context).pushNamed('/vivad_report_screen');
+    } else if (index == 1) {
+      await Navigator.of(context).pushNamed(VivadPendingScreen.routeName, arguments: CaseStatusArguments("pending"));
+    }else if (index == 2) {
+      await Navigator.of(context).pushNamed(VivadPendingScreen.routeName, arguments: CaseStatusArguments("hearing"));
+    }else if (index == 3) {
+      await Navigator.of(context).pushNamed(VivadPendingScreen.routeName, arguments: CaseStatusArguments("rejected"));
+    }else if (index == 4) {
+      await Navigator.of(context).pushNamed(VivadPendingScreen.routeName, arguments: CaseStatusArguments("disposed"));
     }
   }
 
@@ -273,6 +284,7 @@ class Body extends StatelessWidget {
 class GridViewItem {
   final String title;
   final IconData icon;
+  final Color color;
 
-  GridViewItem({required this.title, required this.icon});
+  GridViewItem({required this.title, required this.icon, required this.color});
 }

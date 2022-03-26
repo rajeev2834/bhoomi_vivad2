@@ -9,10 +9,10 @@ import 'package:bhoomi_vivad/models/vivad_type.dart';
 import 'package:bhoomi_vivad/providers/auth.dart';
 import 'package:bhoomi_vivad/utils/database_helper.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../constants.dart';
-import 'package:http/http.dart' as http;
 
 class GetApiData with ChangeNotifier {
   final dbHelper = DatabaseHelper.instance;

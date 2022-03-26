@@ -73,6 +73,8 @@ class _GrievanceEntryScreen extends State<GrievanceEntryScreen> {
   static GrievnaceData data = GrievnaceData();
   bool _isLoading = false;
 
+
+
   @override
   void initState() {
     super.initState();
@@ -381,6 +383,7 @@ class _GrievanceEntryScreen extends State<GrievanceEntryScreen> {
       ];
 
   Widget AddressDetail(BuildContext context) {
+
     return Form(
       key: formKeys[0],
       child: Column(
