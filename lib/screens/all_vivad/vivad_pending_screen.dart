@@ -29,6 +29,14 @@ class _vivadPendingScreenState extends State<VivadPendingScreen> {
   String? _circleId;
   bool _isLoaded = false;
 
+  int _vivadCount = 0;
+
+  _updateVivadCount(int vivadCount) {
+    setState(() {
+      _vivadCount = vivadCount;
+    });
+  }
+
   @override
   void initState() {
     super.initState();
@@ -146,6 +154,10 @@ class _vivadPendingScreenState extends State<VivadPendingScreen> {
   }
 
   Widget pendingLists(String level, String status) {
-    return VivadDetailList(status: status, level: level, circle: _circleId);
+    return VivadDetailList(
+      status: status,
+      level: level,
+      circle: _circleId,
+    );
   }
 }

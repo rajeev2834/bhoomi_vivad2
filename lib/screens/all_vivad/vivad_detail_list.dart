@@ -1,5 +1,7 @@
 import 'package:bhoomi_vivad/models/vivad_status.dart';
 import 'package:bhoomi_vivad/providers/addBaseData.dart';
+import 'package:bhoomi_vivad/screens/all_vivad/status_update_screen.dart';
+import 'package:bhoomi_vivad/utils/size_config.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -10,12 +12,12 @@ class VivadDetailList extends StatefulWidget {
   final String level;
   final String? circle;
 
-  VivadDetailList(
-      {Key? key,
-      required this.status,
-      required this.level,
-      required this.circle})
-      : super(key: key);
+  VivadDetailList({
+    Key? key,
+    required this.status,
+    required this.level,
+    required this.circle,
+  }) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _VivadDetailList();
@@ -24,11 +26,11 @@ class VivadDetailList extends StatefulWidget {
 class _VivadDetailList extends State<VivadDetailList> {
   bool _isLoading = false;
   List<VivadStatus> vivads = [];
+  String _token = "";
 
   TextEditingController _statusController = TextEditingController();
   TextEditingController _levelController = TextEditingController();
   TextEditingController _circleController = TextEditingController();
-
 
   DateFormat formatter = DateFormat("dd-MM-yyyy");
 
@@ -43,8 +45,13 @@ class _VivadDetailList extends State<VivadDetailList> {
       _isLoading = true;
     });
 
+    _loadVivadList();
+  }
+
+  Future<void> _loadVivadList() async {
     var provider = Provider.of<AddBaseData>(context, listen: false);
-    provider.getToken().then((value) {
+    await provider.getToken().then((value) {
+      _token = provider.token;
       provider
           .getVivadData(_statusController.text, _levelController.text,
               _circleController.text)
@@ -52,7 +59,37 @@ class _VivadDetailList extends State<VivadDetailList> {
         setState(() {
           _isLoading = false;
         });
+      }).catchError((handleError) {
+        if (handleError.toString().contains('SocketException')) {
+          _showResultDialog(
+              context, 'Error', 'Please check your network connection !!!');
+        } else {
+          _showResultDialog(context, 'Error', handleError.toString());
+        }
       });
+    });
+  }
+
+  void _showResultDialog(BuildContext context, String title, String message) {
+    AlertDialog alertDialog = AlertDialog(
+      title: Text(title),
+      content: Text(message),
+      actions: <Widget>[
+        TextButton(
+          onPressed: () {
+            Navigator.of(context).pop(title);
+          },
+          child: Text(
+            'Ok',
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+        )
+      ],
+    );
+    showDialog(context: context, builder: (_) => alertDialog).then((value) {
+      if (value.toString().contains('Error')) {
+        Navigator.of(context).pop();
+      }
     });
   }
 
@@ -78,7 +115,7 @@ class _VivadDetailList extends State<VivadDetailList> {
         : Consumer<AddBaseData>(builder: (ctx, addBaseData, _) {
             if (addBaseData.vivadStatusList.vivads.length == 0) {
               return Center(
-                child: Text('There is not pending grievances',
+                child: Text('There is no data to show.',
                     style: TextStyle(
                       fontSize: 16.0,
                       fontWeight: FontWeight.w600,
@@ -89,6 +126,17 @@ class _VivadDetailList extends State<VivadDetailList> {
               vivads = addBaseData.vivadStatusList.vivads;
               return Column(
                 children: <Widget>[
+                  Container(
+                    alignment: Alignment.topLeft,
+                    padding: EdgeInsets.all(1.25 * SizeConfig.heightMultiplier),
+                    child: Text(
+                      'Total: $count Cases',
+                      style: TextStyle(
+                        fontSize: 2.0 * SizeConfig.heightMultiplier,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
                   Expanded(
                     child: SingleChildScrollView(
                       scrollDirection: Axis.vertical,
@@ -121,14 +169,17 @@ class _VivadDetailList extends State<VivadDetailList> {
                                         child: Row(
                                           children: <Widget>[
                                             Padding(
-                                              padding: EdgeInsets.only(right: 2.0,),
-                                            child: Text(
-                                                (index+1).toString()+".",
-                                              style: TextStyle(
-                                                fontSize: 14.0,
-                                                fontWeight: FontWeight.w600,
+                                              padding: EdgeInsets.only(
+                                                right: 2.0,
                                               ),
-                                            ),),
+                                              child: Text(
+                                                (index + 1).toString() + ".",
+                                                style: TextStyle(
+                                                  fontSize: 14.0,
+                                                  fontWeight: FontWeight.w600,
+                                                ),
+                                              ),
+                                            ),
                                             Expanded(
                                               child: Text(
                                                 ' Panchayat',
@@ -291,6 +342,22 @@ class _VivadDetailList extends State<VivadDetailList> {
                                   ),
                                 ),
                               ),
+                              onTap: () async {
+                                _statusController.text == "pending"
+                                    ? await Navigator.of(context)
+                                        .pushNamed(
+                                          StatusUpdateScreen.routeName,
+                                          arguments: StatusUpdateArguments(
+                                              vivads[index], _token),
+                                        )
+                                        .then((value) => setState(() {
+                                              if (value == 0) {
+                                                _isLoading = true;
+                                                _loadVivadList();
+                                              }
+                                            }))
+                                    : null;
+                              },
                             ),
                           ),
                         ),

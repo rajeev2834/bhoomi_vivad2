@@ -20,6 +20,7 @@ class VivadStatusList {
 
 @JsonSerializable()
 class VivadStatus {
+  int id;
   String vivad_id;
   String register_no;
   String register_date;
@@ -50,38 +51,38 @@ class VivadStatus {
   String remarks;
   String created_date;
 
-  VivadStatus(
-      {
-        required this.vivad_id,
-        required this.register_no,
-        required this.register_date,
-        required this.circle,
-        required this.panchayat,
-        required this.first_party_address,
-        required this.first_party_contact,
-        required this.first_party_name,
-        required this.second_party_address,
-        required this.second_party_contact,
-        required this.second_party_name,
-        required this.thana_no,
-        required this.mauza,
-        required this.khata_no,
-        required this.khesra_no,
-        required this.rakwa,
-        required this.chauhaddi,
-        required this.vivad_type,
-        required this.case_detail,
-        required this.is_violence,
-        required this.violence_detail,
-        required this.is_fir,
-        required this.notice_order,
-        required this.is_courtpending,
-        required this.court_status,
-        required this.case_status,
-        required this.next_hearing_date,
-        required this.remarks,
-        required this.created_date,
-      });
+  VivadStatus({
+    required this.id,
+    required this.vivad_id,
+    required this.register_no,
+    required this.register_date,
+    required this.circle,
+    required this.panchayat,
+    required this.first_party_address,
+    required this.first_party_contact,
+    required this.first_party_name,
+    required this.second_party_address,
+    required this.second_party_contact,
+    required this.second_party_name,
+    required this.thana_no,
+    required this.mauza,
+    required this.khata_no,
+    required this.khesra_no,
+    required this.rakwa,
+    required this.chauhaddi,
+    required this.vivad_type,
+    required this.case_detail,
+    required this.is_violence,
+    required this.violence_detail,
+    required this.is_fir,
+    required this.notice_order,
+    required this.is_courtpending,
+    required this.court_status,
+    required this.case_status,
+    required this.next_hearing_date,
+    required this.remarks,
+    required this.created_date,
+  });
 
   factory VivadStatus.fromJson(Map<String, dynamic> json) => _$VivadStatusFromJson(json);
 

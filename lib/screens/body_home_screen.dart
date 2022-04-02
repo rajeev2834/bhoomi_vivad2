@@ -1,14 +1,16 @@
 import 'package:bhoomi_vivad/providers/addBaseData.dart';
 import 'package:bhoomi_vivad/screens/all_vivad/vivad_pending_screen.dart';
-
+import 'package:bhoomi_vivad/screens/all_vivad/vivad_summary_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:path/path.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:provider/provider.dart';
+
 import '../models/http_exception.dart';
 
 class Body extends StatelessWidget {
+  String? _token;
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -56,42 +58,42 @@ class Body extends StatelessWidget {
                     future: Provider.of<AddBaseData>(context, listen: false)
                         .getUserData(),
                     builder: (ctx, snapshot) => snapshot.connectionState ==
-                            ConnectionState.waiting
+                        ConnectionState.waiting
                         ? Center(
-                            child: CircularProgressIndicator(),
-                          )
+                      child: CircularProgressIndicator(),
+                    )
                         : Consumer<AddBaseData>(
-                            builder: (ctx, addBaseData, _) => addBaseData
-                                        .users.length >
-                                    0
-                                ? Row(
-                                    children: <Widget>[
-                                      Text(
-                                        "Welcome,",
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .headline6!
-                                            .copyWith(
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.bold),
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsets.only(left: 5.0),
-                                      ),
-                                      Text(
-                                        addBaseData.users[0].firstName,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .headline5!
-                                            .copyWith(
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.bold),
-                                      )
-                                    ],
-                                  )
-                                : Center(
-                                    child: CircularProgressIndicator(),
-                                  )),
+                        builder: (ctx, addBaseData, _) => addBaseData
+                            .users.length >
+                            0
+                            ? Row(
+                          children: <Widget>[
+                            Text(
+                              "Welcome,",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headline6!
+                                  .copyWith(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(left: 5.0),
+                            ),
+                            Text(
+                              addBaseData.users[0].firstName,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headline5!
+                                  .copyWith(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold),
+                            )
+                          ],
+                        )
+                            : Center(
+                          child: CircularProgressIndicator(),
+                        )),
                   ),
                 ),
                 Positioned(
@@ -110,7 +112,7 @@ class Body extends StatelessWidget {
                           offset: Offset(0, 10),
                           blurRadius: 50.0,
                           color:
-                              Theme.of(context).primaryColor.withOpacity(0.23),
+                          Theme.of(context).primaryColor.withOpacity(0.23),
                         ),
                       ],
                     ),
@@ -165,7 +167,7 @@ class Body extends StatelessWidget {
           });
           // ignore: invalid_return_type_for_catch_error
         }).catchError((handleError) => _showAlertDialog(
-                context, 'Error', 'Failed to load base data.'));
+            context, 'Error', 'Failed to load base data.'));
       });
     } on HttpException catch (error) {
       var errorMessage = error.toString();
@@ -193,11 +195,26 @@ class Body extends StatelessWidget {
 
   Widget VivadRelatedGrid(BuildContext context) {
     List<GridViewItem> loadedItem = [
-      GridViewItem(title: 'Register New Case', icon: Icons.app_registration, color: Colors.indigo),
-      GridViewItem(title: 'Pending Case', icon: Icons.pending_actions_rounded, color: Colors.orangeAccent),
-      GridViewItem(title: 'In Process', icon: Icons.schedule_outlined, color: Colors.lightGreen),
-      GridViewItem(title: 'Rejected', icon: Icons.close_sharp, color: Colors.redAccent),
-      GridViewItem(title: 'Disposed', icon: Icons.restore_from_trash_rounded, color: Colors.blueGrey),
+      GridViewItem(
+          title: 'Register New Case',
+          icon: Icons.app_registration,
+          color: Colors.indigo),
+      GridViewItem(
+          title: 'Pending Case',
+          icon: Icons.pending_actions_rounded,
+          color: Colors.orange),
+      GridViewItem(
+          title: 'In Process',
+          icon: Icons.schedule_outlined,
+          color: Colors.green),
+      GridViewItem(
+          title: 'Rejected', icon: Icons.close_sharp, color: Colors.redAccent),
+      GridViewItem(
+          title: 'Disposed',
+          icon: Icons.restore_from_trash_rounded,
+          color: Colors.blueGrey),
+      GridViewItem(
+          title: 'Summary', icon: Icons.receipt_rounded, color: Colors.pink),
     ];
     return Container(
       child: Padding(
@@ -208,7 +225,7 @@ class Body extends StatelessWidget {
             shrinkWrap: true,
             children: List.generate(
               loadedItem.length,
-              (index) => Padding(
+                  (index) => Padding(
                 padding: EdgeInsets.symmetric(
                   vertical: 10.0,
                   horizontal: 10.0,
@@ -257,7 +274,10 @@ class Body extends StatelessWidget {
     }else if (index == 3) {
       await Navigator.of(context).pushNamed(VivadPendingScreen.routeName, arguments: CaseStatusArguments("rejected"));
     }else if (index == 4) {
-      await Navigator.of(context).pushNamed(VivadPendingScreen.routeName, arguments: CaseStatusArguments("disposed"));
+      await Navigator.of(context).pushNamed(VivadPendingScreen.routeName,
+          arguments: CaseStatusArguments("disposed"));
+    } else if (index == 5) {
+      await Navigator.of(context).pushNamed(VivadSummaryScreen.routeName);
     }
   }
 

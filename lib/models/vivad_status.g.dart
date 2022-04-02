@@ -8,6 +8,7 @@ part of 'vivad_status.dart';
 
 VivadStatus _$VivadStatusFromJson(Map<String, dynamic> json) {
   return VivadStatus(
+    id: json['id'] as int,
     vivad_id: json.containsKey('vivad_id')
         ? json['vivad_id'] as String
         : json['grievance_id'] as String,
@@ -40,7 +41,9 @@ VivadStatus _$VivadStatusFromJson(Map<String, dynamic> json) {
     rakwa: json['rakwa'] ?? '',
     chauhaddi: json['chauhaddi'] ?? '',
     vivad_type: json['vivad_type_name'] as String,
-    case_detail: json['case_detail'] ?? '',
+    case_detail: json.containsKey('vivad_reason')
+        ? json['vivad_reason'] ?? ''
+        : json['case_detail'] ?? '',
     is_violence: json['is_violence'] as int,
     violence_detail: json['violence_detail'] ?? '',
     is_fir: json['is_fir'] as int,
@@ -56,6 +59,7 @@ VivadStatus _$VivadStatusFromJson(Map<String, dynamic> json) {
 
 Map<String, dynamic> _$VivadStatusToJson(VivadStatus instance) =>
     <String, dynamic>{
+      'id': instance.id,
       'vivad_id': instance.vivad_id,
       'register_no': instance.register_no,
       'register_date': instance.register_date,

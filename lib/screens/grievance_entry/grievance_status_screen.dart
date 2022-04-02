@@ -142,9 +142,10 @@ class _GrievanceStatus extends State<GrievanceStatus> {
                                 children: <Widget>[
                                   Expanded(
                                       child: Text(
-                                        'Tracking Id: ',
+                                        'Grievance Id: ',
                                         style: TextStyle(
-                                          fontSize: 2 * SizeConfig.heightMultiplier,
+                                          fontSize:
+                                              2 * SizeConfig.heightMultiplier,
                                           fontWeight: FontWeight.w600,
                                         ),
                                       )),
