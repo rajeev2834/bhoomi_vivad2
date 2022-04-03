@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'case_status.g.dart';
@@ -16,19 +15,21 @@ class CaseStatus {
   String vivad_reason;
   String case_status;
   String created_at;
+  String next_hearing_date;
 
   CaseStatus(
       {required this.circle,
-        required this.panchayat,
-        required this.name,
-        required this.contact,
-        required this.father_name,
-        required this.address,
-        required this.mauza,
-        required this.vivad_type,
-        required this.vivad_reason,
+      required this.panchayat,
+      required this.name,
+      required this.contact,
+      required this.father_name,
+      required this.address,
+      required this.mauza,
+      required this.vivad_type,
+      required this.vivad_reason,
       required this.case_status,
-      required this.created_at});
+      required this.created_at,
+      required this.next_hearing_date});
 
   factory CaseStatus.fromJson(Map<String, dynamic> json) =>
       _$CaseStatusFromJson(json);

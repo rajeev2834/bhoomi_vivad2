@@ -41,12 +41,12 @@ class _GrievanceStatus extends State<GrievanceStatus> {
       if (handleError.toString().contains('SocketException')) {
         _showResultDialog(
             context, 'Network Error', 'Check your Internet and try again !!!');
-      } else
-      if (handleError.toString().contains('Valid value range is empty')) {
+      } else if (handleError
+          .toString()
+          .contains('Valid value range is empty')) {
         _showResultDialog(context, 'Error',
             'Tracking Id does not exist. Please check and try again.');
-      }
-      else {
+      } else {
         _showResultDialog(context, 'Error', handleError.toString());
       }
     });
@@ -83,14 +83,8 @@ class _GrievanceStatus extends State<GrievanceStatus> {
 
   @override
   Widget build(BuildContext context) {
-    final screenHeight = MediaQuery
-        .of(context)
-        .size
-        .height;
-    final screenWidth = MediaQuery
-        .of(context)
-        .size
-        .width;
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
         appBar: AppBar(
@@ -100,48 +94,47 @@ class _GrievanceStatus extends State<GrievanceStatus> {
         body: _isLoading
             ? MySplashScreen()
             : WillPopScope(
-            onWillPop: () async {
-              bool willLeave = false;
-              // show the confirm dialog
-              await showDialog(
-                  context: context,
-                  builder: (_) =>
-                      AlertDialog(
-                        title: const Text('Confirm'),
-                        content: Text('Are you sure want to exit ?'),
-                        actions: [
-                          TextButton(
-                              onPressed: () {
-                                willLeave = true;
-                                Navigator.popUntil(
-                                    context, ModalRoute.withName('/'));
-                              },
-                              child: const Text('Exit')),
-                          ElevatedButton(
-                              onPressed: () => Navigator.of(context).pop(),
-                              child: const Text('Cancel'))
-                        ],
-                      ));
-              return willLeave;
-            },
-            child: Consumer<GetApiData>(
-                builder: (context, getApiData, _) =>
-                    SafeArea(
-                      child: SingleChildScrollView(
-                        scrollDirection: Axis.vertical,
-                        child: Container(
-                          height: screenHeight,
-                          width: screenWidth,
-                          padding: EdgeInsets.all(2 * SizeConfig.heightMultiplier),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            mainAxisSize: MainAxisSize.min,
-                            children: <Widget>[
-                              Row(
+                onWillPop: () async {
+                  bool willLeave = false;
+                  // show the confirm dialog
+                  await showDialog(
+                      context: context,
+                      builder: (_) => AlertDialog(
+                            title: const Text('Confirm'),
+                            content: Text('Are you sure want to exit ?'),
+                            actions: [
+                              TextButton(
+                                  onPressed: () {
+                                    willLeave = true;
+                                    Navigator.popUntil(
+                                        context, ModalRoute.withName('/'));
+                                  },
+                                  child: const Text('Exit')),
+                              ElevatedButton(
+                                  onPressed: () => Navigator.of(context).pop(),
+                                  child: const Text('Cancel'))
+                            ],
+                          ));
+                  return willLeave;
+                },
+                child: Consumer<GetApiData>(
+                    builder: (context, getApiData, _) => SafeArea(
+                          child: SingleChildScrollView(
+                            scrollDirection: Axis.vertical,
+                            child: Container(
+                              height: screenHeight,
+                              width: screenWidth,
+                              padding: EdgeInsets.all(
+                                  2 * SizeConfig.heightMultiplier),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                mainAxisSize: MainAxisSize.min,
                                 children: <Widget>[
-                                  Expanded(
-                                      child: Text(
+                                  Row(
+                                    children: <Widget>[
+                                      Expanded(
+                                          child: Text(
                                         'Grievance Id: ',
                                         style: TextStyle(
                                           fontSize:
@@ -149,206 +142,254 @@ class _GrievanceStatus extends State<GrievanceStatus> {
                                           fontWeight: FontWeight.w600,
                                         ),
                                       )),
-                                  Expanded(
-                                      child: Text(
+                                      Expanded(
+                                          child: Text(
                                         _trackingIdController.text,
                                         style: TextStyle(
-                                          fontSize: 1.9 * SizeConfig.heightMultiplier,
+                                          fontSize:
+                                              1.9 * SizeConfig.heightMultiplier,
                                           fontWeight: FontWeight.w600,
                                         ),
                                       )),
-                                ],
-                              ),
-                              SizedBox(
-                                height: 2.5 * SizeConfig.heightMultiplier,
-                              ),
-                              Row(
-                                children: <Widget>[
-                                  Expanded(
-                                      child: Text(
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 2.5 * SizeConfig.heightMultiplier,
+                                  ),
+                                  Row(
+                                    children: <Widget>[
+                                      Expanded(
+                                          child: Text(
                                         'Circle:',
                                         style: TextStyle(
-                                          fontSize: 2 * SizeConfig.heightMultiplier,
+                                          fontSize:
+                                              2 * SizeConfig.heightMultiplier,
                                           fontWeight: FontWeight.w600,
                                         ),
                                       )),
-                                  Expanded(
-                                      child: Text(
+                                      Expanded(
+                                          child: Text(
                                         getApiData.caseStatus.circle,
                                         style: TextStyle(
-                                          fontSize: 2 * SizeConfig.heightMultiplier,
+                                          fontSize:
+                                              2 * SizeConfig.heightMultiplier,
                                         ),
                                       )),
-                                  Expanded(
-                                      child: Text(
+                                      Expanded(
+                                          child: Text(
                                         'Panchayat:',
                                         style: TextStyle(
-                                          fontSize: 2 * SizeConfig.heightMultiplier,
+                                          fontSize:
+                                              2 * SizeConfig.heightMultiplier,
                                           fontWeight: FontWeight.w600,
                                         ),
                                       )),
-                                  Expanded(
-                                      child: Text(
+                                      Expanded(
+                                          child: Text(
                                         getApiData.caseStatus.panchayat,
                                         style: TextStyle(
-                                          fontSize: 2 * SizeConfig.heightMultiplier,
+                                          fontSize:
+                                              2 * SizeConfig.heightMultiplier,
                                         ),
                                       )),
-                                ],
-                              ),
-                              SizedBox(
-                                height: 2.5 * SizeConfig.heightMultiplier,
-                              ),
-                              Text(
-                                'Parivadi Details:',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 2 * SizeConfig.heightMultiplier,
-                                ),
-                              ),
-                              SizedBox(
-                                height: 0.625 * SizeConfig.heightMultiplier,
-                              ),
-                              Wrap(
-                                children: [
-                                  Text(
-                                    getApiData.caseStatus.name + ',  Mo:',
-                                    style: TextStyle(
-                                      fontSize: 2 * SizeConfig.heightMultiplier,
-                                      fontWeight: FontWeight.w600
-                                    ),
+                                    ],
                                   ),
                                   SizedBox(
-                                    width: 0.5 * SizeConfig.widthMultiplier,
+                                    height: 2.5 * SizeConfig.heightMultiplier,
                                   ),
                                   Text(
-                                    getApiData.caseStatus.contact.replaceAll(
-                                        "-", "").replaceAll(")", "").replaceAll(
-                                        "(", "").replaceAll(" ", ""),
+                                    'Parivadi Details:',
                                     style: TextStyle(
-                                      fontSize: 2 * SizeConfig.heightMultiplier,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(
-                                height: 0.625 * SizeConfig.heightMultiplier,
-                              ),
-                              Wrap(
-                                children: [
-                                  Text(
-                                    getApiData.caseStatus.mauza + ', ',
-                                    style: TextStyle(
+                                      fontWeight: FontWeight.w600,
                                       fontSize: 2 * SizeConfig.heightMultiplier,
                                     ),
                                   ),
                                   SizedBox(
-                                    width: 1.0,
+                                    height: 0.625 * SizeConfig.heightMultiplier,
                                   ),
-                                  Text(
-                                    getApiData.caseStatus.address,
-                                    style: TextStyle(
-                                      fontSize: 2 * SizeConfig.heightMultiplier,
-                                    ),
+                                  Wrap(
+                                    children: [
+                                      Text(
+                                        getApiData.caseStatus.name + ',  Mo:',
+                                        style: TextStyle(
+                                            fontSize:
+                                                2 * SizeConfig.heightMultiplier,
+                                            fontWeight: FontWeight.w600),
+                                      ),
+                                      SizedBox(
+                                        width: 0.5 * SizeConfig.widthMultiplier,
+                                      ),
+                                      Text(
+                                        getApiData.caseStatus.contact
+                                            .replaceAll("-", "")
+                                            .replaceAll(")", "")
+                                            .replaceAll("(", "")
+                                            .replaceAll(" ", ""),
+                                        style: TextStyle(
+                                          fontSize:
+                                              2 * SizeConfig.heightMultiplier,
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                ],
-                              ),
-                              SizedBox(
-                                height: 1.25 * SizeConfig.heightMultiplier,
-                              ),
-                              Row(
-                                children: <Widget>[
-                                  Expanded(
-                                      child: Text(
+                                  SizedBox(
+                                    height: 0.625 * SizeConfig.heightMultiplier,
+                                  ),
+                                  Wrap(
+                                    children: [
+                                      Text(
+                                        getApiData.caseStatus.mauza + ', ',
+                                        style: TextStyle(
+                                          fontSize:
+                                              2 * SizeConfig.heightMultiplier,
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width: 1.0,
+                                      ),
+                                      Text(
+                                        getApiData.caseStatus.address,
+                                        style: TextStyle(
+                                          fontSize:
+                                              2 * SizeConfig.heightMultiplier,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 1.25 * SizeConfig.heightMultiplier,
+                                  ),
+                                  Row(
+                                    children: <Widget>[
+                                      Expanded(
+                                          child: Text(
                                         'Vivad Type: ',
                                         style: TextStyle(
-                                          fontSize: 2 * SizeConfig.heightMultiplier,
+                                          fontSize:
+                                              2 * SizeConfig.heightMultiplier,
                                           fontWeight: FontWeight.w600,
                                         ),
                                       )),
-                                  Expanded(
-                                      child: Text(
+                                      Expanded(
+                                          child: Text(
                                         getApiData.caseStatus.vivad_type,
                                         style: TextStyle(
-                                          fontSize: 1.9 * SizeConfig.heightMultiplier,
+                                          fontSize:
+                                              1.9 * SizeConfig.heightMultiplier,
                                         ),
                                       )),
-                                ],
-                              ),
-                              SizedBox(
-                                height: 1.25 * SizeConfig.heightMultiplier,
-                              ),
-                              Row(
-                                children: <Widget>[
-                                  Expanded(
-                                      child: Text(
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 1.25 * SizeConfig.heightMultiplier,
+                                  ),
+                                  Row(
+                                    children: <Widget>[
+                                      Expanded(
+                                          child: Text(
                                         'Description: ',
                                         style: TextStyle(
-                                          fontSize: 2 * SizeConfig.heightMultiplier,
+                                          fontSize:
+                                              2 * SizeConfig.heightMultiplier,
                                           fontWeight: FontWeight.w600,
                                         ),
                                       )),
-                                  Expanded(
-                                      child: Text(
+                                      Expanded(
+                                          child: Text(
                                         getApiData.caseStatus.vivad_reason,
                                         style: TextStyle(
-                                          fontSize: 1.9 * SizeConfig.heightMultiplier,
+                                          fontSize:
+                                              1.9 * SizeConfig.heightMultiplier,
                                         ),
                                       )),
-                                ],
-                              ),
-                              SizedBox(
-                                height: 1.25 * SizeConfig.heightMultiplier,
-                              ),
-                              Row(
-                                children: <Widget>[
-                                  Expanded(
-                                      child: Text(
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 1.25 * SizeConfig.heightMultiplier,
+                                  ),
+                                  Row(
+                                    children: <Widget>[
+                                      Expanded(
+                                          child: Text(
                                         'Registered Date: ',
                                         style: TextStyle(
-                                          fontSize: 2 * SizeConfig.heightMultiplier,
+                                          fontSize:
+                                              2 * SizeConfig.heightMultiplier,
                                           fontWeight: FontWeight.w600,
                                         ),
                                       )),
-                                  Expanded(
-                                      child: Text(
+                                      Expanded(
+                                          child: Text(
                                         formatter
                                             .format(DateTime.parse(getApiData
-                                            .caseStatus.created_at))
+                                                .caseStatus.created_at))
                                             .toString(),
                                         style: TextStyle(
-                                          fontSize: 1.75 * SizeConfig.heightMultiplier,
+                                          fontSize: 1.75 *
+                                              SizeConfig.heightMultiplier,
                                         ),
                                       )),
-                                ],
-                              ),
-                              SizedBox(
-                                height: 1.25 * SizeConfig.heightMultiplier,
-                              ),
-                              Row(
-                                children: <Widget>[
-                                  Expanded(
-                                      child: Text(
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 1.25 * SizeConfig.heightMultiplier,
+                                  ),
+                                  Row(
+                                    children: <Widget>[
+                                      Expanded(
+                                          child: Text(
                                         'Case Status: ',
                                         style: TextStyle(
-                                          fontSize: 2 * SizeConfig.heightMultiplier,
+                                          fontSize:
+                                              2 * SizeConfig.heightMultiplier,
                                           fontWeight: FontWeight.w600,
                                         ),
                                       )),
-                                  Expanded(
-                                      child: Text(
+                                      Expanded(
+                                          child: Text(
                                         getApiData.caseStatus.case_status,
                                         style: TextStyle(
-                                          fontSize: 2 * SizeConfig.heightMultiplier,
+                                          fontSize:
+                                              2 * SizeConfig.heightMultiplier,
                                           fontWeight: FontWeight.w600,
                                         ),
                                       )),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 1.25 * SizeConfig.heightMultiplier,
+                                  ),
+                                  getApiData.caseStatus.case_status == 'Hearing'
+                                      ? Row(
+                                          children: <Widget>[
+                                            Expanded(
+                                                child: Text(
+                                              'Hearing Date: ',
+                                              style: TextStyle(
+                                                fontSize: 2 *
+                                                    SizeConfig.heightMultiplier,
+                                                fontWeight: FontWeight.w600,
+                                              ),
+                                            )),
+                                            Expanded(
+                                                child: Text(
+                                              formatter
+                                                  .format(DateTime.parse(
+                                                      getApiData.caseStatus
+                                                          .next_hearing_date))
+                                                  .toString(),
+                                              style: TextStyle(
+                                                fontSize: 1.75 *
+                                                    SizeConfig.heightMultiplier,
+                                              ),
+                                            )),
+                                          ],
+                                        )
+                                      : Container(),
                                 ],
                               ),
-                            ],
+                            ),
                           ),
-                        ),
-                      ),
-                    ))));
+                        ))));
   }
 }

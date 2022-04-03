@@ -385,40 +385,73 @@ class _StatusUpdateScreenState extends State<StatusUpdateScreen> {
                                   ),
                                 ],
                               ),
+                              SizedBox(
+                                height: 2.5 * SizeConfig.heightMultiplier,
+                              ),
+                              args._vivadStatus.case_status == 'Hearing'
+                                  ? Row(
+                                      children: <Widget>[
+                                        Text(
+                                          'Hearing Date: ',
+                                          style: TextStyle(
+                                            fontSize:
+                                                2 * SizeConfig.heightMultiplier,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
+                                        SizedBox(
+                                            width:
+                                                2 * SizeConfig.widthMultiplier),
+                                        Text(
+                                          formatter
+                                              .format(DateTime.parse(args
+                                                  ._vivadStatus
+                                                  .next_hearing_date))
+                                              .toString(),
+                                          style: TextStyle(
+                                            fontSize: 1.75 *
+                                                SizeConfig.heightMultiplier,
+                                          ),
+                                        ),
+                                      ],
+                                    )
+                                  : Container(),
                             ]),
                       ),
                     ),
-                    Container(
-                      margin: EdgeInsets.symmetric(
-                        horizontal: 5 * SizeConfig.widthMultiplier,
-                        vertical: 2.5 * SizeConfig.heightMultiplier,
-                      ),
-                      alignment: Alignment.bottomCenter,
-                      constraints: const BoxConstraints(maxWidth: 500),
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          primary: Colors.indigo,
-                          shape: const RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(10.0))),
-                        ),
-                        child: Container(
-                          padding: EdgeInsets.symmetric(
-                              vertical: 1.5 * SizeConfig.heightMultiplier,
-                              horizontal: 2 * SizeConfig.widthMultiplier),
-                          child: Text(
-                            'Update Status',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 2.2 * SizeConfig.heightMultiplier,
+                    args._vivadStatus.case_status == 'Pending'
+                        ? Container(
+                            margin: EdgeInsets.symmetric(
+                              horizontal: 5 * SizeConfig.widthMultiplier,
+                              vertical: 2.5 * SizeConfig.heightMultiplier,
                             ),
-                          ),
-                        ),
-                        onPressed: () {
-                          _showStatusDialog(context, args);
-                        },
-                      ),
-                    ),
+                            alignment: Alignment.bottomCenter,
+                            constraints: const BoxConstraints(maxWidth: 500),
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                primary: Colors.indigo,
+                                shape: const RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.all(
+                                        Radius.circular(10.0))),
+                              ),
+                              child: Container(
+                                padding: EdgeInsets.symmetric(
+                                    vertical: 1.5 * SizeConfig.heightMultiplier,
+                                    horizontal: 2 * SizeConfig.widthMultiplier),
+                                child: Text(
+                                  'Update Status',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 2.2 * SizeConfig.heightMultiplier,
+                                  ),
+                                ),
+                              ),
+                              onPressed: () {
+                                _showStatusDialog(context, args);
+                              },
+                            ),
+                          )
+                        : Container(),
                   ]),
             ),
           ),

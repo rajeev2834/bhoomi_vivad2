@@ -69,6 +69,9 @@ class _VivadSummaryScreenState extends State<VivadSummaryScreen> {
         _caseStatusCount = value;
       });
     }).catchError((handleError) {
+      setState(() {
+        _isLoaded = false;
+      });
       if (handleError.toString().contains('SocketException')) {
         _showResultDialog(
             context, 'Error', 'Please check your network connection !!!');

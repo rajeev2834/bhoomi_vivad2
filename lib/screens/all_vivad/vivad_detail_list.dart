@@ -343,20 +343,18 @@ class _VivadDetailList extends State<VivadDetailList> {
                                 ),
                               ),
                               onTap: () async {
-                                _statusController.text == "pending"
-                                    ? await Navigator.of(context)
-                                        .pushNamed(
-                                          StatusUpdateScreen.routeName,
-                                          arguments: StatusUpdateArguments(
-                                              vivads[index], _token),
-                                        )
-                                        .then((value) => setState(() {
-                                              if (value == 0) {
-                                                _isLoading = true;
-                                                _loadVivadList();
-                                              }
-                                            }))
-                                    : null;
+                                await Navigator.of(context)
+                                    .pushNamed(
+                                      StatusUpdateScreen.routeName,
+                                      arguments: StatusUpdateArguments(
+                                          vivads[index], _token),
+                                    )
+                                    .then((value) => setState(() {
+                                          if (value == 0) {
+                                            _isLoading = true;
+                                            _loadVivadList();
+                                          }
+                                        }));
                               },
                             ),
                           ),

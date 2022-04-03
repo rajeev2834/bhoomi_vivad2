@@ -113,26 +113,25 @@ class GetApiData with ChangeNotifier {
   }
 
   Future<void> getGrievanceStatus(String trackingId) async {
-    if (trackingId.startsWith('GR')) {
-      var url = Uri.parse(base_url).authority;
-      final uri =
-          Uri.http(url, '/api/grievance/', {"grievance_id": trackingId});
-      try {
-        final response = await http.get(uri, headers: {
-          HttpHeaders.contentTypeHeader: 'application/json',
-        });
-        if (response.statusCode == 200) {
-          final extractedGrievanceData =
-              jsonDecode(utf8.decode(response.bodyBytes));
+    var table = trackingId.startsWith('GR') ? 'grievance' : 'vivad';
+    var paramId = trackingId.startsWith('GR') ? 'grievance_id' : 'vivad_id';
+    var url = Uri.parse(base_url).authority;
+    final uri = Uri.http(url, '/api/$table/', {paramId: trackingId});
+    try {
+      final response = await http.get(uri, headers: {
+        HttpHeaders.contentTypeHeader: 'application/json',
+      });
+      if (response.statusCode == 200) {
+        final extractedGrievanceData =
+            jsonDecode(utf8.decode(response.bodyBytes));
 
-          _caseStatus = CaseStatus.fromJson(extractedGrievanceData[0]);
-          notifyListeners();
-        } else {
-          throw HttpException("Unable to load Grievance status!!!");
-        }
-      } catch (error) {
-        throw (error);
+        _caseStatus = CaseStatus.fromJson(extractedGrievanceData[0]);
+        notifyListeners();
+      } else {
+        throw HttpException("Unable to load Grievance status!!!");
       }
+    } catch (error) {
+      throw (error);
     }
   }
 }

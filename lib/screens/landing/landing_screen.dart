@@ -244,9 +244,10 @@ class Landing extends StatelessWidget {
                         if (value.isEmpty || value.length < 16) {
                           _showResultDialog(
                               context, '', 'Please enter valid Tracking Id');
-                        } else if (!value.startsWith('GR')) {
-                          _showResultDialog(
-                              context, '', 'Tracking Id must starts with GR');
+                        } else if (!(value.startsWith('GR') ||
+                            value.startsWith('CO'))) {
+                          _showResultDialog(context, '',
+                              'Tracking Id must starts with GR or CO');
                         } else {
                           Navigator.of(context).push(new MaterialPageRoute(
                               builder: (context) => GrievanceStatus(
