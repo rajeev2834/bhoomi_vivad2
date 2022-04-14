@@ -224,6 +224,32 @@ class _VivadDetailList extends State<VivadDetailList> {
                                       Row(
                                         children: <Widget>[
                                           Text(
+                                            'Tracking Id :-',
+                                            style: TextStyle(
+                                              fontSize: 14.0,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            width: 2.5 *
+                                                SizeConfig.widthMultiplier,
+                                          ),
+                                          Text(
+                                            vivads[index].vivad_id,
+                                            style: TextStyle(
+                                              fontSize: 14.0,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                      SizedBox(
+                                        height:
+                                            1.25 * SizeConfig.heightMultiplier,
+                                      ),
+                                      Row(
+                                        children: <Widget>[
+                                          Text(
                                             'First Party Details :',
                                             style: TextStyle(
                                               fontSize: 14.0,

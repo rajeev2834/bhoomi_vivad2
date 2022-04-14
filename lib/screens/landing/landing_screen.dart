@@ -67,6 +67,13 @@ class Landing extends StatelessWidget {
           ],
         ),
       ),
+      floatingActionButton: FloatingActionButton.small(
+        child: const Icon(Icons.help_outline_rounded),
+        backgroundColor: Colors.indigo,
+        onPressed: () {
+          Navigator.of(context).pushNamed('/help');
+        },
+      ),
     );
   }
 
@@ -179,9 +186,7 @@ class Landing extends StatelessWidget {
                 children: <Widget>[
                   Container(
                     alignment: Alignment.center,
-                    margin: EdgeInsets.symmetric(
-                        horizontal: 10,
-                        vertical: 20),
+                    margin: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
                     child: Text(
                       'Please enter tracking id to see status',
                       style: TextStyle(
@@ -191,9 +196,7 @@ class Landing extends StatelessWidget {
                     ),
                   ),
                   Container(
-                    margin: EdgeInsets.symmetric(
-                        horizontal: 10,
-                        vertical: 20),
+                    margin: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
                     child: TextField(
                       maxLength: 16,
                       maxLines: 1,
@@ -204,8 +207,7 @@ class Landing extends StatelessWidget {
                             borderSide: new BorderSide(
                               color: Theme.of(context).primaryColorDark,
                             ),
-                            borderRadius: BorderRadius.circular(
-                                10.0),
+                            borderRadius: BorderRadius.circular(10.0),
                           ),
                           hintText: 'Tracker Id',
                           prefixIcon: Icon(
@@ -216,22 +218,22 @@ class Landing extends StatelessWidget {
                   ),
                   Container(
                     alignment: Alignment.bottomRight,
-                    margin: EdgeInsets.symmetric(
-                        horizontal: 10.0,
-                        vertical: 10.0),
-                    constraints: BoxConstraints(
-                        maxWidth: 500),
+                    margin:
+                        EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
+                    constraints: BoxConstraints(maxWidth: 500),
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         primary: Colors.indigo,
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.all(Radius.circular(
-                                14.0,))),
+                          14.0,
+                        ))),
                       ),
                       child: Container(
                         padding: EdgeInsets.symmetric(
-                            vertical: 8.0,
-                            horizontal: 8.0,),
+                          vertical: 8.0,
+                          horizontal: 8.0,
+                        ),
                         child: Text(
                           'Search',
                           style: TextStyle(

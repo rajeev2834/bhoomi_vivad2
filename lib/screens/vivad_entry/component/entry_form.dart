@@ -4,12 +4,13 @@ import 'package:bhoomi_vivad/providers/get_base_data.dart';
 import 'package:bhoomi_vivad/screens/upload_vivad/upload_vivad_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:provider/provider.dart';
-import 'package:intl/intl.dart';
 import 'package:uuid/uuid.dart';
+
+import '../../../utils/size_config.dart';
 
 class EntryForm extends StatefulWidget {
   EntryForm({Key? key, required this.vivad_uuid, required this.isEditMode})
@@ -1176,45 +1177,37 @@ class _EntryFormState extends State<EntryForm> {
               ),
             ),
           ),
+          SizedBox(height: 1.25 * SizeConfig.heightMultiplier),
           Padding(
             padding: EdgeInsets.only(
               left: 0.0,
               top: 5.0,
               bottom: 5.0,
             ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                Expanded(
-                  child: RadioListTile(
-                    value: 'Yes',
-                    groupValue: isDisposed,
-                    onChanged: (val) {
-                      setState(() {
-                        isDisposed = val as String?;
-                        _caseStatus = 'Closed';
-                      });
-                    },
-                    title: Text('Yes'),
-                  ),
+            child: DropdownButtonFormField<String>(
+              decoration: InputDecoration(
+                labelText: "Choose Status",
+                contentPadding: EdgeInsets.all(10.0),
+                filled: true,
+                fillColor: Colors.white,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8.0),
                 ),
-                Expanded(
-                  child: RadioListTile(
-                    value: 'No',
-                    groupValue: isDisposed,
-                    onChanged: (val) {
-                      setState(() {
-                        isDisposed = val as String?;
-                        _caseStatus = 'Pending';
-                      });
-                    },
-                    title: Text('No'),
-                  ),
-                ),
-              ],
+              ),
+              value: _caseStatus,
+              items: dropdownItems,
+              //value: _selectedValue,
+              onChanged: ((value) {
+                setState(() {
+                  _caseStatus = value!;
+                });
+              }),
+              validator: (value) =>
+                  value == null ? 'Case Status required' : null,
             ),
           ),
-          isDisposed == 'No'
+          SizedBox(height: 1.25 * SizeConfig.heightMultiplier),
+          _caseStatus == 'Hearing'
               ? Padding(
                   padding: EdgeInsets.only(
                     left: 0.0,
@@ -1498,5 +1491,27 @@ class _EntryFormState extends State<EntryForm> {
       return 'Contact no. must be in digits';
     }
     return null;
+  }
+
+  List<DropdownMenuItem<String>> get dropdownItems {
+    List<DropdownMenuItem<String>> menuItems = [
+      DropdownMenuItem(
+        child: Text("Pending"),
+        value: "Pending",
+      ),
+      DropdownMenuItem(
+        child: Text("Schedule Hearing"),
+        value: "Hearing",
+      ),
+      DropdownMenuItem(
+        child: Text("Reject Case"),
+        value: "Rejected",
+      ),
+      DropdownMenuItem(
+        child: Text("Close Case"),
+        value: "Closed",
+      ),
+    ];
+    return menuItems;
   }
 }

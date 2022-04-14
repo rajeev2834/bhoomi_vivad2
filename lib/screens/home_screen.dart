@@ -1,22 +1,20 @@
-import '../providers/auth.dart';
-import './body_home_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import './body_home_screen.dart';
+import '../providers/auth.dart';
 
 class HomeScreen extends StatefulWidget {
   static const routeName = '/home_screen';
 
   @override
   _HomeScreenState createState() => _HomeScreenState();
-
 }
 
-class _HomeScreenState extends State<HomeScreen>{
-
-
+class _HomeScreenState extends State<HomeScreen> {
   @override
-  void initState(){
+  void initState() {
     super.initState();
   }
 
@@ -78,8 +76,10 @@ class _HomeScreenState extends State<HomeScreen>{
         TextButton(
           onPressed: () {
             Navigator.of(context).pop();
-            Navigator.of(context).pushReplacementNamed('/');
-            Provider.of<Auth>(context, listen: false).logout();
+            //Navigator.of(context).pushReplacementNamed('/');
+            Provider.of<Auth>(context, listen: false).logout().then((_) {
+              //Navigator.of(context).pop();
+            });
           },
           child: Text(
             'Yes',

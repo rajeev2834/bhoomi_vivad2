@@ -10,6 +10,7 @@ import 'package:bhoomi_vivad/screens/grievance_entry/get_api_data.dart';
 import 'package:bhoomi_vivad/screens/grievance_entry/grievance_screen.dart';
 import 'package:bhoomi_vivad/screens/grievance_entry/tracking_id_screen.dart';
 import 'package:bhoomi_vivad/screens/home_screen.dart';
+import 'package:bhoomi_vivad/screens/landing/help_screen.dart';
 import 'package:bhoomi_vivad/screens/landing/landing_screen.dart';
 import 'package:bhoomi_vivad/screens/login.dart';
 import 'package:bhoomi_vivad/screens/upload_vivad/upload_vivad_provider.dart';
@@ -85,6 +86,7 @@ class BhoomiVivad extends StatelessWidget {
                   VivadSummaryScreen.routeName: (context) =>
                       VivadSummaryScreen(),
                   VivadReportScreen.routeName: (context) => VivadReportScreen(),
+                  HelpScreen.routeName: (context) => HelpScreen(),
                 },
               );
             },

@@ -34,8 +34,8 @@ class VivadStatus {
   String second_party_name;
   String thana_no;
   String mauza;
-  String khata_no;
-  String khesra_no;
+  String? khata_no;
+  String? khesra_no;
   String rakwa;
   String chauhaddi;
   String vivad_type;

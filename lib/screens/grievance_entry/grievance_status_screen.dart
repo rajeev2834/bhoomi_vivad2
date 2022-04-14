@@ -212,8 +212,8 @@ class _GrievanceStatus extends State<GrievanceStatus> {
                                       Text(
                                         getApiData.caseStatus.name + ',  Mo:',
                                         style: TextStyle(
-                                            fontSize:
-                                                2 * SizeConfig.heightMultiplier,
+                                            fontSize: 1.9 *
+                                                SizeConfig.heightMultiplier,
                                             fontWeight: FontWeight.w600),
                                       ),
                                       SizedBox(
@@ -227,7 +227,7 @@ class _GrievanceStatus extends State<GrievanceStatus> {
                                             .replaceAll(" ", ""),
                                         style: TextStyle(
                                           fontSize:
-                                              2 * SizeConfig.heightMultiplier,
+                                              1.9 * SizeConfig.heightMultiplier,
                                         ),
                                       ),
                                     ],
@@ -241,7 +241,7 @@ class _GrievanceStatus extends State<GrievanceStatus> {
                                         getApiData.caseStatus.mauza + ', ',
                                         style: TextStyle(
                                           fontSize:
-                                              2 * SizeConfig.heightMultiplier,
+                                              1.9 * SizeConfig.heightMultiplier,
                                         ),
                                       ),
                                       SizedBox(
@@ -251,75 +251,84 @@ class _GrievanceStatus extends State<GrievanceStatus> {
                                         getApiData.caseStatus.address,
                                         style: TextStyle(
                                           fontSize:
-                                              2 * SizeConfig.heightMultiplier,
+                                              1.9 * SizeConfig.heightMultiplier,
                                         ),
                                       ),
                                     ],
                                   ),
                                   SizedBox(
-                                    height: 1.25 * SizeConfig.heightMultiplier,
+                                    height: 2.5 * SizeConfig.heightMultiplier,
                                   ),
                                   Row(
                                     children: <Widget>[
-                                      Expanded(
-                                          child: Text(
+                                      Text(
                                         'Vivad Type: ',
                                         style: TextStyle(
                                           fontSize:
                                               2 * SizeConfig.heightMultiplier,
                                           fontWeight: FontWeight.w600,
                                         ),
-                                      )),
-                                      Expanded(
-                                          child: Text(
-                                        getApiData.caseStatus.vivad_type,
-                                        style: TextStyle(
-                                          fontSize:
-                                              1.9 * SizeConfig.heightMultiplier,
-                                        ),
-                                      )),
+                                      ),
+                                      SizedBox(
+                                          width:
+                                              2.5 * SizeConfig.widthMultiplier),
+                                      Wrap(
+                                        children: [
+                                          Text(
+                                            getApiData.caseStatus.vivad_type,
+                                            style: TextStyle(
+                                              fontSize: 1.9 *
+                                                  SizeConfig.heightMultiplier,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                     ],
                                   ),
                                   SizedBox(
-                                    height: 1.25 * SizeConfig.heightMultiplier,
+                                    height: 2.5 * SizeConfig.heightMultiplier,
                                   ),
-                                  Row(
-                                    children: <Widget>[
-                                      Expanded(
-                                          child: Text(
-                                        'Description: ',
-                                        style: TextStyle(
-                                          fontSize:
-                                              2 * SizeConfig.heightMultiplier,
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                      )),
-                                      Expanded(
-                                          child: Text(
+                                  Text(
+                                    'Case Description:',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 2 * SizeConfig.heightMultiplier,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 0.625 * SizeConfig.heightMultiplier,
+                                  ),
+                                  Wrap(
+                                    crossAxisAlignment:
+                                        WrapCrossAlignment.start,
+                                    children: [
+                                      Text(
                                         getApiData.caseStatus.vivad_reason,
                                         style: TextStyle(
+                                          height: 1.5,
                                           fontSize:
                                               1.9 * SizeConfig.heightMultiplier,
                                         ),
-                                      )),
+                                      ),
                                     ],
                                   ),
                                   SizedBox(
-                                    height: 1.25 * SizeConfig.heightMultiplier,
+                                    height: 2.5 * SizeConfig.heightMultiplier,
                                   ),
                                   Row(
                                     children: <Widget>[
-                                      Expanded(
-                                          child: Text(
+                                      Text(
                                         'Registered Date: ',
                                         style: TextStyle(
                                           fontSize:
                                               2 * SizeConfig.heightMultiplier,
                                           fontWeight: FontWeight.w600,
                                         ),
-                                      )),
-                                      Expanded(
-                                          child: Text(
+                                      ),
+                                      SizedBox(
+                                          width:
+                                              2.5 * SizeConfig.widthMultiplier),
+                                      Text(
                                         formatter
                                             .format(DateTime.parse(getApiData
                                                 .caseStatus.created_at))
@@ -328,36 +337,37 @@ class _GrievanceStatus extends State<GrievanceStatus> {
                                           fontSize: 1.75 *
                                               SizeConfig.heightMultiplier,
                                         ),
-                                      )),
+                                      ),
                                     ],
                                   ),
                                   SizedBox(
-                                    height: 1.25 * SizeConfig.heightMultiplier,
+                                    height: 2.5 * SizeConfig.heightMultiplier,
                                   ),
                                   Row(
                                     children: <Widget>[
-                                      Expanded(
-                                          child: Text(
+                                      Text(
                                         'Case Status: ',
                                         style: TextStyle(
                                           fontSize:
                                               2 * SizeConfig.heightMultiplier,
                                           fontWeight: FontWeight.w600,
                                         ),
-                                      )),
-                                      Expanded(
-                                          child: Text(
+                                      ),
+                                      SizedBox(
+                                          width:
+                                              2.5 * SizeConfig.widthMultiplier),
+                                      Text(
                                         getApiData.caseStatus.case_status,
                                         style: TextStyle(
                                           fontSize:
                                               2 * SizeConfig.heightMultiplier,
                                           fontWeight: FontWeight.w600,
                                         ),
-                                      )),
+                                      ),
                                     ],
                                   ),
                                   SizedBox(
-                                    height: 1.25 * SizeConfig.heightMultiplier,
+                                    height: 2.5 * SizeConfig.heightMultiplier,
                                   ),
                                   getApiData.caseStatus.case_status == 'Hearing'
                                       ? Row(

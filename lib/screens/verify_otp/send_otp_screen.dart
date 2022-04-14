@@ -1,10 +1,10 @@
+import 'package:bhoomi_vivad/models/http_exception.dart';
 import 'package:bhoomi_vivad/models/mobile_device.dart';
 import 'package:bhoomi_vivad/screens/verify_otp/verify_otp_provider.dart';
 import 'package:bhoomi_vivad/utils/loading_dialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:bhoomi_vivad/models/http_exception.dart';
 import 'package:provider/provider.dart';
 
 import '../../utils/size_config.dart';
@@ -86,14 +86,14 @@ class _SendOTPScreen extends State<SendOTPScreen> {
                           Container(
                             margin: EdgeInsets.symmetric(horizontal:2.5 * SizeConfig.widthMultiplier),
                             child: FittedBox(
-                            child: Text(
-                              'Phone Number Verification',
-                              style: TextStyle(
-                                fontSize: 3.5 * SizeConfig.heightMultiplier,
-                                color: Colors.black,
-                                fontWeight: FontWeight.w800,
-                              ),
-                            ),),
+                              child: Text(
+                                'Phone Number Verification',
+                                style: TextStyle(
+                                  fontSize: 3.5 * SizeConfig.heightMultiplier,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w800,
+                                ),
+                              ),),
                           ),
                         ],
                       ),
@@ -136,7 +136,7 @@ class _SendOTPScreen extends State<SendOTPScreen> {
                               maxLength: 10,
                               maxLines: 1,
                               maxLengthEnforcement:
-                                  MaxLengthEnforcement.enforced,
+                              MaxLengthEnforcement.enforced,
                               decoration: InputDecoration(
                                 labelText: 'Enter Mobile No',
                                 labelStyle: TextStyle(
@@ -175,7 +175,7 @@ class _SendOTPScreen extends State<SendOTPScreen> {
                                     horizontal: 2 * SizeConfig.widthMultiplier),
                                 child: Row(
                                   mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                  MainAxisAlignment.spaceBetween,
                                   children: <Widget>[
                                     Text(
                                       'Send OTP',
@@ -203,6 +203,7 @@ class _SendOTPScreen extends State<SendOTPScreen> {
                               onPressed: () {
                                 setState(() {
                                   if (_formKey.currentState!.validate()) {
+                                    FocusScope.of(context).unfocus();
                                     _generateOTP();
                                   }
                                 });
@@ -263,9 +264,9 @@ class _SendOTPScreen extends State<SendOTPScreen> {
           .then((value) {
         Navigator.of(this.context, rootNavigator: true).pop();
         Navigator.of(context).pushNamed('/verify_otp',
-        arguments: {
-          'phone_number' : _mobileData['phone_number'],
-        },);
+          arguments: {
+            'phone_number' : _mobileData['phone_number'],
+          },);
       }).catchError((handleError) {
         Navigator.of(this.context, rootNavigator: true).pop();
         if (handleError.toString().contains('SocketException')) {

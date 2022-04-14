@@ -3,11 +3,11 @@ import 'dart:io';
 
 import 'package:bhoomi_vivad/constants.dart';
 import 'package:bhoomi_vivad/models/http_exception.dart';
-import '../models/user.dart';
-import '../utils/database_helper.dart';
 import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../utils/database_helper.dart';
 
 class Auth with ChangeNotifier {
   String? _token;
@@ -44,8 +44,10 @@ class Auth with ChangeNotifier {
       if (responseData['non_field_errors'] != null) {
         throw HttpException(responseData['non_field_errors'][0]);
       }
-      if(username.toUpperCase() == "TEST")
+      if (username.toUpperCase() == "TEST")
         _status = 'True';
+      else
+        _status = 'False';
       _token = responseData['token'];
       //await fetchAndSetCircle();
       notifyListeners();

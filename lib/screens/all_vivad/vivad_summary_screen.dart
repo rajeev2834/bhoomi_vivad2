@@ -154,7 +154,7 @@ class _VivadSummaryScreenState extends State<VivadSummaryScreen> {
     return [
       DataColumn(label: Text('Case Status')),
       DataColumn(label: Text('Citizen Login')),
-      DataColumn(label: Text('Circle Level'))
+      DataColumn(label: Text('Admin Login'))
     ];
   }
 

@@ -144,6 +144,9 @@ class _GrievanceEntryScreen extends State<GrievanceEntryScreen> {
         });
       });
     }).catchError((handleError) {
+      setState(() {
+        _isLoading = false;
+      });
       if (handleError.toString().contains('SocketException')) {
         _showResultDialog(
             context, 'Network Error', 'Check your Internet and try again !!!');
@@ -169,10 +172,15 @@ class _GrievanceEntryScreen extends State<GrievanceEntryScreen> {
         )
       ],
     );
-    showDialog(context: context, builder: (_) => alertDialog);
+    showDialog(context: context, builder: (_) => alertDialog).then((value) {
+      if (value.toString().contains('Error')) {
+        Navigator.of(this.context, rootNavigator: true).pop();
+      }
+    });
   }
 
   Future<void> _submit(BuildContext context) async {
+    FocusScope.of(context).unfocus();
     _grievance = new Grievance(
         circle: data._circleValue!,
         panchayat: int.parse(data._panchayatValue!),
@@ -196,19 +204,26 @@ class _GrievanceEntryScreen extends State<GrievanceEntryScreen> {
     await Provider.of<GetApiData>(context, listen: false)
         .uploadGrievanceData(_grievance!)
         .then((value) {
-          print(value);
+      print(value);
       Navigator.of(this.context, rootNavigator: true).pop();
       _showResultDialog(
           context, 'Success', 'Grievance submitted successfully !!!');
       _formKey.currentState?.reset();
       _clearTextField();
-      Navigator.of(context).pushNamed('/tracking_id',
+      Navigator.of(context).pushNamed(
+        '/tracking_id',
         arguments: {
-          'tracking_id' : value,
-        },);
+          'tracking_id': value,
+        },
+      );
     }).catchError((handleError) {
       Navigator.of(this.context, rootNavigator: true).pop();
-      _showResultDialog(context, 'Error', handleError.toString());
+      if (handleError.toString().contains('SocketException')) {
+        _showResultDialog(
+            context, 'Failure', 'Check your Internet and try again !!!');
+      } else {
+        _showResultDialog(context, 'Failure', handleError.toString());
+      }
     });
   }
 

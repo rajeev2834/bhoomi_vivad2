@@ -74,6 +74,10 @@ class StatusUpdateProvider with ChangeNotifier {
       var grievanceCount = jsonDecode(response[0].body) as List<dynamic>;
       var vivadCount = jsonDecode(response[1].body) as List<dynamic>;
 
+      var len1 = grievanceCount.length;
+      var len2 = vivadCount.length;
+      var max = len1 >= len2 ? len1 : len2;
+
       List<Map<String, dynamic>> caseStatusCount = [];
       grievanceCount.forEach((element) {
         vivadCount.forEach((e) {
@@ -83,6 +87,41 @@ class StatusUpdateProvider with ChangeNotifier {
           }
         });
       });
+      if (caseStatusCount.isEmpty) {
+        if (grievanceCount.isNotEmpty) {
+          grievanceCount.forEach((element) {
+            caseStatusCount.add(getCaseStatusCount(
+                element['case_status'], element['total_grievance'], 0));
+          });
+        }
+        if (vivadCount.isNotEmpty) {
+          vivadCount.forEach((element) {
+            caseStatusCount.add(getCaseStatusCount(
+                element['case_status'], 0, element['total_vivad']));
+          });
+        }
+      } else if (caseStatusCount.length < max) {
+        if (grievanceCount.isNotEmpty) {
+          grievanceCount.forEach((element) {
+            caseStatusCount.forEach((e) {
+              if (e['case_status'] != element['case_status']) {
+                caseStatusCount.add(getCaseStatusCount(
+                    element['case_status'], element['total_grievance'], 0));
+              }
+            });
+          });
+        }
+        if (vivadCount.isNotEmpty) {
+          vivadCount.forEach((element) {
+            caseStatusCount.forEach((e) {
+              if (e['case_status'] != element['case_status']) {
+                caseStatusCount.add(getCaseStatusCount(
+                    element['case_status'], 0, element['total_vivad']));
+              }
+            });
+          });
+        }
+      }
       return caseStatusCount;
     } catch (error) {
       throw error;

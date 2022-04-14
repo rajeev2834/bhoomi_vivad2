@@ -2,6 +2,7 @@ import 'package:bhoomi_vivad/models/http_exception.dart';
 import 'package:bhoomi_vivad/utils/size_config.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import '../providers/auth.dart';
 
 class Login extends StatefulWidget {
@@ -27,6 +28,8 @@ class _LoginState extends State<Login> {
   };
 
   var _isLoading = false;
+  var userRegex = r'^(?=[a-zA-Z0-9_]{6,10}$)(?![_]$)';
+  var passRegex = r'^(?=[a-zA-Z0-9@]{8,16}$)(?![@]$)';
 
   @override
   Widget build(BuildContext context) {
@@ -110,8 +113,12 @@ class _LoginState extends State<Login> {
                               controller: userController,
                               keyboardType: TextInputType.emailAddress,
                               validator: (value) {
+                                RegExp regExp = RegExp(userRegex);
                                 if (value!.isEmpty) {
                                   return 'Please enter username';
+                                }
+                                if (!regExp.hasMatch(value)) {
+                                  return 'Invalid UserName';
                                 }
                                 return null;
                               },
@@ -148,8 +155,12 @@ class _LoginState extends State<Login> {
                               obscureText: !_showPassword,
                               keyboardType: TextInputType.emailAddress,
                               validator: (value) {
+                                RegExp regExp = RegExp(passRegex);
                                 if (value!.isEmpty) {
                                   return 'Please enter password';
+                                }
+                                if (!regExp.hasMatch(value)) {
+                                  return 'Invalid Password';
                                 }
                                 return null;
                               },
@@ -217,6 +228,8 @@ class _LoginState extends State<Login> {
                                               ),
                                               onPressed: () {
                                                 setState(() {
+                                                  FocusScope.of(context)
+                                                      .unfocus();
                                                   if (_formKey.currentState!
                                                       .validate()) {
                                                     _submit();

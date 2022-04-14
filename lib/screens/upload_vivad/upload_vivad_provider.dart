@@ -95,10 +95,10 @@ class UploadVivadProvider with ChangeNotifier {
       );
       //print(response.body);
       notifyListeners();
-      if(response.statusCode == 201){
+      if (response.statusCode == 200) {
         int result = await dbHelper.deleteTableData('vivad');
         return result;
-      }else {
+      } else {
         throw HttpException("Unable to upload Vivad data !!!");
       }
     }catch(error){

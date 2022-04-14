@@ -94,6 +94,7 @@ class AddBaseData with ChangeNotifier {
       final response = await http.get(Uri.parse(url), headers: {
         HttpHeaders.authorizationHeader: "Token " + _token.toString()
       });
+
       if (response.statusCode == 200) {
         final extractedPanchayatData =
             jsonDecode(utf8.decode(response.bodyBytes));
