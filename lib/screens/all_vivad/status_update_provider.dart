@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 
 class StatusUpdateProvider with ChangeNotifier {
+
   Future<bool> updateStatus(Map<String, dynamic> statusUpdateVariable) async {
     print(statusUpdateVariable);
     var vivad_id = statusUpdateVariable['vivad_id'].toString();

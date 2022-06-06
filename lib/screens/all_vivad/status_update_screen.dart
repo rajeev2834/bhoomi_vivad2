@@ -497,7 +497,37 @@ class _StatusUpdateScreenState extends State<StatusUpdateScreen> {
                               },
                             ),
                           )
-                        : Container(),
+                        : Container(
+                      margin: EdgeInsets.symmetric(
+                        horizontal: 5 * SizeConfig.widthMultiplier,
+                        vertical: 2.5 * SizeConfig.heightMultiplier,
+                      ),
+                      alignment: Alignment.bottomCenter,
+                      constraints: const BoxConstraints(maxWidth: 500),
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          primary: Colors.indigo,
+                          shape: const RoundedRectangleBorder(
+                              borderRadius: BorderRadius.all(
+                                  Radius.circular(10.0))),
+                        ),
+                        child: Container(
+                          padding: EdgeInsets.symmetric(
+                              vertical: 1.5 * SizeConfig.heightMultiplier,
+                              horizontal: 2 * SizeConfig.widthMultiplier),
+                          child: Text(
+                            'Action History',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 2.2 * SizeConfig.heightMultiplier,
+                            ),
+                          ),
+                        ),
+                        onPressed: () {
+                          print('Timeline feature to be added !!!');
+                        },
+                      ),
+                    ),
                   ]),
           ),
         ),
