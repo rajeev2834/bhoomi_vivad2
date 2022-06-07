@@ -181,7 +181,7 @@ class _UploadVivadScreenState extends State<UploadVivadScreen> {
                 if (count == null ||
                     count < uploadVivadProvider.result.length ||
                     uploadVivadProvider.result.length == 0) {
-                  WidgetsBinding.instance!.addPostFrameCallback((_) {
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
                     setState(() {
                       count = uploadVivadProvider.result.length;
                     });
