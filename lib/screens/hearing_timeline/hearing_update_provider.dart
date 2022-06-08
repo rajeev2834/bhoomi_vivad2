@@ -59,16 +59,16 @@ class HearingUpdateProvider with ChangeNotifier{
       final uri = Uri.http(
         url,
         '/api/$table',
-        {"grievance_id": grievanceId}
+        {"grievance": grievanceId}
             .map((key, value) => MapEntry(key, value.toString())),
       );
       final response = await http.get(uri, headers: {
         HttpHeaders.contentTypeHeader: 'application/json',
       });
+      print(response.body);
       if (response.statusCode == 200) {
         final extractedHearingData = jsonDecode(utf8.decode(response.bodyBytes));
         _hearingStatusList = HearingList.fromJson(extractedHearingData);
-
         notifyListeners();
       } else {
         throw HttpException("Unable to load Hearing data !!!");

@@ -1,10 +1,12 @@
 import 'dart:io';
 
+import 'package:bhoomi_vivad/models/hearing.dart';
 import 'package:bhoomi_vivad/models/vivad_status.dart';
 import 'package:bhoomi_vivad/screens/hearing_timeline/hearing_update_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:timelines/timelines.dart';
 
 class HearingUpdateArguments {
   final VivadStatus _vivadStatus;
@@ -66,6 +68,8 @@ class HearingActionHistory extends StatefulWidget {
 }
 
 class _HearingActionHistory extends State<HearingActionHistory> {
+
+  List<Hearing> hearing = [];
   bool _isLoading = false;
   String _token = "";
   int? _user;
@@ -94,9 +98,9 @@ class _HearingActionHistory extends State<HearingActionHistory> {
   Future<void> _loadHearingData() async {
     var provider = Provider.of<HearingUpdateProvider>(context, listen: false);
     provider.getHearingData(_vivadStatus!.vivad_id).then((value) {
-      setState() {
+      setState(() {
         _isLoading = false;
-      }
+      });
     }).catchError((handleError) {
       if (handleError.toString().contains('SocketException')) {
         _showResultDialog(
@@ -132,7 +136,27 @@ class _HearingActionHistory extends State<HearingActionHistory> {
 
   @override
   Widget build(BuildContext context) {
-    return Container();
-    // TODO: implement build
+    return _isLoading
+        ? Container(
+            child: Center(
+              child: CircularProgressIndicator(),
+            ),
+          )
+        : Consumer<HearingUpdateProvider>(
+            builder: (ctx, hearingUpdateProvider, _) {
+            if (hearingUpdateProvider.hearingStatusList.hearings.length == 0) {
+              return Center(
+                child: Text('There is no action history.',
+                    style: TextStyle(
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.w600,
+                    )),
+              );
+            }
+            else {
+              hearing = hearingUpdateProvider.hearingStatusList.hearings;
+              return Container();
+            }
+          });
   }
 }
