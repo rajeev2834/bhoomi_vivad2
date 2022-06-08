@@ -11,12 +11,14 @@ class VivadDetailList extends StatefulWidget {
   final String status;
   final String level;
   final String? circle;
+  final int? user;
 
   VivadDetailList({
     Key? key,
     required this.status,
     required this.level,
     required this.circle,
+    required this.user,
   }) : super(key: key);
 
   @override
@@ -27,6 +29,7 @@ class _VivadDetailList extends State<VivadDetailList> {
   bool _isLoading = false;
   List<VivadStatus> vivads = [];
   String _token = "";
+  int? _user;
 
   TextEditingController _statusController = TextEditingController();
   TextEditingController _levelController = TextEditingController();
@@ -41,6 +44,7 @@ class _VivadDetailList extends State<VivadDetailList> {
     _statusController.text = widget.status;
     _levelController.text = widget.level;
     _circleController.text = widget.circle!;
+    _user = widget.user;
     setState(() {
       _isLoading = true;
     });
@@ -52,21 +56,21 @@ class _VivadDetailList extends State<VivadDetailList> {
     var provider = Provider.of<AddBaseData>(context, listen: false);
     await provider.getToken().then((value) {
       _token = provider.token;
-      provider
-          .getVivadData(_statusController.text, _levelController.text,
-              _circleController.text)
-          .then((value) {
-        setState(() {
-          _isLoading = false;
+        provider
+            .getVivadData(_statusController.text, _levelController.text,
+                _circleController.text)
+            .then((value) {
+          setState(() {
+            _isLoading = false;
+          });
+        }).catchError((handleError) {
+          if (handleError.toString().contains('SocketException')) {
+            _showResultDialog(
+                context, 'Error', 'Please check your network connection !!!');
+          } else {
+            _showResultDialog(context, 'Error', handleError.toString());
+          }
         });
-      }).catchError((handleError) {
-        if (handleError.toString().contains('SocketException')) {
-          _showResultDialog(
-              context, 'Error', 'Please check your network connection !!!');
-        } else {
-          _showResultDialog(context, 'Error', handleError.toString());
-        }
-      });
     });
   }
 
@@ -373,7 +377,7 @@ class _VivadDetailList extends State<VivadDetailList> {
                                     .pushNamed(
                                       StatusUpdateScreen.routeName,
                                       arguments: StatusUpdateArguments(
-                                          vivads[index], _token),
+                                          vivads[index], _token, _user!),
                                     )
                                     .then((value) => setState(() {
                                           if (value == 0) {

@@ -1,5 +1,6 @@
 import 'package:bhoomi_vivad/models/vivad_status.dart';
 import 'package:bhoomi_vivad/screens/all_vivad/status_update_provider.dart';
+import 'package:bhoomi_vivad/screens/hearing_timeline/hearing_update_provider.dart';
 import 'package:bhoomi_vivad/utils/loading_dialog.dart';
 import 'package:bhoomi_vivad/utils/size_config.dart';
 import 'package:flutter/cupertino.dart';
@@ -14,8 +15,9 @@ import '../../models/http_exception.dart';
 class StatusUpdateArguments {
   final VivadStatus _vivadStatus;
   final String _token;
+  final int _user;
 
-  StatusUpdateArguments(this._vivadStatus, this._token);
+  StatusUpdateArguments(this._vivadStatus, this._token, this._user);
 }
 
 class StatusUpdateScreen extends StatefulWidget {
@@ -68,108 +70,106 @@ class _StatusUpdateScreenState extends State<StatusUpdateScreen> {
             scrollDirection: Axis.vertical,
             padding:
                 EdgeInsets.only(bottom: 1.75 * SizeConfig.heightMultiplier),
-              child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Card(
-                      elevation: 5.0,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Card(
+                    elevation: 5.0,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    child: Container(
+                      width: MediaQuery.of(context).size.width,
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 2.25 * SizeConfig.widthMultiplier,
+                        vertical: 1.25 * SizeConfig.heightMultiplier,
                       ),
-                      child: Container(
-                        width: MediaQuery.of(context).size.width,
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 2.25 * SizeConfig.widthMultiplier,
-                          vertical: 1.25 * SizeConfig.heightMultiplier,
-                        ),
-                        child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Row(
-                                children: <Widget>[
-                                  Text(
-                                    'Grievance Id: ',
-                                    style: TextStyle(
-                                      fontSize: 2 * SizeConfig.heightMultiplier,
-                                      fontWeight: FontWeight.w600,
-                                    ),
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Row(
+                              children: <Widget>[
+                                Text(
+                                  'Grievance Id: ',
+                                  style: TextStyle(
+                                    fontSize: 2 * SizeConfig.heightMultiplier,
+                                    fontWeight: FontWeight.w600,
                                   ),
-                                  SizedBox(
-                                      width: 5 * SizeConfig.widthMultiplier),
-                                  Text(
-                                    args._vivadStatus.vivad_id,
-                                    style: TextStyle(
-                                      fontSize:
-                                          1.9 * SizeConfig.heightMultiplier,
-                                      fontWeight: FontWeight.w600,
-                                    ),
+                                ),
+                                SizedBox(width: 5 * SizeConfig.widthMultiplier),
+                                Text(
+                                  args._vivadStatus.vivad_id,
+                                  style: TextStyle(
+                                    fontSize: 1.9 * SizeConfig.heightMultiplier,
+                                    fontWeight: FontWeight.w600,
                                   ),
-                                ],
-                              ),
-                              SizedBox(
-                                height: 2.5 * SizeConfig.heightMultiplier,
-                              ),
-                              Row(
-                                children: <Widget>[
-                                  Text(
-                                    'Circle:',
-                                    style: TextStyle(
-                                      fontSize: 2 * SizeConfig.heightMultiplier,
-                                      fontWeight: FontWeight.w600,
-                                    ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 2.5 * SizeConfig.heightMultiplier,
+                            ),
+                            Row(
+                              children: <Widget>[
+                                Text(
+                                  'Circle:',
+                                  style: TextStyle(
+                                    fontSize: 2 * SizeConfig.heightMultiplier,
+                                    fontWeight: FontWeight.w600,
                                   ),
-                                  SizedBox(
-                                    width: 17.5 * SizeConfig.widthMultiplier,
+                                ),
+                                SizedBox(
+                                  width: 17.5 * SizeConfig.widthMultiplier,
+                                ),
+                                Text(
+                                  args._vivadStatus.circle,
+                                  style: TextStyle(
+                                    fontSize: 2 * SizeConfig.heightMultiplier,
                                   ),
-                                  Text(
-                                    args._vivadStatus.circle,
-                                    style: TextStyle(
-                                      fontSize: 2 * SizeConfig.heightMultiplier,
-                                    ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 2.5 * SizeConfig.heightMultiplier,
+                            ),
+                            Row(
+                              children: <Widget>[
+                                Text(
+                                  'Panchayat:',
+                                  style: TextStyle(
+                                    fontSize: 2 * SizeConfig.heightMultiplier,
+                                    fontWeight: FontWeight.w600,
                                   ),
-                                ],
-                              ),
-                              SizedBox(
-                                height: 2.5 * SizeConfig.heightMultiplier,
-                              ),
-                              Row(
-                                children: <Widget>[
-                                  Text(
-                                    'Panchayat:',
-                                    style: TextStyle(
-                                      fontSize: 2 * SizeConfig.heightMultiplier,
-                                      fontWeight: FontWeight.w600,
-                                    ),
+                                ),
+                                SizedBox(
+                                  width: 10 * SizeConfig.widthMultiplier,
+                                ),
+                                Text(
+                                  args._vivadStatus.panchayat,
+                                  style: TextStyle(
+                                    fontSize: 2 * SizeConfig.heightMultiplier,
                                   ),
-                                  SizedBox(
-                                    width: 10 * SizeConfig.widthMultiplier,
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 2.5 * SizeConfig.heightMultiplier,
+                            ),
+                            Row(
+                              children: <Widget>[
+                                Text(
+                                  'Mauza:',
+                                  style: TextStyle(
+                                    fontSize: 2 * SizeConfig.heightMultiplier,
+                                    fontWeight: FontWeight.w600,
                                   ),
-                                  Text(
-                                    args._vivadStatus.panchayat,
-                                    style: TextStyle(
-                                      fontSize: 2 * SizeConfig.heightMultiplier,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(
-                                height: 2.5 * SizeConfig.heightMultiplier,
-                              ),
-                              Row(
-                                children: <Widget>[
-                                  Text(
-                                    'Mauza:',
-                                    style: TextStyle(
-                                      fontSize: 2 * SizeConfig.heightMultiplier,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: 17.5 * SizeConfig.widthMultiplier,
-                                  ),
-                                  Text(
+                                ),
+                                SizedBox(
+                                  width: 17.5 * SizeConfig.widthMultiplier,
+                                ),
+                                Text(
                                   args._vivadStatus.mauza,
                                   style: TextStyle(
                                     fontSize: 2 * SizeConfig.heightMultiplier,
@@ -237,73 +237,19 @@ class _StatusUpdateScreenState extends State<StatusUpdateScreen> {
                               height: 0.625 * SizeConfig.heightMultiplier,
                             ),
                             Wrap(
-                                children: [
-                                  Text(
-                                    args._vivadStatus.first_party_name +
-                                        ',  Mo:',
-                                    style: TextStyle(
-                                    fontSize:
-                                        1.75 * SizeConfig.heightMultiplier,
-                                  ),
-                                  ),
-                                  SizedBox(
-                                    width: 0.5 * SizeConfig.widthMultiplier,
-                                  ),
-                                  Text(
-                                    args._vivadStatus.first_party_contact
-                                        .replaceAll("-", "")
-                                        .replaceAll(")", "")
-                                        .replaceAll("(", "")
-                                        .replaceAll(" ", ""),
-                                    style: TextStyle(
-                                    fontSize:
-                                        1.75 * SizeConfig.heightMultiplier,
-                                  ),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(
-                                height: 0.625 * SizeConfig.heightMultiplier,
-                              ),
-                              Wrap(
-                                children: [
-                                  Text(
-                                    args._vivadStatus.first_party_address,
+                              children: [
+                                Text(
+                                  args._vivadStatus.first_party_name + ',  Mo:',
                                   style: TextStyle(
                                     fontSize:
                                         1.75 * SizeConfig.heightMultiplier,
                                   ),
                                 ),
-                                ],
-                              ),
-                              SizedBox(
-                                height: 2.5 * SizeConfig.heightMultiplier,
-                              ),
-                              Text(
-                                'Vadi Details:',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 2 * SizeConfig.heightMultiplier,
+                                SizedBox(
+                                  width: 0.5 * SizeConfig.widthMultiplier,
                                 ),
-                              ),
-                              SizedBox(
-                                height: 0.625 * SizeConfig.heightMultiplier,
-                              ),
-                              Wrap(
-                                children: [
-                                  Text(
-                                    args._vivadStatus.second_party_name +
-                                      ',  Mo:',
-                                  style: TextStyle(
-                                    fontSize:
-                                        1.75 * SizeConfig.heightMultiplier,
-                                  ),
-                                ),
-                                  SizedBox(
-                                    width: 0.5 * SizeConfig.widthMultiplier,
-                                  ),
-                                  Text(
-                                    args._vivadStatus.second_party_contact
+                                Text(
+                                  args._vivadStatus.first_party_contact
                                       .replaceAll("-", "")
                                       .replaceAll(")", "")
                                       .replaceAll("(", "")
@@ -313,32 +259,85 @@ class _StatusUpdateScreenState extends State<StatusUpdateScreen> {
                                         1.75 * SizeConfig.heightMultiplier,
                                   ),
                                 ),
-                                ],
-                              ),
-                              SizedBox(
-                                height: 0.625 * SizeConfig.heightMultiplier,
-                              ),
-                              Wrap(
-                                children: [
-                                  Text(
-                                    args._vivadStatus.second_party_address,
-                                    style: TextStyle(
+                              ],
+                            ),
+                            SizedBox(
+                              height: 0.625 * SizeConfig.heightMultiplier,
+                            ),
+                            Wrap(
+                              children: [
+                                Text(
+                                  args._vivadStatus.first_party_address,
+                                  style: TextStyle(
                                     fontSize:
                                         1.75 * SizeConfig.heightMultiplier,
                                   ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 2.5 * SizeConfig.heightMultiplier,
+                            ),
+                            Text(
+                              'Vadi Details:',
+                              style: TextStyle(
+                                fontWeight: FontWeight.w600,
+                                fontSize: 2 * SizeConfig.heightMultiplier,
+                              ),
+                            ),
+                            SizedBox(
+                              height: 0.625 * SizeConfig.heightMultiplier,
+                            ),
+                            Wrap(
+                              children: [
+                                Text(
+                                  args._vivadStatus.second_party_name +
+                                      ',  Mo:',
+                                  style: TextStyle(
+                                    fontSize:
+                                        1.75 * SizeConfig.heightMultiplier,
                                   ),
-                                ],
-                              ),
-                              SizedBox(
-                                height: 1.25 * SizeConfig.heightMultiplier,
-                              ),
-                              Row(
-                                children: <Widget>[
-                                  Text(
-                                    'Vivad Type: ',
-                                    style: TextStyle(
-                                      fontSize: 2 * SizeConfig.heightMultiplier,
-                                      fontWeight: FontWeight.w600,
+                                ),
+                                SizedBox(
+                                  width: 0.5 * SizeConfig.widthMultiplier,
+                                ),
+                                Text(
+                                  args._vivadStatus.second_party_contact
+                                      .replaceAll("-", "")
+                                      .replaceAll(")", "")
+                                      .replaceAll("(", "")
+                                      .replaceAll(" ", ""),
+                                  style: TextStyle(
+                                    fontSize:
+                                        1.75 * SizeConfig.heightMultiplier,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 0.625 * SizeConfig.heightMultiplier,
+                            ),
+                            Wrap(
+                              children: [
+                                Text(
+                                  args._vivadStatus.second_party_address,
+                                  style: TextStyle(
+                                    fontSize:
+                                        1.75 * SizeConfig.heightMultiplier,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 1.25 * SizeConfig.heightMultiplier,
+                            ),
+                            Row(
+                              children: <Widget>[
+                                Text(
+                                  'Vivad Type: ',
+                                  style: TextStyle(
+                                    fontSize: 2 * SizeConfig.heightMultiplier,
+                                    fontWeight: FontWeight.w600,
                                   ),
                                 ),
                                 SizedBox(
@@ -400,135 +399,134 @@ class _StatusUpdateScreenState extends State<StatusUpdateScreen> {
                                   formatter
                                       .format(DateTime.parse(
                                           args._vivadStatus.created_date))
-                                        .toString(),
-                                    style: TextStyle(
-                                      fontSize:
-                                          1.75 * SizeConfig.heightMultiplier,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(
-                                height: 2.5 * SizeConfig.heightMultiplier,
-                              ),
-                              Row(
-                                children: <Widget>[
-                                  Text(
-                                    'Case Status: ',
-                                    style: TextStyle(
-                                      fontSize: 2 * SizeConfig.heightMultiplier,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-                                  SizedBox(
-                                      width: 2 * SizeConfig.widthMultiplier),
-                                  Text(
-                                    args._vivadStatus.case_status,
-                                    style: TextStyle(
-                                      fontSize: 2 * SizeConfig.heightMultiplier,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(
-                                height: 2.5 * SizeConfig.heightMultiplier,
-                              ),
-                              args._vivadStatus.case_status == 'Hearing'
-                                  ? Row(
-                                      children: <Widget>[
-                                        Text(
-                                          'Hearing Date: ',
-                                          style: TextStyle(
-                                            fontSize:
-                                                2 * SizeConfig.heightMultiplier,
-                                            fontWeight: FontWeight.w600,
-                                          ),
-                                        ),
-                                        SizedBox(
-                                            width:
-                                                2 * SizeConfig.widthMultiplier),
-                                        Text(
-                                          formatter
-                                              .format(DateTime.parse(args
-                                                  ._vivadStatus
-                                                  .next_hearing_date))
-                                              .toString(),
-                                          style: TextStyle(
-                                            fontSize: 1.75 *
-                                                SizeConfig.heightMultiplier,
-                                          ),
-                                        ),
-                                      ],
-                                    )
-                                  : Container(),
-                            ]),
-                      ),
-                    ),
-                    args._vivadStatus.case_status == 'Pending'
-                        ? Container(
-                            margin: EdgeInsets.symmetric(
-                              horizontal: 5 * SizeConfig.widthMultiplier,
-                              vertical: 2.5 * SizeConfig.heightMultiplier,
-                            ),
-                            alignment: Alignment.bottomCenter,
-                            constraints: const BoxConstraints(maxWidth: 500),
-                            child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                primary: Colors.indigo,
-                                shape: const RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.all(
-                                        Radius.circular(10.0))),
-                              ),
-                              child: Container(
-                                padding: EdgeInsets.symmetric(
-                                    vertical: 1.5 * SizeConfig.heightMultiplier,
-                                    horizontal: 2 * SizeConfig.widthMultiplier),
-                                child: Text(
-                                  'Update Status',
+                                      .toString(),
                                   style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 2.2 * SizeConfig.heightMultiplier,
+                                    fontSize:
+                                        1.75 * SizeConfig.heightMultiplier,
                                   ),
                                 ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 2.5 * SizeConfig.heightMultiplier,
+                            ),
+                            Row(
+                              children: <Widget>[
+                                Text(
+                                  'Case Status: ',
+                                  style: TextStyle(
+                                    fontSize: 2 * SizeConfig.heightMultiplier,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                                SizedBox(width: 2 * SizeConfig.widthMultiplier),
+                                Text(
+                                  args._vivadStatus.case_status,
+                                  style: TextStyle(
+                                    fontSize: 2 * SizeConfig.heightMultiplier,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 2.5 * SizeConfig.heightMultiplier,
+                            ),
+                            args._vivadStatus.case_status == 'Hearing'
+                                ? Row(
+                                    children: <Widget>[
+                                      Text(
+                                        'Hearing Date: ',
+                                        style: TextStyle(
+                                          fontSize:
+                                              2 * SizeConfig.heightMultiplier,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                      SizedBox(
+                                          width:
+                                              2 * SizeConfig.widthMultiplier),
+                                      Text(
+                                        formatter
+                                            .format(DateTime.parse(args
+                                                ._vivadStatus
+                                                .next_hearing_date))
+                                            .toString(),
+                                        style: TextStyle(
+                                          fontSize: 1.75 *
+                                              SizeConfig.heightMultiplier,
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                                : Container(),
+                          ]),
+                    ),
+                  ),
+                  args._vivadStatus.case_status == 'Pending'
+                      ? Container(
+                          margin: EdgeInsets.symmetric(
+                            horizontal: 5 * SizeConfig.widthMultiplier,
+                            vertical: 2.5 * SizeConfig.heightMultiplier,
+                          ),
+                          alignment: Alignment.bottomCenter,
+                          constraints: const BoxConstraints(maxWidth: 500),
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              primary: Colors.indigo,
+                              shape: const RoundedRectangleBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(10.0))),
+                            ),
+                            child: Container(
+                              padding: EdgeInsets.symmetric(
+                                  vertical: 1.5 * SizeConfig.heightMultiplier,
+                                  horizontal: 2 * SizeConfig.widthMultiplier),
+                              child: Text(
+                                'Update Status',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 2.2 * SizeConfig.heightMultiplier,
+                                ),
                               ),
-                              onPressed: () {
-                                _showStatusDialog(context, args);
-                              },
                             ),
-                          )
-                        : Container(
-                      margin: EdgeInsets.symmetric(
-                        horizontal: 5 * SizeConfig.widthMultiplier,
-                        vertical: 2.5 * SizeConfig.heightMultiplier,
-                      ),
-                      alignment: Alignment.bottomCenter,
-                      constraints: const BoxConstraints(maxWidth: 500),
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          primary: Colors.indigo,
-                          shape: const RoundedRectangleBorder(
-                              borderRadius: BorderRadius.all(
-                                  Radius.circular(10.0))),
-                        ),
-                        child: Container(
-                          padding: EdgeInsets.symmetric(
-                              vertical: 1.5 * SizeConfig.heightMultiplier,
-                              horizontal: 2 * SizeConfig.widthMultiplier),
-                          child: Text(
-                            'Action History',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 2.2 * SizeConfig.heightMultiplier,
+                            onPressed: () {
+                              _showStatusDialog(context, args);
+                            },
+                          ),
+                        )
+                      : Container(
+                          margin: EdgeInsets.symmetric(
+                            horizontal: 5 * SizeConfig.widthMultiplier,
+                            vertical: 2.5 * SizeConfig.heightMultiplier,
+                          ),
+                          alignment: Alignment.bottomCenter,
+                          constraints: const BoxConstraints(maxWidth: 500),
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              primary: Colors.indigo,
+                              shape: const RoundedRectangleBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(10.0))),
                             ),
+                            child: Container(
+                              padding: EdgeInsets.symmetric(
+                                  vertical: 1.5 * SizeConfig.heightMultiplier,
+                                  horizontal: 2 * SizeConfig.widthMultiplier),
+                              child: Text(
+                                'Action History',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 2.2 * SizeConfig.heightMultiplier,
+                                ),
+                              ),
+                            ),
+                            onPressed: () {
+                              print('Timeline feature to be added !!!');
+                            },
                           ),
                         ),
-                        onPressed: () {
-                          print('Timeline feature to be added !!!');
-                        },
-                      ),
-                    ),
-                  ]),
+                ]),
           ),
         ),
       ),
@@ -696,6 +694,7 @@ class _StatusUpdateScreenState extends State<StatusUpdateScreen> {
                   setState(() {
                     if (_formKey.currentState!.validate()) {
                       statusUpdateVariable['token'] = args._token;
+                      statusUpdateVariable['user'] = args._user;
                       statusUpdateVariable['id'] = args._vivadStatus.id;
                       statusUpdateVariable['vivad_id'] =
                           args._vivadStatus.vivad_id;
@@ -719,10 +718,14 @@ class _StatusUpdateScreenState extends State<StatusUpdateScreen> {
       Dialogs.showLoadingDialog(context, _keyLoader);
       await Provider.of<StatusUpdateProvider>(context, listen: false)
           .updateStatus(statusUpdateVariable)
-          .then((value) {
-        Navigator.of(this.context, rootNavigator: true).pop();
-        _showAlertDialog(
-            context, "Success", "Case Status updated successfully !!!", 0);
+          .then((value) async {
+        await Provider.of<HearingUpdateProvider>(context, listen: false)
+            .updateHearing(statusUpdateVariable)
+            .then((value) {
+          Navigator.of(this.context, rootNavigator: true).pop();
+          _showAlertDialog(
+              context, "Success", "Case Status updated successfully !!!", 0);
+        });
       }).catchError((handleError) {
         Navigator.of(this.context, rootNavigator: true).pop();
         if (handleError.toString().contains('SocketException')) {

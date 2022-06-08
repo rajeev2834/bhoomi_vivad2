@@ -158,6 +158,7 @@ class _vivadPendingScreenState extends State<VivadPendingScreen> {
       status: status,
       level: level,
       circle: _circleId,
+      user: _userId,
     );
   }
 }

@@ -8,7 +8,6 @@ import 'package:http/http.dart' as http;
 class StatusUpdateProvider with ChangeNotifier {
 
   Future<bool> updateStatus(Map<String, dynamic> statusUpdateVariable) async {
-    print(statusUpdateVariable);
     var vivad_id = statusUpdateVariable['vivad_id'].toString();
     String table = vivad_id.startsWith("GR", 0) ? "grievance" : "vivad";
 
@@ -28,7 +27,6 @@ class StatusUpdateProvider with ChangeNotifier {
             'next_hearing_date': statusUpdateVariable['hearingDate'],
             'remarks': statusUpdateVariable['remarks'],
           }));
-      print(response.body);
       final message = jsonDecode(response.body)['message'];
       notifyListeners();
       if (response.statusCode == 200) {
