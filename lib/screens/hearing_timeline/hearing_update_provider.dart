@@ -1,11 +1,21 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:bhoomi_vivad/constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:bhoomi_vivad/models/http_exception.dart';
 
+import '../../models/hearing.dart';
+
 class HearingUpdateProvider with ChangeNotifier{
+
+  late HearingList _hearingStatusList;
+
+  HearingList get hearingStatusList {
+    return _hearingStatusList;
+  }
+
 
   Future<bool> updateHearing(Map<String, dynamic> statusUpdateVariable) async {
     var grievance_id = statusUpdateVariable['vivad_id'].toString();
@@ -39,6 +49,32 @@ class HearingUpdateProvider with ChangeNotifier{
       }
     } catch (error) {
       throw (error);
+    }
+  }
+
+  Future<void> getHearingData(String grievanceId) async{
+    String table = 'hearing/';
+    var url = Uri.parse(base_url).authority;
+    try {
+      final uri = Uri.http(
+        url,
+        '/api/$table',
+        {"grievance_id": grievanceId}
+            .map((key, value) => MapEntry(key, value.toString())),
+      );
+      final response = await http.get(uri, headers: {
+        HttpHeaders.contentTypeHeader: 'application/json',
+      });
+      if (response.statusCode == 200) {
+        final extractedHearingData = jsonDecode(utf8.decode(response.bodyBytes));
+        _hearingStatusList = HearingList.fromJson(extractedHearingData);
+
+        notifyListeners();
+      } else {
+        throw HttpException("Unable to load Hearing data !!!");
+      }
+    } catch (error) {
+    throw error;
     }
   }
 }

@@ -1,5 +1,6 @@
 import 'package:bhoomi_vivad/models/vivad_status.dart';
 import 'package:bhoomi_vivad/screens/all_vivad/status_update_provider.dart';
+import 'package:bhoomi_vivad/screens/hearing_timeline/hearing_timeline_screen.dart';
 import 'package:bhoomi_vivad/screens/hearing_timeline/hearing_update_provider.dart';
 import 'package:bhoomi_vivad/utils/loading_dialog.dart';
 import 'package:bhoomi_vivad/utils/size_config.dart';
@@ -521,8 +522,12 @@ class _StatusUpdateScreenState extends State<StatusUpdateScreen> {
                                 ),
                               ),
                             ),
-                            onPressed: () {
-                              print('Timeline feature to be added !!!');
+                            onPressed: () async {
+                              await Navigator.of(context).pushNamed(
+                                HearingTimeLineScreen.routeName,
+                                arguments: HearingUpdateArguments(
+                                    args._vivadStatus, args._token, args._user),
+                              );
                             },
                           ),
                         ),

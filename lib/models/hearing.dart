@@ -21,15 +21,15 @@ class HearingList{
 
 @JsonSerializable()
 class Hearing {
-  String vivad_uuid;
-  DateTime hearing_date;
+  int id;
+  String grievance_id;
+  String hearing_date;
+  String case_status;
+  String next_date;
   String remarks;
-  bool first_party;
-  bool second_party;
 
-
-  Hearing({required this.vivad_uuid,  required this.hearing_date, required this.remarks,
-  required this.first_party, required this.second_party});
+  Hearing({required this.id, required this.grievance_id,  required this.hearing_date, required this.remarks,
+  required this.case_status, required this.next_date});
 
   factory Hearing.fromJson(Map<String, dynamic> json) => _$HearingFromJson(json);
 

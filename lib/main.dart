@@ -9,6 +9,7 @@ import 'package:bhoomi_vivad/screens/all_vivad/vivad_summary_screen.dart';
 import 'package:bhoomi_vivad/screens/grievance_entry/get_api_data.dart';
 import 'package:bhoomi_vivad/screens/grievance_entry/grievance_screen.dart';
 import 'package:bhoomi_vivad/screens/grievance_entry/tracking_id_screen.dart';
+import 'package:bhoomi_vivad/screens/hearing_timeline/hearing_timeline_screen.dart';
 import 'package:bhoomi_vivad/screens/hearing_timeline/hearing_update_provider.dart';
 import 'package:bhoomi_vivad/screens/home_screen.dart';
 import 'package:bhoomi_vivad/screens/landing/help_screen.dart';
@@ -87,6 +88,8 @@ class BhoomiVivad extends StatelessWidget {
                       const VivadPendingScreen(),
                   StatusUpdateScreen.routeName: (context) =>
                       StatusUpdateScreen(),
+                  HearingTimeLineScreen.routeName: (context) =>
+                      HearingTimeLineScreen(),
                   VivadSummaryScreen.routeName: (context) =>
                       VivadSummaryScreen(),
                   VivadReportScreen.routeName: (context) => VivadReportScreen(),
