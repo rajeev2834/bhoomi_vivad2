@@ -34,8 +34,8 @@ class HearingUpdateProvider with ChangeNotifier{
           },
           body: jsonEncode({
             'grievance_id' : grievance_id,
-            'status': statusUpdateVariable['case_status'],
-            'hearing_date': statusUpdateVariable['hearingDate'] == "" ? null : statusUpdateVariable['hearingDate'],
+            'case_status': statusUpdateVariable['case_status'],
+            'next_hearing_date': statusUpdateVariable['hearingDate'] == "" ? null : statusUpdateVariable['hearingDate'],
             'remarks': statusUpdateVariable['remarks'],
             'user' : statusUpdateVariable['user'],
           }));

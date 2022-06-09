@@ -23,13 +23,13 @@ class HearingList{
 class Hearing {
   int id;
   String grievance_id;
-  String hearing_date;
+  String next_hearing_date;
   String case_status;
-  String next_date;
   String remarks;
+  String created_at;
 
-  Hearing({required this.id, required this.grievance_id,  required this.hearing_date, required this.remarks,
-  required this.case_status, required this.next_date});
+  Hearing({required this.id, required this.grievance_id,  required this.next_hearing_date, required this.remarks,
+  required this.case_status, required this.created_at});
 
   factory Hearing.fromJson(Map<String, dynamic> json) => _$HearingFromJson(json);
 

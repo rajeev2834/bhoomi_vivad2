@@ -5,8 +5,11 @@ import 'package:bhoomi_vivad/models/vivad_status.dart';
 import 'package:bhoomi_vivad/screens/hearing_timeline/hearing_update_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:timelines/timelines.dart';
+
+import '../../utils/size_config.dart';
 
 class HearingUpdateArguments {
   final VivadStatus _vivadStatus;
@@ -39,6 +42,16 @@ class _HearingTimeLineScreenState extends State<HearingTimeLineScreen> {
         title: Text("Action History"),
       ),
       body: showActionHistory(args),
+      floatingActionButton: args._vivadStatus.case_status == "Hearing"
+          ? new FloatingActionButton(
+              elevation: 0.0,
+              child: new Icon(Icons.cloud_upload_rounded),
+              backgroundColor: Theme.of(context).primaryColor,
+              tooltip: 'Update Case Status',
+              onPressed: () {
+                print("Upload Case Status");
+              })
+          : Container(),
     );
   }
 
@@ -68,12 +81,12 @@ class HearingActionHistory extends StatefulWidget {
 }
 
 class _HearingActionHistory extends State<HearingActionHistory> {
-
   List<Hearing> hearing = [];
   bool _isLoading = false;
   String _token = "";
   int? _user;
   VivadStatus? _vivadStatus;
+  DateFormat formatter = DateFormat("dd-MM-yyyy");
 
   @override
   void initState() {
@@ -152,11 +165,313 @@ class _HearingActionHistory extends State<HearingActionHistory> {
                       fontWeight: FontWeight.w600,
                     )),
               );
-            }
-            else {
+            } else {
               hearing = hearingUpdateProvider.hearingStatusList.hearings;
-              return Container();
+              return Timeline.tileBuilder(
+                  theme: TimelineThemeData(
+                    nodeItemOverlap: true,
+                    nodePosition: 0.050,
+                    color: Colors.indigo,
+                    connectorTheme: ConnectorThemeData(
+                      thickness: 2.0,
+                    ),
+                    indicatorTheme: IndicatorThemeData(
+                      position: 0.15,
+                    ),
+                  ),
+                  builder: TimelineTileBuilder.connected(
+                      indicatorBuilder: (_, index) {
+                        if (index == 0) {
+                          return DotIndicator(
+                            size: 24.0,
+                            child: Icon(
+                              Icons.account_box_outlined,
+                              color: Colors.white,
+                              size: 16.0,
+                            ),
+                          );
+                        } else if (hearing[index - 1].case_status ==
+                            "Hearing") {
+                          return DotIndicator(
+                            size: 24.0,
+                            child: Icon(
+                              Icons.calendar_month_sharp,
+                              color: Colors.white,
+                              size: 16.0,
+                            ),
+                          );
+                        } else {
+                          return DotIndicator(
+                            size: 24.0,
+                            child: Icon(
+                              Icons.check,
+                              color: Colors.white,
+                              size: 16.0,
+                            ),
+                          );
+                        }
+                      },
+                      connectorBuilder: (_, index, __) => SolidLineConnector(
+                            color: Colors.indigo,
+                          ),
+                      contentsAlign: ContentsAlign.basic,
+                      contentsBuilder: (context, index) => Padding(
+                            padding: const EdgeInsets.all(24.0),
+                            child: index == 0
+                                ? Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: <Widget>[
+                                      Row(
+                                        children: <Widget>[
+                                          Text(
+                                            'Case Registered: ',
+                                            style: TextStyle(
+                                                fontSize: 2 *
+                                                    SizeConfig.heightMultiplier,
+                                                fontWeight: FontWeight.w600,
+                                                color: Colors.indigo),
+                                          ),
+                                          SizedBox(
+                                              width: 1.5 *
+                                                  SizeConfig.widthMultiplier),
+                                          Text(
+                                            formatter
+                                                .format(DateTime.parse(
+                                                    _vivadStatus!.created_date))
+                                                .toString(),
+                                            style: TextStyle(
+                                                fontSize: 2 *
+                                                    SizeConfig.heightMultiplier,
+                                                color: Colors.indigo),
+                                          ),
+                                        ],
+                                      ),
+                                      SizedBox(
+                                        height:
+                                            1.25 * SizeConfig.heightMultiplier,
+                                      ),
+                                      Text(
+                                        _vivadStatus!.vivad_id,
+                                        style: TextStyle(
+                                          fontSize: 1.75 *
+                                              SizeConfig.heightMultiplier,
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height:
+                                            1.25 * SizeConfig.heightMultiplier,
+                                      ),
+                                      Row(
+                                        children: <Widget>[
+                                          Text(
+                                            'Vivad Type: ',
+                                            style: TextStyle(
+                                              fontSize: 1.75 *
+                                                  SizeConfig.heightMultiplier,
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                          ),
+                                          SizedBox(
+                                              width: 1.5 *
+                                                  SizeConfig.widthMultiplier),
+                                          Wrap(
+                                            children: [
+                                              Text(
+                                                _vivadStatus!.vivad_type,
+                                                style: TextStyle(
+                                                  fontSize: 1.75 *
+                                                      SizeConfig
+                                                          .heightMultiplier,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                      SizedBox(
+                                        height:
+                                            1.25 * SizeConfig.heightMultiplier,
+                                      ),
+                                      Text(
+                                        'Case Description:',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 1.75 *
+                                              SizeConfig.heightMultiplier,
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height:
+                                            0.625 * SizeConfig.heightMultiplier,
+                                      ),
+                                      Wrap(
+                                        crossAxisAlignment:
+                                            WrapCrossAlignment.start,
+                                        children: [
+                                          Text(
+                                            _vivadStatus!.case_detail,
+                                            style: TextStyle(
+                                              height: 1.5,
+                                              fontSize: 1.75 *
+                                                  SizeConfig.heightMultiplier,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      SizedBox(
+                                        height:
+                                            1.25 * SizeConfig.heightMultiplier,
+                                      ),
+                                    ],
+                                  )
+                                : Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: <Widget>[
+                                      Row(
+                                        children: <Widget>[
+                                          Text(
+                                            'Review Date: ',
+                                            style: TextStyle(
+                                                fontSize: 2 *
+                                                    SizeConfig.heightMultiplier,
+                                                fontWeight: FontWeight.w600,
+                                                color: Colors.indigo),
+                                          ),
+                                          SizedBox(
+                                            width: 1.25 *
+                                                SizeConfig.widthMultiplier,
+                                          ),
+                                          Text(
+                                            formatter
+                                                .format(DateTime.parse(
+                                                    hearing[index - 1]
+                                                        .created_at))
+                                                .toString(),
+                                            style: TextStyle(
+                                              fontSize: 2 *
+                                                  SizeConfig.heightMultiplier,
+                                              color: Colors.indigo,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      SizedBox(
+                                        height:
+                                            1.25 * SizeConfig.heightMultiplier,
+                                      ),
+                                      Text(
+                                        'Remarks: ',
+                                        style: TextStyle(
+                                          fontSize: 1.75 *
+                                              SizeConfig.heightMultiplier,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height:
+                                            0.625 * SizeConfig.heightMultiplier,
+                                      ),
+                                      Wrap(
+                                        crossAxisAlignment:
+                                            WrapCrossAlignment.start,
+                                        children: [
+                                          Text(
+                                            hearing[index - 1].remarks,
+                                            style: TextStyle(
+                                              height: 1.5,
+                                              fontSize: 1.75 *
+                                                  SizeConfig.heightMultiplier,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      SizedBox(
+                                        height:
+                                            0.625 * SizeConfig.heightMultiplier,
+                                      ),
+                                      Row(
+                                        children: <Widget>[
+                                          Text(
+                                            'Case Status: ',
+                                            style: TextStyle(
+                                              fontSize: 1.75 *
+                                                  SizeConfig.heightMultiplier,
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                          ),
+                                          SizedBox(
+                                              width: 1.25 *
+                                                  SizeConfig.widthMultiplier),
+                                          CustomTitle(
+                                              case_status: hearing[index - 1]
+                                                  .case_status),
+                                        ],
+                                      ),
+                                      SizedBox(
+                                        height:
+                                            1.25 * SizeConfig.heightMultiplier,
+                                      ),
+                                      hearing[index - 1].case_status ==
+                                              "Hearing"
+                                          ? Row(
+                                              children: <Widget>[
+                                                Text(
+                                                  'Next Hearing Date: ',
+                                                  style: TextStyle(
+                                                    fontSize: 1.75 *
+                                                        SizeConfig
+                                                            .heightMultiplier,
+                                                    fontWeight: FontWeight.w600,
+                                                  ),
+                                                ),
+                                                SizedBox(
+                                                    width: 1.25 *
+                                                        SizeConfig
+                                                            .widthMultiplier),
+                                                Text(
+                                                  formatter
+                                                      .format(DateTime.parse(
+                                                          hearing[index - 1]
+                                                              .next_hearing_date))
+                                                      .toString(),
+                                                  style: TextStyle(
+                                                    fontSize: 1.75 *
+                                                        SizeConfig
+                                                            .heightMultiplier,
+                                                  ),
+                                                ),
+                                              ],
+                                            )
+                                          : Container(),
+                                      SizedBox(
+                                        height:
+                                            2.5 * SizeConfig.heightMultiplier,
+                                      ),
+                                    ],
+                                  ),
+                          ),
+                      itemCount: hearing.length + 1));
             }
           });
+  }
+
+  Widget CustomTitle({required String case_status}) {
+    var caseStatus = case_status == "Pending"
+        ? "Case Registered"
+        : case_status == "Hearing"
+            ? "Hearing Scheduled"
+            : case_status == "Rejected"
+                ? "Case has been rejected."
+                : case_status == "Closed"
+                    ? "Case has been closed."
+                    : "";
+    return Text(
+      caseStatus,
+      style: TextStyle(
+        fontSize: 1.75 * SizeConfig.heightMultiplier,
+      ),
+    );
   }
 }
