@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
+import '../hearing_timeline/hearing_timeline_screen.dart';
+
 class GrievanceStatus extends StatefulWidget {
   GrievanceStatus({Key? key, required this.trackingId}) : super(key: key);
 
@@ -133,24 +135,25 @@ class _GrievanceStatus extends State<GrievanceStatus> {
                                 children: <Widget>[
                                   Row(
                                     children: <Widget>[
-                                      Expanded(
-                                          child: Text(
+                                      Text(
                                         'Grievance Id: ',
                                         style: TextStyle(
                                           fontSize:
                                               2 * SizeConfig.heightMultiplier,
                                           fontWeight: FontWeight.w600,
                                         ),
-                                      )),
-                                      Expanded(
-                                          child: Text(
+                                      ),
+                                      SizedBox(
+                                        width: 5 * SizeConfig.widthMultiplier,
+                                      ),
+                                      Text(
                                         _trackingIdController.text,
                                         style: TextStyle(
                                           fontSize:
                                               1.9 * SizeConfig.heightMultiplier,
                                           fontWeight: FontWeight.w600,
                                         ),
-                                      )),
+                                      ),
                                     ],
                                   ),
                                   SizedBox(
@@ -158,40 +161,130 @@ class _GrievanceStatus extends State<GrievanceStatus> {
                                   ),
                                   Row(
                                     children: <Widget>[
-                                      Expanded(
-                                          child: Text(
+                                      Text(
                                         'Circle:',
                                         style: TextStyle(
                                           fontSize:
                                               2 * SizeConfig.heightMultiplier,
                                           fontWeight: FontWeight.w600,
                                         ),
-                                      )),
-                                      Expanded(
-                                          child: Text(
-                                        getApiData.caseStatus.circle,
+                                      ),
+                                      SizedBox(
+                                        width:
+                                            17.5 * SizeConfig.widthMultiplier,
+                                      ),
+                                      Text(
+                                        getApiData.vivadStatus.circle,
                                         style: TextStyle(
                                           fontSize:
                                               2 * SizeConfig.heightMultiplier,
                                         ),
-                                      )),
-                                      Expanded(
-                                          child: Text(
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 2.5 * SizeConfig.heightMultiplier,
+                                  ),
+                                  Row(
+                                    children: <Widget>[
+                                      Text(
                                         'Panchayat:',
                                         style: TextStyle(
                                           fontSize:
                                               2 * SizeConfig.heightMultiplier,
                                           fontWeight: FontWeight.w600,
                                         ),
-                                      )),
-                                      Expanded(
-                                          child: Text(
-                                        getApiData.caseStatus.panchayat,
+                                      ),
+                                      SizedBox(
+                                        width: 10 * SizeConfig.widthMultiplier,
+                                      ),
+                                      Text(
+                                        getApiData.vivadStatus.panchayat,
                                         style: TextStyle(
                                           fontSize:
                                               2 * SizeConfig.heightMultiplier,
                                         ),
-                                      )),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 2.5 * SizeConfig.heightMultiplier,
+                                  ),
+                                  Row(
+                                    children: <Widget>[
+                                      Text(
+                                        'Mauza:',
+                                        style: TextStyle(
+                                          fontSize:
+                                              2 * SizeConfig.heightMultiplier,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width:
+                                            17.5 * SizeConfig.widthMultiplier,
+                                      ),
+                                      Text(
+                                        getApiData.vivadStatus.mauza,
+                                        style: TextStyle(
+                                          fontSize:
+                                              2 * SizeConfig.heightMultiplier,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 2.5 * SizeConfig.heightMultiplier,
+                                  ),
+                                  Row(
+                                    children: <Widget>[
+                                      Text(
+                                        'Khata:',
+                                        style: TextStyle(
+                                          fontSize:
+                                              2 * SizeConfig.heightMultiplier,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width:
+                                            17.5 * SizeConfig.widthMultiplier,
+                                      ),
+                                      Text(
+                                        getApiData.vivadStatus.khata_no
+                                            .toString(),
+                                        style: TextStyle(
+                                          fontSize:
+                                              2 * SizeConfig.heightMultiplier,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 2.5 * SizeConfig.heightMultiplier,
+                                  ),
+                                  Row(
+                                    children: <Widget>[
+                                      Text(
+                                        'Khesra:',
+                                        style: TextStyle(
+                                          fontSize:
+                                              2 * SizeConfig.heightMultiplier,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width:
+                                            17.5 * SizeConfig.widthMultiplier,
+                                      ),
+                                      Text(
+                                        getApiData.vivadStatus.khesra_no
+                                            .toString(),
+                                        style: TextStyle(
+                                          fontSize:
+                                              2 * SizeConfig.heightMultiplier,
+                                        ),
+                                      ),
                                     ],
                                   ),
                                   SizedBox(
@@ -210,24 +303,27 @@ class _GrievanceStatus extends State<GrievanceStatus> {
                                   Wrap(
                                     children: [
                                       Text(
-                                        getApiData.caseStatus.name + ',  Mo:',
+                                        getApiData
+                                                .vivadStatus.first_party_name +
+                                            ',  Mo:',
                                         style: TextStyle(
-                                            fontSize: 1.9 *
-                                                SizeConfig.heightMultiplier,
-                                            fontWeight: FontWeight.w600),
+                                          fontSize: 1.75 *
+                                              SizeConfig.heightMultiplier,
+                                        ),
                                       ),
                                       SizedBox(
                                         width: 0.5 * SizeConfig.widthMultiplier,
                                       ),
                                       Text(
-                                        getApiData.caseStatus.contact
+                                        getApiData
+                                            .vivadStatus.first_party_contact
                                             .replaceAll("-", "")
                                             .replaceAll(")", "")
                                             .replaceAll("(", "")
                                             .replaceAll(" ", ""),
                                         style: TextStyle(
-                                          fontSize:
-                                              1.9 * SizeConfig.heightMultiplier,
+                                          fontSize: 1.75 *
+                                              SizeConfig.heightMultiplier,
                                         ),
                                       ),
                                     ],
@@ -238,26 +334,73 @@ class _GrievanceStatus extends State<GrievanceStatus> {
                                   Wrap(
                                     children: [
                                       Text(
-                                        getApiData.caseStatus.mauza + ', ',
+                                        getApiData
+                                            .vivadStatus.first_party_address,
                                         style: TextStyle(
-                                          fontSize:
-                                              1.9 * SizeConfig.heightMultiplier,
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: 1.0,
-                                      ),
-                                      Text(
-                                        getApiData.caseStatus.address,
-                                        style: TextStyle(
-                                          fontSize:
-                                              1.9 * SizeConfig.heightMultiplier,
+                                          fontSize: 1.75 *
+                                              SizeConfig.heightMultiplier,
                                         ),
                                       ),
                                     ],
                                   ),
                                   SizedBox(
                                     height: 2.5 * SizeConfig.heightMultiplier,
+                                  ),
+                                  Text(
+                                    'Vadi Details:',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 2 * SizeConfig.heightMultiplier,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 0.625 * SizeConfig.heightMultiplier,
+                                  ),
+                                  Wrap(
+                                    children: [
+                                      Text(
+                                        getApiData
+                                                .vivadStatus.second_party_name +
+                                            ',  Mo:',
+                                        style: TextStyle(
+                                          fontSize: 1.75 *
+                                              SizeConfig.heightMultiplier,
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width: 0.5 * SizeConfig.widthMultiplier,
+                                      ),
+                                      Text(
+                                        getApiData
+                                            .vivadStatus.second_party_contact
+                                            .replaceAll("-", "")
+                                            .replaceAll(")", "")
+                                            .replaceAll("(", "")
+                                            .replaceAll(" ", ""),
+                                        style: TextStyle(
+                                          fontSize: 1.75 *
+                                              SizeConfig.heightMultiplier,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 0.625 * SizeConfig.heightMultiplier,
+                                  ),
+                                  Wrap(
+                                    children: [
+                                      Text(
+                                        getApiData
+                                            .vivadStatus.second_party_address,
+                                        style: TextStyle(
+                                          fontSize: 1.75 *
+                                              SizeConfig.heightMultiplier,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 1.25 * SizeConfig.heightMultiplier,
                                   ),
                                   Row(
                                     children: <Widget>[
@@ -275,7 +418,7 @@ class _GrievanceStatus extends State<GrievanceStatus> {
                                       Wrap(
                                         children: [
                                           Text(
-                                            getApiData.caseStatus.vivad_type,
+                                            getApiData.vivadStatus.vivad_type,
                                             style: TextStyle(
                                               fontSize: 1.9 *
                                                   SizeConfig.heightMultiplier,
@@ -303,7 +446,7 @@ class _GrievanceStatus extends State<GrievanceStatus> {
                                         WrapCrossAlignment.start,
                                     children: [
                                       Text(
-                                        getApiData.caseStatus.vivad_reason,
+                                        getApiData.vivadStatus.case_detail,
                                         style: TextStyle(
                                           height: 1.5,
                                           fontSize:
@@ -326,12 +469,13 @@ class _GrievanceStatus extends State<GrievanceStatus> {
                                         ),
                                       ),
                                       SizedBox(
-                                          width:
-                                              2.5 * SizeConfig.widthMultiplier),
+                                        height:
+                                            1.25 * SizeConfig.heightMultiplier,
+                                      ),
                                       Text(
                                         formatter
                                             .format(DateTime.parse(getApiData
-                                                .caseStatus.created_at))
+                                                .vivadStatus.created_date))
                                             .toString(),
                                         style: TextStyle(
                                           fontSize: 1.75 *
@@ -341,7 +485,7 @@ class _GrievanceStatus extends State<GrievanceStatus> {
                                     ],
                                   ),
                                   SizedBox(
-                                    height: 2.5 * SizeConfig.heightMultiplier,
+                                    height: 1.25 * SizeConfig.heightMultiplier,
                                   ),
                                   Row(
                                     children: <Widget>[
@@ -349,18 +493,19 @@ class _GrievanceStatus extends State<GrievanceStatus> {
                                         'Case Status: ',
                                         style: TextStyle(
                                           fontSize:
-                                              2 * SizeConfig.heightMultiplier,
+                                          2 * SizeConfig.heightMultiplier,
                                           fontWeight: FontWeight.w600,
                                         ),
                                       ),
                                       SizedBox(
-                                          width:
-                                              2.5 * SizeConfig.widthMultiplier),
+                                       width:
+                                        1.25 * SizeConfig.widthMultiplier,
+                                      ),
                                       Text(
-                                        getApiData.caseStatus.case_status,
+                                        getApiData.vivadStatus.case_status,
                                         style: TextStyle(
-                                          fontSize:
-                                              2 * SizeConfig.heightMultiplier,
+                                          fontSize: 2 *
+                                              SizeConfig.heightMultiplier,
                                           fontWeight: FontWeight.w600,
                                         ),
                                       ),
@@ -369,33 +514,49 @@ class _GrievanceStatus extends State<GrievanceStatus> {
                                   SizedBox(
                                     height: 2.5 * SizeConfig.heightMultiplier,
                                   ),
-                                  getApiData.caseStatus.case_status == 'Hearing'
-                                      ? Row(
-                                          children: <Widget>[
-                                            Expanded(
-                                                child: Text(
-                                              'Hearing Date: ',
-                                              style: TextStyle(
-                                                fontSize: 2 *
-                                                    SizeConfig.heightMultiplier,
-                                                fontWeight: FontWeight.w600,
-                                              ),
-                                            )),
-                                            Expanded(
-                                                child: Text(
-                                              formatter
-                                                  .format(DateTime.parse(
-                                                      getApiData.caseStatus
-                                                          .next_hearing_date))
-                                                  .toString(),
-                                              style: TextStyle(
-                                                fontSize: 1.75 *
-                                                    SizeConfig.heightMultiplier,
-                                              ),
-                                            )),
-                                          ],
-                                        )
-                                      : Container(),
+                                  Container(
+                                    margin: EdgeInsets.symmetric(
+                                      horizontal:
+                                          5 * SizeConfig.widthMultiplier,
+                                      vertical:
+                                          2.5 * SizeConfig.heightMultiplier,
+                                    ),
+                                    alignment: Alignment.bottomCenter,
+                                    constraints:
+                                        const BoxConstraints(maxWidth: 500),
+                                    child: ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        primary: Colors.indigo,
+                                        shape: const RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(10.0))),
+                                      ),
+                                      child: Container(
+                                        padding: EdgeInsets.symmetric(
+                                            vertical: 1.5 *
+                                                SizeConfig.heightMultiplier,
+                                            horizontal:
+                                                2 * SizeConfig.widthMultiplier),
+                                        child: Text(
+                                          'Action History',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 2.2 *
+                                                SizeConfig.heightMultiplier,
+                                          ),
+                                        ),
+                                      ),
+                                      onPressed: () async {
+                                        await Navigator.of(context).pushNamed(
+                                          HearingTimeLineScreen.routeName,
+                                          arguments: HearingUpdateArguments(
+                                              getApiData.vivadStatus,
+                                              "",
+                                              0),
+                                        );
+                                      },
+                                    ),
+                                  ),
                                 ],
                               ),
                             ),

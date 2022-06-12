@@ -5,6 +5,7 @@ import 'package:bhoomi_vivad/models/case_status.dart';
 import 'package:bhoomi_vivad/models/circle.dart';
 import 'package:bhoomi_vivad/models/grievance.dart';
 import 'package:bhoomi_vivad/models/panchayat.dart';
+import 'package:bhoomi_vivad/models/vivad_status.dart';
 import 'package:bhoomi_vivad/models/vivad_type.dart';
 import 'package:bhoomi_vivad/providers/auth.dart';
 import 'package:bhoomi_vivad/utils/database_helper.dart';
@@ -41,10 +42,10 @@ class GetApiData with ChangeNotifier {
     return [..._vivadTypes];
   }
 
-  late CaseStatus _caseStatus;
+  late VivadStatus _vivadStatus;
 
-  CaseStatus get caseStatus {
-    return _caseStatus;
+  VivadStatus get vivadStatus {
+    return _vivadStatus;
   }
 
   Future<void> getToken() async {
@@ -125,7 +126,7 @@ class GetApiData with ChangeNotifier {
         final extractedGrievanceData =
             jsonDecode(utf8.decode(response.bodyBytes));
 
-        _caseStatus = CaseStatus.fromJson(extractedGrievanceData[0]);
+        _vivadStatus = VivadStatus.fromJson(extractedGrievanceData[0]);
         notifyListeners();
       } else {
         throw HttpException("Unable to load Grievance status!!!");

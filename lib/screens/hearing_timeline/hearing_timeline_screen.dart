@@ -3,12 +3,15 @@ import 'dart:io';
 import 'package:bhoomi_vivad/models/hearing.dart';
 import 'package:bhoomi_vivad/models/vivad_status.dart';
 import 'package:bhoomi_vivad/screens/hearing_timeline/hearing_update_provider.dart';
+import 'package:bhoomi_vivad/screens/hearing_timeline/status_dialog_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:timelines/timelines.dart';
 
+import '../../utils/loading_dialog.dart';
 import '../../utils/size_config.dart';
 
 class HearingUpdateArguments {
@@ -30,6 +33,23 @@ class HearingTimeLineScreen extends StatefulWidget {
 }
 
 class _HearingTimeLineScreenState extends State<HearingTimeLineScreen> {
+  Map<String, dynamic> statusUpdateVariable = new Map();
+
+  DateTime? _dateTime;
+
+  String? _selectedValue;
+
+  TextEditingController _remarksController = TextEditingController();
+  TextEditingController _dateTimeController = TextEditingController();
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    _remarksController.dispose();
+    _dateTimeController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final args =
@@ -42,16 +62,18 @@ class _HearingTimeLineScreenState extends State<HearingTimeLineScreen> {
         title: Text("Action History"),
       ),
       body: showActionHistory(args),
-      floatingActionButton: args._vivadStatus.case_status == "Hearing"
-          ? new FloatingActionButton(
-              elevation: 0.0,
-              child: new Icon(Icons.cloud_upload_rounded),
-              backgroundColor: Theme.of(context).primaryColor,
-              tooltip: 'Update Case Status',
-              onPressed: () {
-                print("Upload Case Status");
-              })
-          : Container(),
+      floatingActionButton:
+          args._vivadStatus.case_status == "Hearing" && args._user != 0
+              ? new FloatingActionButton(
+                  elevation: 0.0,
+                  child: new Icon(Icons.cloud_upload_rounded),
+                  backgroundColor: Theme.of(context).primaryColor,
+                  tooltip: 'Update Case Status',
+                  onPressed: () async {
+                    StatusDialog().showStatusDialog(
+                        context, args._vivadStatus, args._token, args._user);
+                  })
+              : Container(),
     );
   }
 
@@ -470,7 +492,7 @@ class _HearingActionHistory extends State<HearingActionHistory> {
     return Text(
       caseStatus,
       style: TextStyle(
-        fontSize: 1.75 * SizeConfig.heightMultiplier,
+        fontSize: 2 * SizeConfig.heightMultiplier,
       ),
     );
   }
