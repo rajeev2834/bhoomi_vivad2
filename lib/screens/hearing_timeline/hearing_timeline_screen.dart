@@ -59,7 +59,7 @@ class _HearingTimeLineScreenState extends State<HearingTimeLineScreen> {
     return Scaffold(
       appBar: AppBar(
         titleSpacing: 0.0,
-        title: Text("Action History"),
+        title: Text("Case History"),
       ),
       body: showActionHistory(args),
       floatingActionButton:

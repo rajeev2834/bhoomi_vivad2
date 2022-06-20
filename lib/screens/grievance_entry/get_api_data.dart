@@ -114,7 +114,7 @@ class GetApiData with ChangeNotifier {
   }
 
   Future<void> getGrievanceStatus(String trackingId) async {
-    var table = trackingId.startsWith('GR') ? 'grievance' : 'vivad';
+    var table = trackingId.startsWith('GR') ? 'grievance' : 'vivad-list';
     var paramId = trackingId.startsWith('GR') ? 'grievance_id' : 'vivad_id';
     var url = Uri.parse(base_url).authority;
     final uri = Uri.http(url, '/api/$table/', {paramId: trackingId});

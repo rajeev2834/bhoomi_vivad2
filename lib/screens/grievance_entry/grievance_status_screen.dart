@@ -121,13 +121,15 @@ class _GrievanceStatus extends State<GrievanceStatus> {
                 },
                 child: Consumer<GetApiData>(
                     builder: (context, getApiData, _) => SafeArea(
-                          child: SingleChildScrollView(
-                            scrollDirection: Axis.vertical,
-                            child: Container(
-                              height: screenHeight,
-                              width: screenWidth,
-                              padding: EdgeInsets.all(
-                                  2 * SizeConfig.heightMultiplier),
+                          child: Container(
+                            height: double.infinity,
+                            width: double.infinity,
+                            padding: EdgeInsets.all(
+                                0.625 * SizeConfig.heightMultiplier),
+                            child: SingleChildScrollView(
+                              scrollDirection: Axis.vertical,
+                              padding: EdgeInsets.only(
+                                  bottom: 1.75 * SizeConfig.heightMultiplier),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 mainAxisAlignment: MainAxisAlignment.start,
@@ -493,19 +495,19 @@ class _GrievanceStatus extends State<GrievanceStatus> {
                                         'Case Status: ',
                                         style: TextStyle(
                                           fontSize:
-                                          2 * SizeConfig.heightMultiplier,
+                                              2 * SizeConfig.heightMultiplier,
                                           fontWeight: FontWeight.w600,
                                         ),
                                       ),
                                       SizedBox(
-                                       width:
-                                        1.25 * SizeConfig.widthMultiplier,
+                                        width:
+                                            1.25 * SizeConfig.widthMultiplier,
                                       ),
                                       Text(
                                         getApiData.vivadStatus.case_status,
                                         style: TextStyle(
-                                          fontSize: 2 *
-                                              SizeConfig.heightMultiplier,
+                                          fontSize:
+                                              2 * SizeConfig.heightMultiplier,
                                           fontWeight: FontWeight.w600,
                                         ),
                                       ),
@@ -514,6 +516,7 @@ class _GrievanceStatus extends State<GrievanceStatus> {
                                   SizedBox(
                                     height: 2.5 * SizeConfig.heightMultiplier,
                                   ),
+                                  getApiData.vivadStatus.case_status != "Pending" ?
                                   Container(
                                     margin: EdgeInsets.symmetric(
                                       horizontal:
@@ -538,7 +541,7 @@ class _GrievanceStatus extends State<GrievanceStatus> {
                                             horizontal:
                                                 2 * SizeConfig.widthMultiplier),
                                         child: Text(
-                                          'Action History',
+                                          'Case History',
                                           style: TextStyle(
                                             color: Colors.white,
                                             fontSize: 2.2 *
@@ -550,13 +553,11 @@ class _GrievanceStatus extends State<GrievanceStatus> {
                                         await Navigator.of(context).pushNamed(
                                           HearingTimeLineScreen.routeName,
                                           arguments: HearingUpdateArguments(
-                                              getApiData.vivadStatus,
-                                              "",
-                                              0),
+                                              getApiData.vivadStatus, "", 0),
                                         );
                                       },
                                     ),
-                                  ),
+                                  ) : Container(),
                                 ],
                               ),
                             ),

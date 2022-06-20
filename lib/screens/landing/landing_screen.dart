@@ -242,7 +242,8 @@ class Landing extends StatelessWidget {
                         ),
                       ),
                       onPressed: () {
-                        String value = _trackingIdController.text;
+                        RegExp _regExp = RegExp('[A-Z]{5}[0-9]{11}');
+                        String value = _trackingIdController.text.toUpperCase();
                         if (value.isEmpty || value.length < 16) {
                           _showResultDialog(
                               context, '', 'Please enter valid Tracking Id');
@@ -250,7 +251,10 @@ class Landing extends StatelessWidget {
                             value.startsWith('CO'))) {
                           _showResultDialog(context, '',
                               'Tracking Id must starts with GR or CO');
-                        } else {
+                        } else if (!_regExp.hasMatch(value)){
+                          _showResultDialog(context, '',
+                              'Please enter valid Tracking Id');
+                        }else {
                           Navigator.of(context).push(new MaterialPageRoute(
                               builder: (context) => GrievanceStatus(
                                     trackingId: value,

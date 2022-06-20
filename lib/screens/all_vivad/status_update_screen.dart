@@ -42,8 +42,6 @@ class _StatusUpdateScreenState extends State<StatusUpdateScreen> {
     // TODO: implement build
     final args =
         ModalRoute.of(context)!.settings.arguments as StatusUpdateArguments;
-    final screenHeight = MediaQuery.of(context).size.height;
-    final screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
         titleSpacing: 0.0,
@@ -503,7 +501,7 @@ class _StatusUpdateScreenState extends State<StatusUpdateScreen> {
                                   vertical: 1.5 * SizeConfig.heightMultiplier,
                                   horizontal: 2 * SizeConfig.widthMultiplier),
                               child: Text(
-                                'Action History',
+                                'Case History',
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 2.2 * SizeConfig.heightMultiplier,
