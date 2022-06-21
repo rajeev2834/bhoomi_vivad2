@@ -1,6 +1,7 @@
 import 'package:bhoomi_vivad/providers/addBaseData.dart';
 import 'package:bhoomi_vivad/providers/auth.dart';
 import 'package:bhoomi_vivad/providers/get_base_data.dart';
+import 'package:bhoomi_vivad/screens/admin_module/screens/admin_home.dart';
 import 'package:bhoomi_vivad/screens/all_vivad/status_update_provider.dart';
 import 'package:bhoomi_vivad/screens/all_vivad/status_update_screen.dart';
 import 'package:bhoomi_vivad/screens/all_vivad/vivad_pending_screen.dart';
@@ -11,8 +12,6 @@ import 'package:bhoomi_vivad/screens/grievance_entry/grievance_screen.dart';
 import 'package:bhoomi_vivad/screens/grievance_entry/tracking_id_screen.dart';
 import 'package:bhoomi_vivad/screens/hearing_timeline/hearing_timeline_screen.dart';
 import 'package:bhoomi_vivad/screens/hearing_timeline/hearing_update_provider.dart';
-import 'package:bhoomi_vivad/screens/hearing_timeline/status_dialog_screen.dart';
-import 'package:bhoomi_vivad/screens/hearing_timeline/timeline_demo.dart';
 import 'package:bhoomi_vivad/screens/home_screen.dart';
 import 'package:bhoomi_vivad/screens/landing/help_screen.dart';
 import 'package:bhoomi_vivad/screens/landing/landing_screen.dart';
@@ -84,6 +83,7 @@ class BhoomiVivad extends StatelessWidget {
                   TrackingIdScreen.routeName: (context) => TrackingIdScreen(),
                   Login.routeName: (context) => Login(),
                   HomeScreen.routeName: (context) => HomeScreen(),
+                  AdminHomeScreen.routeName: (context) => AdminHomeScreen(),
                   UploadVivadScreen.routeName: (context) => UploadVivadScreen(),
                   VivadEntryScreen.routeName: (context) => VivadEntryScreen(),
                   VivadPendingScreen.routeName: (context) =>

@@ -1,6 +1,9 @@
+import 'package:bhoomi_vivad/color/custom_colors.dart';
 import 'package:bhoomi_vivad/providers/addBaseData.dart';
+import 'package:bhoomi_vivad/screens/admin_module/screens/admin_dashboard.dart';
 import 'package:bhoomi_vivad/screens/all_vivad/vivad_pending_screen.dart';
 import 'package:bhoomi_vivad/screens/all_vivad/vivad_summary_screen.dart';
+import 'package:bhoomi_vivad/utils/size_config.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:progress_dialog/progress_dialog.dart';
@@ -9,7 +12,10 @@ import 'package:provider/provider.dart';
 import '../models/http_exception.dart';
 
 class Body extends StatelessWidget {
-  String? _token;
+  String title;
+  bool isAdmin;
+
+  Body({required this.title, required this.isAdmin});
 
   @override
   Widget build(BuildContext context) {
@@ -58,42 +64,43 @@ class Body extends StatelessWidget {
                     future: Provider.of<AddBaseData>(context, listen: false)
                         .getUserData(),
                     builder: (ctx, snapshot) => snapshot.connectionState ==
-                        ConnectionState.waiting
+                            ConnectionState.waiting
                         ? Center(
-                      child: CircularProgressIndicator(),
-                    )
-                        : Consumer<AddBaseData>(
-                        builder: (ctx, addBaseData, _) => addBaseData
-                            .users.length >
-                            0
-                            ? Row(
-                          children: <Widget>[
-                            Text(
-                              "Welcome,",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .headline6!
-                                  .copyWith(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.only(left: 5.0),
-                            ),
-                            Text(
-                              addBaseData.users[0].firstName,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .headline5!
-                                  .copyWith(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold),
-                            )
-                          ],
-                        )
-                            : Center(
-                          child: CircularProgressIndicator(),
-                        )),
+                            child: CircularProgressIndicator(),
+                          )
+                        : Consumer<AddBaseData>(builder: (ctx, addBaseData, _) {
+                            if (addBaseData.users.length > 0) {
+                              return Row(
+                                children: <Widget>[
+                                  Text(
+                                    "Welcome,",
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headline6!
+                                        .copyWith(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.only(left: 5.0),
+                                  ),
+                                  Text(
+                                    addBaseData.users[0].firstName,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headline5!
+                                        .copyWith(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold),
+                                  )
+                                ],
+                              );
+                            } else {
+                              return Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            }
+                          }),
                   ),
                 ),
                 Positioned(
@@ -112,7 +119,7 @@ class Body extends StatelessWidget {
                           offset: Offset(0, 10),
                           blurRadius: 50.0,
                           color:
-                          Theme.of(context).primaryColor.withOpacity(0.23),
+                              Theme.of(context).primaryColor.withOpacity(0.23),
                         ),
                       ],
                     ),
@@ -132,12 +139,17 @@ class Body extends StatelessWidget {
             ),
           ),
           CustomTitle(
-            title: 'Bhoomi Vivad Related',
+            title: title,
           ),
-          Container(
-            margin: EdgeInsets.only(left: 10.0, top: 10.0),
-            child: VivadRelatedGrid(context),
-          ),
+          isAdmin
+              ? Container(
+                  margin: EdgeInsets.only(left: 10.0, top: 10.0),
+                  child: DashboardScreen(),
+                )
+              : Container(
+                  margin: EdgeInsets.only(left: 10.0, top: 10.0),
+                  child: VivadRelatedGrid(context),
+                ),
         ],
       ),
     );
@@ -167,7 +179,7 @@ class Body extends StatelessWidget {
           });
           // ignore: invalid_return_type_for_catch_error
         }).catchError((handleError) => _showAlertDialog(
-            context, 'Error', 'Failed to load base data.'));
+                context, 'Error', 'Failed to load base data.'));
       });
     } on HttpException catch (error) {
       var errorMessage = error.toString();
@@ -185,7 +197,12 @@ class Body extends StatelessWidget {
             padding: const EdgeInsets.only(left: 20.0),
             child: Text(
               title,
-              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                fontSize: 2 * SizeConfig.heightMultiplier,
+                fontWeight: FontWeight.w700,
+                color: CustomColors.kDarkBlue,
+                letterSpacing: 1.2,
+              ),
             ),
           ),
         ],
@@ -225,7 +242,7 @@ class Body extends StatelessWidget {
             shrinkWrap: true,
             children: List.generate(
               loadedItem.length,
-                  (index) => Padding(
+              (index) => Padding(
                 padding: EdgeInsets.symmetric(
                   vertical: 10.0,
                   horizontal: 10.0,
@@ -268,12 +285,15 @@ class Body extends StatelessWidget {
     if (index == 0) {
       await Navigator.of(context).pushNamed('/upload_vivad_screen');
     } else if (index == 1) {
-      await Navigator.of(context).pushNamed(VivadPendingScreen.routeName, arguments: CaseStatusArguments("pending"));
-    }else if (index == 2) {
-      await Navigator.of(context).pushNamed(VivadPendingScreen.routeName, arguments: CaseStatusArguments("hearing"));
-    }else if (index == 3) {
-      await Navigator.of(context).pushNamed(VivadPendingScreen.routeName, arguments: CaseStatusArguments("rejected"));
-    }else if (index == 4) {
+      await Navigator.of(context).pushNamed(VivadPendingScreen.routeName,
+          arguments: CaseStatusArguments("pending"));
+    } else if (index == 2) {
+      await Navigator.of(context).pushNamed(VivadPendingScreen.routeName,
+          arguments: CaseStatusArguments("hearing"));
+    } else if (index == 3) {
+      await Navigator.of(context).pushNamed(VivadPendingScreen.routeName,
+          arguments: CaseStatusArguments("rejected"));
+    } else if (index == 4) {
       await Navigator.of(context).pushNamed(VivadPendingScreen.routeName,
           arguments: CaseStatusArguments("disposed"));
     } else if (index == 5) {

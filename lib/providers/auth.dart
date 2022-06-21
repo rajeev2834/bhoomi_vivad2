@@ -7,23 +7,28 @@ import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../models/user.dart';
 import '../utils/database_helper.dart';
 
 class Auth with ChangeNotifier {
   String? _token;
   String? _status;
+  bool? _isAdmin;
+
   final dbHelper = DatabaseHelper.instance;
 
   bool get isAuth {
     return token != null;
   }
 
+  bool get isAdmin {
+    return _isAdmin ?? false;
+  }
+
   dynamic get token {
     if (_token != null && _status != "True") return _token;
     return null;
   }
-
-
 
   Future<void> _authenticate(String username, String password) async {
     final url = base_url + 'token/';
@@ -75,9 +80,9 @@ class Auth with ChangeNotifier {
         json.decode(prefs.getString('userData')!) as Map<String, dynamic>;
     _token = extractedUserData['token'];
     _status = extractedUserData['status'];
+    _isAdmin = prefs.getBool('isAdmin') ?? false;
 
-    if(_status == "True")
-      return false;
+    if (_status == "True") return false;
 
     notifyListeners();
     return true;
@@ -86,6 +91,7 @@ class Auth with ChangeNotifier {
   Future<void> logout() async {
     _token = null;
     _status = null;
+    _isAdmin = null;
     notifyListeners();
     final prefs = await SharedPreferences.getInstance();
     prefs.clear();
@@ -97,13 +103,21 @@ class Auth with ChangeNotifier {
       final response = await http.get(Uri.parse(url), headers: {
         HttpHeaders.authorizationHeader: "Token " + _token.toString()
       });
+
       if (response.statusCode == 200) {
-        final responseData = jsonDecode(response.body) as Map<String, dynamic>;
+
+        _isAdmin = json.decode(response.body)['is_superuser'];
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        prefs.setBool('isAdmin', _isAdmin!);
+
+        print(response.body);
+
+        final extractedUserData = jsonDecode(utf8.decode(response.bodyBytes));
+        final responseData = User.fromJson(extractedUserData);
         notifyListeners();
 
         deleteUserData('user');
-        updateUserTable('user', responseData);
-
+        updateUserTable('user', responseData.toJson());
       } else {
         throw HttpException("Unable to load User data!!!");
       }
@@ -112,17 +126,14 @@ class Auth with ChangeNotifier {
     }
   }
 
-  void updateUserTable(String user, Map<String, dynamic> userData) async
-  {
+  void updateUserTable(String user, Map<String, dynamic> userData) async {
     int result;
     result = await dbHelper.insertTableData(user, userData);
-    if(result != null)
-      print(result);
+    if (result != null) print(result);
   }
 
-  void deleteUserData(String user) async{
+  void deleteUserData(String user) async {
     var result = await dbHelper.deleteTableData(user);
     print(result);
   }
-
 }

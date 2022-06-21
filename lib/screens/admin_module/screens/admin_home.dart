@@ -2,32 +2,23 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import './body_home_screen.dart';
-import '../providers/auth.dart';
+import '../../../color/custom_colors.dart';
+import '../../../providers/auth.dart';
+import '../../body_home_screen.dart';
 
-class HomeScreen extends StatefulWidget {
-  static const routeName = '/home_screen';
-
-  @override
-  _HomeScreenState createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
-  @override
-  void initState() {
-    super.initState();
-  }
+class AdminHomeScreen extends StatelessWidget {
+  static const routeName = '/admin_home_screen';
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Scaffold(
-      appBar: _buildAppBar(),
-      body: Body(title: 'Bhoomi Vivad Related', isAdmin: false),
+      backgroundColor: CustomColors.kLightIndigo,
+      appBar: _buildAppBar(context),
+      body: Body(title: 'Recent Grievances', isAdmin: true),
     );
   }
 
-  AppBar _buildAppBar() {
+  AppBar _buildAppBar(BuildContext context) {
     return AppBar(
       elevation: 0,
       leading: IconButton(
@@ -36,7 +27,8 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       automaticallyImplyLeading: true,
       titleSpacing: 0,
-      title: Text('Bhoomi Vivad Tracker'),
+      title: Text('Bhoomi Vivad Tracker',),
+
       actions: <Widget>[
         Padding(
           padding: EdgeInsets.only(right: 10.0),
@@ -44,7 +36,8 @@ class _HomeScreenState extends State<HomeScreen> {
             message: 'Logout',
             child: GestureDetector(
               onTap: () {
-                _showAlertDialog('Logout', 'Are you really want to logout ?');
+                _showAlertDialog(
+                    'Logout', 'Are you really want to logout ?', context);
               },
               child: Icon(
                 Icons.logout,
@@ -57,7 +50,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  void _showAlertDialog(String title, String message) {
+  void _showAlertDialog(String title, String message, BuildContext context) {
     AlertDialog alertDialog = AlertDialog(
       title: Text(title),
       content: Text(message),
@@ -92,5 +85,4 @@ class _HomeScreenState extends State<HomeScreen> {
     );
     showDialog(context: context, builder: (_) => alertDialog);
   }
-
 }

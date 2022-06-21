@@ -5,8 +5,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-
 import '../../utils/size_config.dart';
+import '../admin_module/screens/admin_home.dart';
 import '../home_screen.dart';
 import '../splash_screen.dart';
 import 'header_widget.dart';
@@ -303,7 +303,7 @@ class LoginToHome extends StatelessWidget {
     // TODO: implement build
     return Consumer<Auth>(
       builder: (ctx, auth, _) => auth.isAuth
-          ? HomeScreen()
+          ? auth.isAdmin ? AdminHomeScreen() : HomeScreen()
           : FutureBuilder(
               future: auth.autoLogin(),
               builder: (ctx, authResultSnapshot) =>
