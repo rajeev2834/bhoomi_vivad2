@@ -7,14 +7,14 @@ import '../../../providers/auth.dart';
 import '../../body_home_screen.dart';
 
 class AdminHomeScreen extends StatelessWidget {
+
   static const routeName = '/admin_home_screen';
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: CustomColors.kLightIndigo,
       appBar: _buildAppBar(context),
-      body: Body(title: 'Recent Grievances', isAdmin: true),
+      body: Body(isAdmin: true, title: "Dashboard",),
     );
   }
 
@@ -27,8 +27,9 @@ class AdminHomeScreen extends StatelessWidget {
       ),
       automaticallyImplyLeading: true,
       titleSpacing: 0,
-      title: Text('Bhoomi Vivad Tracker',),
-
+      title: Text(
+        'Bhoomi Vivad Tracker',
+      ),
       actions: <Widget>[
         Padding(
           padding: EdgeInsets.only(right: 10.0),

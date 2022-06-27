@@ -6,7 +6,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 
 class StatusUpdateProvider with ChangeNotifier {
-
   Future<bool> updateStatus(Map<String, dynamic> statusUpdateVariable) async {
     var vivad_id = statusUpdateVariable['vivad_id'].toString();
     String table = vivad_id.startsWith("GR", 0) ? "grievance" : "vivad";
@@ -41,22 +40,29 @@ class StatusUpdateProvider with ChangeNotifier {
   }
 
   Future<List<Map<String, dynamic>>> countCaseStatus(
-      String? token, String circleId) async {
+      String? token, String circleId, String duration) async {
     var url = Uri.parse(base_url).authority;
+
+    final queryMaps = <String, String>{};
+    if (circleId != "") {
+      queryMaps['circle_id'] = circleId;
+    }
+
+    if (duration != "") {
+      duration == "week" ? queryMaps['week'] = "1" : queryMaps['month'] = "1";
+    }
 
     try {
       final uri1 = Uri.http(
         url,
         '/api/count/',
-        {"circle": circleId}
-            .map((key, value) => MapEntry(key, value.toString())),
+        queryMaps,
       );
 
       final uri2 = Uri.http(
         url,
         '/api/count-vivad/',
-        {"circle": circleId}
-            .map((key, value) => MapEntry(key, value.toString())),
+        queryMaps,
       );
 
       final response = await Future.wait([

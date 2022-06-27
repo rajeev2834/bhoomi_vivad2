@@ -63,7 +63,7 @@ class _VivadSummaryScreenState extends State<VivadSummaryScreen> {
 
   Future<void> _loadCaseStatusSummary() async {
     var provider = Provider.of<StatusUpdateProvider>(context, listen: false);
-    await provider.countCaseStatus(_token, _circleId!).then((value) {
+    await provider.countCaseStatus(_token, _circleId!, "").then((value) {
       setState(() {
         _isLoaded = false;
         _caseStatusCount = value;

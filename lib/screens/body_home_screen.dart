@@ -12,10 +12,11 @@ import 'package:provider/provider.dart';
 import '../models/http_exception.dart';
 
 class Body extends StatelessWidget {
-  String title;
-  bool isAdmin;
 
-  Body({required this.title, required this.isAdmin});
+  bool isAdmin;
+  final String title;
+
+  Body({required this.isAdmin, required this.title});
 
   @override
   Widget build(BuildContext context) {
@@ -143,7 +144,9 @@ class Body extends StatelessWidget {
           ),
           isAdmin
               ? Container(
-                  margin: EdgeInsets.only(left: 10.0, top: 10.0),
+                  margin: EdgeInsets.only(
+                    top: 10.0,
+                  ),
                   child: DashboardScreen(),
                 )
               : Container(
@@ -185,29 +188,6 @@ class Body extends StatelessWidget {
       var errorMessage = error.toString();
       _showAlertDialog(context, 'Error', errorMessage);
     }
-  }
-
-  Widget CustomTitle({required String title}) {
-    return Container(
-      margin: EdgeInsets.only(top: 10.0),
-      height: 18,
-      child: Stack(
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.only(left: 20.0),
-            child: Text(
-              title,
-              style: TextStyle(
-                fontSize: 2 * SizeConfig.heightMultiplier,
-                fontWeight: FontWeight.w700,
-                color: CustomColors.kDarkBlue,
-                letterSpacing: 1.2,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
   }
 
   Widget VivadRelatedGrid(BuildContext context) {
@@ -327,4 +307,33 @@ class GridViewItem {
   final Color color;
 
   GridViewItem({required this.title, required this.icon, required this.color});
+}
+
+class CustomTitle extends StatelessWidget {
+  final String title;
+
+  CustomTitle({required this.title});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.only(top: 10.0),
+      height: 18,
+      child: Stack(
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.only(left: 20.0),
+            child: Text(
+              title,
+              style: TextStyle(
+                fontSize: 1.9 * SizeConfig.heightMultiplier,
+                fontWeight: FontWeight.w700,
+                color: CustomColors.kDarkBlue,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }

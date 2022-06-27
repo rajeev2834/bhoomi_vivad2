@@ -23,7 +23,7 @@ class _HomeScreenState extends State<HomeScreen> {
     // TODO: implement build
     return Scaffold(
       appBar: _buildAppBar(),
-      body: Body(title: 'Bhoomi Vivad Related', isAdmin: false),
+      body: Body(isAdmin: false, title: "Bhoomi Vivad Related",),
     );
   }
 
@@ -92,5 +92,4 @@ class _HomeScreenState extends State<HomeScreen> {
     );
     showDialog(context: context, builder: (_) => alertDialog);
   }
-
 }

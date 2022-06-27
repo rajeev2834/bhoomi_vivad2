@@ -1,98 +1,221 @@
+import 'package:bhoomi_vivad/screens/all_vivad/status_update_provider.dart';
+import 'package:bhoomi_vivad/screens/body_home_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
+import 'package:provider/provider.dart';
 import '../../../color/custom_colors.dart';
+import '../../../providers/addBaseData.dart';
 import '../../../utils/size_config.dart';
+import 'basic_information_screen.dart';
+import 'case_status_cards.dart';
 
-class DashboardScreen extends StatelessWidget {
+class DashboardScreen extends StatefulWidget {
   static const routeName = '/dashboard_screen';
+
+  @override
+  _DashboardScreenState createState() => _DashboardScreenState();
+}
+
+class _DashboardScreenState extends State<DashboardScreen> {
+  bool _isLoading = false;
+  String _token = "";
+  List<Map<String, dynamic>> _caseStatusCount = [];
+  var _totalCircleCount = 0;
+  var _totalCitizenCount = 0;
+  var _pendingCitizen = 0;
+  var _pendingCircle = 0;
+  var _hearingCitizen = 0;
+  var _hearingCircle = 0;
+  var _rejectedCitizen = 0;
+  var _rejectedCircle = 0;
+  var _closedCitizen = 0;
+  var _closedCircle = 0;
+  var _weekCitizen = 0;
+  var _weekCircle = 0;
+  var _monthCitizen = 0;
+  var _monthCircle = 0;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+
+    setState(() {
+      _isLoading = true;
+    });
+    _loadDashboardData();
+    super.initState();
+  }
+
+  Future<void> _loadDashboardData() async {
+    var provider = Provider.of<AddBaseData>(context, listen: false);
+    await provider.getToken().then((value) async {
+      _token = provider.token;
+      await Provider.of<StatusUpdateProvider>(context, listen: false)
+          .countCaseStatus(_token, "", "")
+          .then((value) {
+        setState(() {
+          _caseStatusCount = value;
+          _getDashBoardData();
+          _getWeekData();
+          _getMonthData();
+          _isLoading = false;
+        });
+      });
+    });
+  }
+
+  Future<void> _getDashBoardData() async {
+    _caseStatusCount
+        .sort((a, b) => a['case_status'].compareTo(b['case_status']));
+    _caseStatusCount.forEach((element) {
+      _totalCitizenCount += element['total_grievance'] as int;
+      _totalCircleCount += element['total_vivad'] as int;
+      switch (element['case_status']) {
+        case 0:
+          _pendingCitizen = element['total_grievance'] as int;
+          _pendingCircle = element['total_vivad'] as int;
+          break;
+        case 1:
+          _hearingCitizen = element['total_grievance'] as int;
+          _hearingCircle = element['total_vivad'] as int;
+          break;
+        case 2:
+          _rejectedCitizen = element['total_grievance'] as int;
+          _rejectedCircle = element['total_vivad'] as int;
+          break;
+        case 3:
+          _closedCitizen = element['total_grievance'] as int;
+          _closedCircle = element['total_vivad'] as int;
+          break;
+      }
+    });
+  }
+
+  Future<void> _getWeekData() async {
+    await Provider.of<StatusUpdateProvider>(context, listen: false)
+        .countCaseStatus(_token, "", "week")
+        .then((value) {
+      setState(() {
+        value.forEach((element) {
+          _weekCitizen += element['total_grievance'] as int;
+          _weekCircle += element['total_vivad'] as int;
+        });
+      });
+    });
+  }
+
+  Future<void> _getMonthData() async {
+    await Provider.of<StatusUpdateProvider>(context, listen: false)
+        .countCaseStatus(_token, "", "month")
+        .then((value) {
+      setState(() {
+        value.forEach((element) {
+          _monthCitizen += element['total_grievance'] as int;
+          _monthCircle += element['total_vivad'] as int;
+        });
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
     return Container(
-      padding: EdgeInsets.all(8.0),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          BasicInformationList(
-              title: "Total Grievance",
-              total: 100,
-              pending: 50,
-              resolved: 50,
-              icon: Icons.cases,
-              iconColor: CustomColors.kRed),
+          Container(
+            margin: EdgeInsets.only(
+              left: 2.5 * SizeConfig.widthMultiplier,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Row(
+                  children: <Widget>[
+                    CaseStatusCards(
+                      caseStatus: "Pending",
+                      total: _pendingCircle + _pendingCitizen,
+                      citizen: _pendingCitizen,
+                      circle: _pendingCircle,
+                      cardColor: CustomColors.kDarkOrange,
+                    ),
+                    SizedBox(
+                      width: 1.5 * SizeConfig.widthMultiplier,
+                    ),
+                    CaseStatusCards(
+                      caseStatus: "Hearing",
+                      total: _hearingCircle + _hearingCitizen,
+                      citizen: _hearingCitizen,
+                      circle: _hearingCircle,
+                      cardColor: CustomColors.kGreen,
+                    ),
+                  ],
+                ),
+                Row(
+                  children: <Widget>[
+                    CaseStatusCards(
+                      caseStatus: "Rejected",
+                      total: _rejectedCircle + _rejectedCitizen,
+                      citizen: _rejectedCitizen,
+                      circle: _rejectedCircle,
+                      cardColor: CustomColors.kRed,
+                    ),
+                    SizedBox(
+                      width: 1.5 * SizeConfig.widthMultiplier,
+                    ),
+                    CaseStatusCards(
+                      caseStatus: "Resolved",
+                      total: _closedCircle + _closedCitizen,
+                      citizen: _closedCitizen,
+                      circle: _closedCircle,
+                      cardColor: CustomColors.kBlue,
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          const Divider(
+            color: Colors.grey,
+            thickness: 1.0,
+          ),
+          CustomTitle(title: "Recent Grievances"),
           SizedBox(
-            height: 1.9 * SizeConfig.heightMultiplier,
+            height: 1.5 * SizeConfig.heightMultiplier,
           ),
           BasicInformationList(
-              title: "Registered during Last Month",
-              total: 70,
-              pending: 50,
-              resolved: 20,
-              icon: Icons.calendar_month,
+              title: "Total Grievance",
+              total: _totalCitizenCount + _totalCircleCount,
+              citizen: _totalCitizenCount,
+              circle: _totalCircleCount,
+              icon: Icons.cases_rounded,
+              iconColor: CustomColors.kRed),
+          SizedBox(
+            height: 1.5 * SizeConfig.heightMultiplier,
+          ),
+          BasicInformationList(
+              title: "Grievance during last month",
+              total: _monthCitizen + _monthCircle,
+              citizen: _monthCitizen,
+              circle: _monthCircle,
+              icon: Icons.calendar_month_rounded,
               iconColor: CustomColors.kDarkYellow),
           SizedBox(
-            height: 1.9 * SizeConfig.heightMultiplier,
+            height: 1.5 * SizeConfig.heightMultiplier,
+          ),
+          BasicInformationList(
+              title: "Grievance during last week",
+              total: _weekCitizen + _weekCircle,
+              citizen: _weekCitizen,
+              circle: _weekCircle,
+              icon: Icons.calendar_view_week_rounded,
+              iconColor: CustomColors.kGreen),
+          SizedBox(
+            height: 1.25 * SizeConfig.heightMultiplier,
           ),
         ],
       ),
-    );
-  }
-}
-
-class BasicInformationList extends StatelessWidget {
-  final String title;
-  final int total;
-  final int pending;
-  final int resolved;
-  final IconData icon;
-  final Color iconColor;
-
-  BasicInformationList(
-      {required this.title,
-      required this.total,
-      required this.pending,
-      required this.resolved,
-      required this.icon,
-      required this.iconColor});
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: <Widget>[
-        CircleAvatar(
-          radius: 2.5 * SizeConfig.heightMultiplier,
-          backgroundColor: iconColor,
-          child: Icon(
-            icon,
-            size: 1.9 * SizeConfig.heightMultiplier,
-            color: Colors.white,
-          ),
-        ),
-        SizedBox(
-          width: 2.5 * SizeConfig.widthMultiplier,
-        ),
-        Column(
-          children: <Widget>[
-            Text(
-              title,
-              style: TextStyle(
-                fontSize: 2 * SizeConfig.heightMultiplier,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-            Text(
-              "Pending: $pending , Resolved: $resolved",
-              style: TextStyle(
-                fontSize: 1.9 * SizeConfig.heightMultiplier,
-                fontWeight: FontWeight.w500,
-                color: Colors.black45,
-              ),
-            ),
-          ],
-        ),
-      ],
     );
   }
 }

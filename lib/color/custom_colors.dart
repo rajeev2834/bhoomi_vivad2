@@ -14,4 +14,6 @@ class CustomColors  {
 
   static const Color kDarkBlue = Color(0xFF0D253F);
   static const Color kLightIndigo = Color(0xFFC5CAE9);
+
+  static const Color kDarkOrange = Color(0xFFF9A825);
 }
