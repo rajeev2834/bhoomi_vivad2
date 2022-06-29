@@ -98,13 +98,21 @@ class StatusUpdateProvider with ChangeNotifier {
         });
       });
 
-      indexGrievance.forEach((element) {
-        grievanceCount.removeAt(element);
-      });
+      if(indexGrievance.isNotEmpty){
+        indexGrievance.sort();
+        for(int i=0; i<indexGrievance.length; i++){
+          var element = indexGrievance[i];
+          grievanceCount.removeAt(element-i);
+        }
+      }
 
-      indexVivad.forEach((element) {
-        vivadCount.removeAt(element);
-      });
+      if(indexVivad.isNotEmpty){
+        indexVivad.sort();
+        for(int i=0; i<indexVivad.length; i++){
+          var element = indexVivad[i];
+          vivadCount.removeAt(element-i);
+        }
+      }
 
       if (caseStatusCount.isEmpty) {
         if (grievanceCount.isNotEmpty) {
@@ -207,13 +215,22 @@ class StatusUpdateProvider with ChangeNotifier {
         });
       });
 
-      indexGrievance.forEach((element) {
-        grievanceCount.removeAt(element);
-      });
+      if(indexGrievance.isNotEmpty){
+        indexGrievance.sort();
+        for(int i=0; i<indexGrievance.length; i++){
+          var element = indexGrievance[i];
+          grievanceCount.removeAt(element-i);
+        }
+      }
 
-      indexVivad.forEach((element) {
-        vivadCount.removeAt(element);
-      });
+      if(indexVivad.isNotEmpty){
+        indexVivad.sort();
+        for(int i=0; i<indexVivad.length; i++){
+          var element = indexVivad[i];
+          vivadCount.removeAt(element-i);
+        }
+      }
+
 
       if (circleWiseStatus.isEmpty) {
         if (grievanceCount.isNotEmpty) {

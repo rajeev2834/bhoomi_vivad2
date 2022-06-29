@@ -124,21 +124,25 @@ class Body extends StatelessWidget {
                       ],
                     ),
                     child: isAdmin
-                        ? TextButton.icon(
-                            icon: Icon(Icons.sync),
-                            label: Text(
-                              "Refresh Data",
-                              style: TextStyle(fontSize: 16.0),
-                            ),
-                            onPressed: () {
-                              print("Refresh Data");
+                        ? GestureDetector(
+                            onTap: () {
+                              print("Refresh");
                             },
+                            child: Text(
+                              "Dashboard",
+                              style: TextStyle(
+                                fontSize: 2.25 * SizeConfig.heightMultiplier,
+                                fontWeight: FontWeight.w700,
+                                color: Theme.of(context).primaryColor,
+                              ),
+                            ),
                           )
                         : TextButton.icon(
                             icon: Icon(Icons.cloud_download_rounded),
                             label: Text(
                               "Download Base Data",
-                              style: TextStyle(fontSize: 14.0),
+                              style: TextStyle(
+                                  fontSize: 2 * SizeConfig.heightMultiplier),
                             ),
                             onPressed: () {
                               _addBaseData(context, pr);
@@ -149,9 +153,6 @@ class Body extends StatelessWidget {
               ],
             ),
           ),
-          CustomTitle(
-            title: title,
-          ),
           isAdmin
               ? Container(
                   margin: EdgeInsets.only(
@@ -159,9 +160,17 @@ class Body extends StatelessWidget {
                   ),
                   child: DashboardScreen(),
                 )
-              : Container(
-                  margin: EdgeInsets.only(left: 10.0, top: 10.0),
-                  child: VivadRelatedGrid(context),
+              : Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    CustomTitle(
+                      title: title,
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(left: 10.0, top: 10.0),
+                      child: VivadRelatedGrid(context),
+                    ),
+                  ],
                 ),
         ],
       ),

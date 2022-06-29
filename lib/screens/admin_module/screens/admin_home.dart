@@ -7,14 +7,16 @@ import '../../../providers/auth.dart';
 import '../../body_home_screen.dart';
 
 class AdminHomeScreen extends StatelessWidget {
-
   static const routeName = '/admin_home_screen';
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: _buildAppBar(context),
-      body: Body(isAdmin: true, title: "Dashboard",),
+      body: Body(
+        isAdmin: true,
+        title: "",
+      ),
     );
   }
 
