@@ -29,7 +29,7 @@ class _LoginState extends State<Login> {
 
   var _isLoading = false;
   var userRegex = r'^(?=[a-zA-Z0-9_]{6,10}$)(?![_]$)';
-  var passRegex = r'^(?=[a-zA-Z0-9@]{8,16}$)(?![@]$)';
+  var passRegex = r'^(?=[a-zA-Z0-9@#]{8,16}$)(?![@]$)';
 
   @override
   Widget build(BuildContext context) {

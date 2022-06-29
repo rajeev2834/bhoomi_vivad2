@@ -12,7 +12,6 @@ import 'package:provider/provider.dart';
 import '../models/http_exception.dart';
 
 class Body extends StatelessWidget {
-
   bool isAdmin;
   final String title;
 
@@ -124,16 +123,27 @@ class Body extends StatelessWidget {
                         ),
                       ],
                     ),
-                    child: TextButton.icon(
-                      icon: Icon(Icons.cloud_download_rounded),
-                      label: Text(
-                        "Download Base Data",
-                        style: TextStyle(fontSize: 14.0),
-                      ),
-                      onPressed: () {
-                        _addBaseData(context, pr);
-                      },
-                    ),
+                    child: isAdmin
+                        ? TextButton.icon(
+                            icon: Icon(Icons.sync),
+                            label: Text(
+                              "Refresh Data",
+                              style: TextStyle(fontSize: 16.0),
+                            ),
+                            onPressed: () {
+                              print("Refresh Data");
+                            },
+                          )
+                        : TextButton.icon(
+                            icon: Icon(Icons.cloud_download_rounded),
+                            label: Text(
+                              "Download Base Data",
+                              style: TextStyle(fontSize: 14.0),
+                            ),
+                            onPressed: () {
+                              _addBaseData(context, pr);
+                            },
+                          ),
                   ),
                 ),
               ],

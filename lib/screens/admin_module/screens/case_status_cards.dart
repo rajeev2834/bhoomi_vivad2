@@ -1,3 +1,4 @@
+import 'package:bhoomi_vivad/screens/admin_module/screens/circle_wise_status_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -31,8 +32,7 @@ class CaseStatusCards extends StatelessWidget {
       width: 45 * SizeConfig.widthMultiplier,
       child: GestureDetector(
         onTap: () {
-          print("Tapped: $caseStatus");
-          _circleWiseStatus(context, caseStatus);
+          _circleWiseStatus(context, caseStatus, cardColor);
         },
         child: Card(
           elevation: 5.0,
@@ -101,8 +101,17 @@ class CaseStatusCards extends StatelessWidget {
     );
   }
 
-  void _circleWiseStatus(BuildContext context, String caseStatus) {
+  void _circleWiseStatus(
+      BuildContext context, String caseStatus, Color cardColor) {
+    var caseStatusList = ["Pending", "Hearing", "Rejected", "Resolved"];
+    var caseStatusIndex = caseStatusList.indexOf(caseStatus);
 
-
+    Navigator.push(context, MaterialPageRoute(builder: (context) {
+      return CircleWiseStatusScreen(
+        caseStatus: caseStatusIndex.toString(),
+        cardColor: cardColor,
+        duration: "",
+      );
+    }));
   }
 }

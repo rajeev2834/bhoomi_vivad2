@@ -67,6 +67,8 @@ class _VivadSummaryScreenState extends State<VivadSummaryScreen> {
       setState(() {
         _isLoaded = false;
         _caseStatusCount = value;
+        _caseStatusCount
+            .sort((a, b) => a['case_status'].compareTo(b['case_status']));
       });
     }).catchError((handleError) {
       setState(() {

@@ -1,6 +1,7 @@
 import 'package:bhoomi_vivad/providers/addBaseData.dart';
 import 'package:bhoomi_vivad/providers/auth.dart';
 import 'package:bhoomi_vivad/providers/get_base_data.dart';
+import 'package:bhoomi_vivad/screens/admin_module/screens/admin_dashboard.dart';
 import 'package:bhoomi_vivad/screens/admin_module/screens/admin_home.dart';
 import 'package:bhoomi_vivad/screens/all_vivad/status_update_provider.dart';
 import 'package:bhoomi_vivad/screens/all_vivad/status_update_screen.dart';
@@ -84,6 +85,7 @@ class BhoomiVivad extends StatelessWidget {
                   Login.routeName: (context) => Login(),
                   HomeScreen.routeName: (context) => HomeScreen(),
                   AdminHomeScreen.routeName: (context) => AdminHomeScreen(),
+                  DashboardScreen.routeName: (context) => DashboardScreen(),
                   UploadVivadScreen.routeName: (context) => UploadVivadScreen(),
                   VivadEntryScreen.routeName: (context) => VivadEntryScreen(),
                   VivadPendingScreen.routeName: (context) =>
