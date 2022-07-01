@@ -109,6 +109,7 @@ class _CircleWiseStatusScreenState extends State<CircleWiseStatusScreen> {
         : Scaffold(
             appBar: _buildAppBar(),
             body: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
                 Expanded(
                   child: SingleChildScrollView(
@@ -156,6 +157,7 @@ class _CircleWiseStatusScreenState extends State<CircleWiseStatusScreen> {
 
   DataTable _createDataTable() {
     return DataTable(
+      columnSpacing: 2.5 * SizeConfig.widthMultiplier,
       columns: _createColumns(),
       rows: _createRows(),
       dividerThickness: 3,

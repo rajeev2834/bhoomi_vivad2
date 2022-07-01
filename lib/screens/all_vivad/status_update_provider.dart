@@ -98,19 +98,19 @@ class StatusUpdateProvider with ChangeNotifier {
         });
       });
 
-      if(indexGrievance.isNotEmpty){
+      if (indexGrievance.isNotEmpty) {
         indexGrievance.sort();
-        for(int i=0; i<indexGrievance.length; i++){
+        for (int i = 0; i < indexGrievance.length; i++) {
           var element = indexGrievance[i];
-          grievanceCount.removeAt(element-i);
+          grievanceCount.removeAt(element - i);
         }
       }
 
-      if(indexVivad.isNotEmpty){
+      if (indexVivad.isNotEmpty) {
         indexVivad.sort();
-        for(int i=0; i<indexVivad.length; i++){
+        for (int i = 0; i < indexVivad.length; i++) {
           var element = indexVivad[i];
-          vivadCount.removeAt(element-i);
+          vivadCount.removeAt(element - i);
         }
       }
 
@@ -130,15 +130,15 @@ class StatusUpdateProvider with ChangeNotifier {
       } else if (caseStatusCount.length < max) {
         if (grievanceCount.isNotEmpty) {
           grievanceCount.forEach((element) {
-                caseStatusCount.add(getCaseStatusCount(
-                    element['case_status'], element['total_grievance'], 0));
-            });
-          }
+            caseStatusCount.add(getCaseStatusCount(
+                element['case_status'], element['total_grievance'], 0));
+          });
+        }
         if (vivadCount.isNotEmpty) {
           vivadCount.forEach((element) {
-                caseStatusCount.add(getCaseStatusCount(
-                    element['case_status'], 0, element['total_vivad']));
-              });
+            caseStatusCount.add(getCaseStatusCount(
+                element['case_status'], 0, element['total_vivad']));
+          });
         }
       }
       return caseStatusCount;
@@ -215,22 +215,21 @@ class StatusUpdateProvider with ChangeNotifier {
         });
       });
 
-      if(indexGrievance.isNotEmpty){
+      if (indexGrievance.isNotEmpty) {
         indexGrievance.sort();
-        for(int i=0; i<indexGrievance.length; i++){
+        for (int i = 0; i < indexGrievance.length; i++) {
           var element = indexGrievance[i];
-          grievanceCount.removeAt(element-i);
+          grievanceCount.removeAt(element - i);
         }
       }
 
-      if(indexVivad.isNotEmpty){
+      if (indexVivad.isNotEmpty) {
         indexVivad.sort();
-        for(int i=0; i<indexVivad.length; i++){
+        for (int i = 0; i < indexVivad.length; i++) {
           var element = indexVivad[i];
-          vivadCount.removeAt(element-i);
+          vivadCount.removeAt(element - i);
         }
       }
-
 
       if (circleWiseStatus.isEmpty) {
         if (grievanceCount.isNotEmpty) {
@@ -248,20 +247,14 @@ class StatusUpdateProvider with ChangeNotifier {
       } else if (circleWiseStatus.length < max) {
         if (grievanceCount.isNotEmpty) {
           grievanceCount.forEach((element) {
-                circleWiseStatus.add(getCircleWiseStatusCount(
-                    element['circle_id'],
-                    element['circle_name'],
-                    element['total_vivad'],
-                    0));
+            circleWiseStatus.add(getCircleWiseStatusCount(element['circle_id'],
+                element['circle_name'], element['total_vivad'], 0));
           });
         }
         if (vivadCount.isNotEmpty) {
           vivadCount.forEach((element) {
-                circleWiseStatus.add(getCircleWiseStatusCount(
-                    element['circle_id'],
-                    element['circle_name'],
-                    0,
-                    element['total_vivad']));
+            circleWiseStatus.add(getCircleWiseStatusCount(element['circle_id'],
+                element['circle_name'], 0, element['total_vivad']));
           });
         }
       }
